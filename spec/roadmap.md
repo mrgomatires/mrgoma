@@ -73,12 +73,13 @@ persisted (`SC_Order`/`SC_OrderDetail`), tire marked `sold`, and receipt shown.
   `GET /api/checkout/session`, `receipt_url`, email and a copyable reference.
 - ⬜ **S2.5 — Switch default.** Make Stripe the default flow; keep WhatsApp as a
   fallback via flag.
-- 🟡 **Tires on Stripe Checkout (`048-stripe-line-items`).** Found on the
+- ✅ **Tires on Stripe Checkout (`048-stripe-line-items`).** Found on the
   production payment page (2026-11-13): broken images (the site's images get a
   firewall challenge; 72% of tires have no photo), internal-format names, and
   prices in the visitor's local currency. Readable names and descriptions, no
   broken image (a generic image on Vercel Blob), the firewall exception
-  documented but not applied; Adaptive Pricing stays on.
+  documented but not applied; Adaptive Pricing stays on. _Merged (PR #209,
+  2026-11-13)._
 - ⬜ **S2.6 — Live + smoke test.** Live keys on Vercel, a real end-to-end test,
   logging/monitoring of payment errors.
 
@@ -134,6 +135,24 @@ To be resumed after the two tracks above; no fixed order yet.
   not count for compatibility, and pickup is allowed at any store whatever the
   tires' city. Reverses 041's D1 and D5. Also a facts line and a hover card to
   compare tires in the cart. _Merged (PR #208, 2026-11-13)._
+- **Lessons from a competitor (series 049–054).** From a 2026-11-18 walk-through
+  of prioritytire.com, in this order. Every one covers modern-web-guidance,
+  site security, SEO, phone width and GA4 events.
+  - 🟡 **Size picker and other sizes (`049-size-picker-other-sizes`).** Pick
+    width → ratio → rim with buttons that only offer what is for sale (7 of 293
+    sizes cannot be reached today); the tire page lists the same model's other
+    sizes by rim (64% of tires have some).
+  - ⬜ **Size index page (`050`).** A `/tires/size` hub: text search, popular
+    sizes, sizes grouped by rim, linking to each size page.
+  - ⬜ **Compare up to 3 tires (`051`).** From the listing: tread, life,
+    patch, DOT, price side by side.
+  - ⬜ **Used-tire filters (`052`).** Minimum tread or life, no patch, run flat.
+  - ⬜ **Google ratings (`053`).** Figures copied by hand from the 7 Business
+    Profiles with their date (≈4.7 from 5,952 reviews on 2026-11-18): under
+    the search on home and `/tires`, on the tire page and cart, and on each
+    store page. No review stars in search results (Google's self-serving rule).
+  - ⬜ **Set total on listing cards (`054`).** "Set of 4 from $X" where a set
+    can be built.
 
 - ⬜ **Tailwind v4 config activation (bug).** `tailwind.config.ts` is ignored by
   Tailwind v4 (no `@config` directive), so its custom tokens are dormant **in

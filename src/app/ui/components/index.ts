@@ -20,6 +20,7 @@ export { default as ServiceCard } from './ServiceCard/ServiceCard';
 export { default as InfoCard } from './InfoCard/InfoCard';
 export { default as LocationCard } from './LocationCard/LocationCard';
 export { default as SizeSelector } from './SizeSelector/SizeSelector';
+export { default as SizePicker } from './SizePicker/SizePicker';
 export { default as ResultsHeader } from './ResultsHeader/ResultsHeader';
 export { default as TireResults } from './TireResults/TireResults';
 export { default as RangeSlider } from './RangeSlider/RangeSlider';

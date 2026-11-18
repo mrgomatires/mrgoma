@@ -14,7 +14,6 @@ export { default as ServicesGrid } from './ServicesGrid/ServicesGrid';
 export { default as InfoCardsSection } from './InfoCardsSection/InfoCardsSection';
 export { default as SearchContainer } from './SearchContainer/SearchContainer';
 export { default as SearchSection } from './SearchSection/SearchSection';
-export { default as SizeSelectors } from './SizeSelectors/SizeSelectors';
 export { default as CartModal } from './CartModal/CartModal';
 export { default as TopFilters } from './TopFilters/TopFilters';
 export { default as FilterBody } from './FilterBody/FilterBody';

@@ -76,9 +76,30 @@ export const useTireSearch = (redirectBasePath: string) => {
     [searchParams, router]
   );
 
+  /**
+   * Apply a whole size in one navigation (049): the size picker stages width,
+   * ratio and rim and searches only when the shopper presses Search (D3).
+   * `handleFilterChange` keeps navigating on every change for the dashboard.
+   */
+  const applySize = useCallback(
+    (size: TireFilters) => {
+      setSelectedFilters(size);
+      const params = new URLSearchParams(searchParams.toString());
+      (['w', 's', 'd'] as const).forEach(key => {
+        if (size[key]) params.set(key, size[key]);
+        else params.delete(key);
+      });
+      // A new size starts the results from the first page.
+      params.delete('page');
+      router.push(`/${redirectBasePath}?${params.toString()}`);
+    },
+    [searchParams, router, redirectBasePath]
+  );
+
   return {
     selectedFilters,
     handleFilterChange,
     resetFilters,
+    applySize,
   };
 };

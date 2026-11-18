@@ -381,3 +381,48 @@ input[type='range']::-moz-range-thumb {
     opacity: 0;
   }
 }
+
+/*
+ * The size picker's panel (feature 049). Opens on a tap, so its height change
+ * is not counted as layout shift. Static by default; with motion allowed it
+ * fades in and settles from a few pixels above (`@starting-style`), and leaves
+ * at once — the next step replaces it. `allow-discrete` after the shorthand
+ * (modern-web-guidance, animate-element-entry-exit).
+ */
+.size-picker-panel[hidden] {
+  display: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .size-picker-panel {
+    transition:
+      opacity 0.16s ease-out,
+      translate 0.16s ease-out,
+      display 0.16s;
+    transition-behavior: allow-discrete;
+  }
+  @starting-style {
+    .size-picker-panel:not([hidden]) {
+      opacity: 0;
+      translate: 0 -4px;
+    }
+  }
+}
+
+/* Search, once the picked size is complete (049, D3): a ring that says "next". */
+.search-ready {
+  box-shadow:
+    0 0 0 3px #fff,
+    0 0 0 6px var(--color-green-600, #16a34a);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .search-ready {
+    animation: search-ready-pulse 0.9s ease-out 1;
+  }
+}
+@keyframes search-ready-pulse {
+  from {
+    box-shadow:
+      0 0 0 3px #fff,
+      0 0 0 14px rgb(22 163 74 / 0);
+  }
+}
