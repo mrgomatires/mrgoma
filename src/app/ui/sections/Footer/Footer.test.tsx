@@ -16,6 +16,14 @@ describe('Footer', () => {
     expect(link).toHaveAttribute('href', '/instant-quote');
   });
 
+  it('links the size index (050)', () => {
+    render(<Footer />);
+    expect(screen.getByRole('link', { name: 'Shop by size' })).toHaveAttribute(
+      'href',
+      '/tires/size'
+    );
+  });
+
   it('keeps every navigation link keyboard reachable with a visible focus ring', () => {
     render(<Footer />);
     const link = screen.getByRole('link', { name: /instant quote/i });

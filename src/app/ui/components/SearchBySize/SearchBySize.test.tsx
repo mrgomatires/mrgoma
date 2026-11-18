@@ -72,4 +72,15 @@ describe('SearchBySize with the size picker (049)', () => {
     expect(screen.getByRole('button', { name: /^Aspect ratio/ })).toHaveTextContent('Select');
     expect(screen.getByRole('button', { name: 'Select all measurements' })).toBeDisabled();
   });
+
+  it('links the size index (050)', () => {
+    render(
+      <SelectedFiltersProvider>
+        <SearchBySize />
+      </SelectedFiltersProvider>
+    );
+    const link = screen.getByRole('link', { name: 'See all sizes →' });
+    expect(link).toHaveAttribute('href', '/tires/size');
+    expect(link).toHaveAttribute('data-track-surface', 'home');
+  });
 });

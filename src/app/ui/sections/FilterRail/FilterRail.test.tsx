@@ -301,3 +301,18 @@ describe('the mobile disclosure is one card, not two', () => {
     expect(container.firstElementChild?.className).toContain('rounded-xl');
   });
 });
+
+describe('the way to every size (050)', () => {
+  it('links the size index at the end of the Rim size group', () => {
+    renderRail();
+    const link = screen.getByRole('link', { name: 'See all sizes →' });
+    expect(link).toHaveAttribute('href', '/tires/size');
+    expect(link).toHaveAttribute('data-track', 'see_all_sizes');
+    expect(link).toHaveAttribute('data-track-surface', 'rail');
+    // After the Rim size heading, before Price: inside the rim group.
+    const rim = screen.getByRole('heading', { name: 'Rim size' });
+    const price = screen.getByRole('heading', { name: 'Price' });
+    expect(rim.compareDocumentPosition(link) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(link.compareDocumentPosition(price) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+});

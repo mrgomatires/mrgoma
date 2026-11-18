@@ -4,6 +4,7 @@ import React, { useRef, useState } from 'react';
 
 import { useStockedSizes } from '@/app/hooks/useStockedSizes';
 import { EditIcon, XMarkIcon } from '@/app/ui/components/Icons/Icons';
+import SeeAllSizesLink from '@/app/ui/components/SeeAllSizesLink/SeeAllSizesLink';
 import SizePicker from '@/app/ui/components/SizePicker/SizePicker';
 
 import { TireFilters } from '../hooks/useTireSearch';
@@ -104,6 +105,8 @@ export const CompactForm: React.FC<CompactFormProps> = ({
         >
           <span>Reset Selection</span>
         </button>
+
+        <SeeAllSizesLink surface="tires_form" className="w-full justify-center" />
       </div>
     </div>
   );

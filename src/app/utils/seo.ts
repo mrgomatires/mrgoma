@@ -695,6 +695,21 @@ export function sizeMetadata(params: { size: string; slug: string }): Metadata {
   });
 }
 
+/** `/tires/size` — every size for sale on one page (050). */
+export function sizeIndexMetadata(): Metadata {
+  return pageMetadata({
+    title: fitTitle(
+      `Shop Tires by Size — Miami & Orlando${TITLE_SUFFIX}`,
+      `Shop Tires by Size${TITLE_SUFFIX}`
+    ),
+    description: fitDescription(
+      'Find your tire size: type it as printed on your tire or pick it from every size we sell, used and new, with a 30-day warranty on used tires.',
+      [`${SHIPPING}. 7 locations in Miami & Orlando.`, `${SHIPPING}.`]
+    ),
+    path: '/tires/size',
+  });
+}
+
 /** `/locations` — the hub for all seven stores. */
 export function locationsMetadata(): Metadata {
   return pageMetadata({

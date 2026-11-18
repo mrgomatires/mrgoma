@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, ReactNode, useEffect, useState } from 'react';
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,7 +10,7 @@ import { useCart } from '@/app/context/CartContext';
 import { HamburgerMenu } from '@/app/ui/components';
 import { ShoppingCart } from '@/app/ui/icons';
 import { CartModal, MenuMobile } from '@/app/ui/sections';
-import { menuItems } from '@/app/ui/sections/Header/MenuItems';
+import { groupChildren, menuItems } from '@/app/ui/sections/Header/MenuItems';
 
 import { mrGomaLogoLight } from '#public/assets/images/Logo';
 /**
@@ -24,6 +24,19 @@ const Header: FC<{ compact?: boolean }> = ({ compact = false }): ReactNode => {
   const { cartCount, setShowCartModal } = useCart();
   const [isMounted, setIsMounted] = useState(false);
   const [activeHash, setActiveHash] = useState('');
+  // After a navigation, a dropdown would stay open: focus is still on the link
+  // that was clicked (`focus-within`) and the pointer is often still over the
+  // panel (`hover`). Release the focus and keep the panels shut until the
+  // pointer enters a menu again or leaves it (050, owner review).
+  const [menusShut, setMenusShut] = useState(false);
+  const lastPath = useRef(pathname);
+  useEffect(() => {
+    if (lastPath.current === pathname) return; // first render: nothing to close
+    lastPath.current = pathname;
+    const active = document.activeElement;
+    if (active instanceof HTMLElement && active.closest('[data-nav-menu]')) active.blur();
+    setMenusShut(true);
+  }, [pathname]);
 
   const handleCartClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -81,10 +94,17 @@ const Header: FC<{ compact?: boolean }> = ({ compact = false }): ReactNode => {
                   (pathname === '/' && activeHash === item.href.replace('/', ''));
 
                 if (item.children?.length) {
-                  const miamiKids = item.children.filter(c => c.city === 'Miami');
-                  const orlandoKids = item.children.filter(c => c.city === 'Orlando');
+                  const groups = groupChildren(item.children);
+                  const grouped = groups.some(g => g.label);
                   return (
-                    <div key={item.name} className="relative group">
+                    <div
+                      key={item.name}
+                      data-nav-menu
+                      className="relative group"
+                      onMouseEnter={() => setMenusShut(false)}
+                      onMouseLeave={() => setMenusShut(false)}
+                      onFocus={() => setMenusShut(false)}
+                    >
                       <Link
                         href={item.href}
                         className={`inline-flex items-center gap-1 text-sm font-semibold leading-6 transition-colors rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${
@@ -98,54 +118,61 @@ const Header: FC<{ compact?: boolean }> = ({ compact = false }): ReactNode => {
                           fill="none"
                           stroke="currentColor"
                           strokeWidth={2.5}
-                          className="w-3 h-3 transition-transform duration-200 group-hover:rotate-180"
+                          className={`w-3 h-3 transition-transform duration-200 ${
+                            menusShut ? '' : 'group-hover:rotate-180 group-focus-within:rotate-180'
+                          }`}
                           aria-hidden="true"
                         >
                           <polyline points="6 9 12 15 18 9" />
                         </svg>
                       </Link>
-                      <div className="absolute left-1/2 -translate-x-1/2 top-full pt-3 w-[480px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                        <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-2xl p-6 grid grid-cols-2 gap-6">
-                          <div>
-                            <p className="text-[#9dfb40] text-[10px] font-bold tracking-[0.2em] uppercase mb-3">
-                              Miami, FL
-                            </p>
-                            <ul className="space-y-1.5">
-                              {miamiKids.map(kid => (
-                                <li key={kid.href}>
-                                  <Link
-                                    href={kid.href}
-                                    className="block text-sm text-gray-300 hover:text-[#9dfb40] hover:translate-x-0.5 transition-all duration-150"
-                                  >
-                                    {kid.name}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                          <div>
-                            <p className="text-[#9dfb40] text-[10px] font-bold tracking-[0.2em] uppercase mb-3">
-                              Orlando, FL
-                            </p>
-                            <ul className="space-y-1.5">
-                              {orlandoKids.map(kid => (
-                                <li key={kid.href}>
-                                  <Link
-                                    href={kid.href}
-                                    className="block text-sm text-gray-300 hover:text-[#9dfb40] hover:translate-x-0.5 transition-all duration-150"
-                                  >
-                                    {kid.name}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                          <Link
-                            href={item.href}
-                            className="col-span-2 mt-2 pt-3 border-t border-white/10 text-xs font-bold text-[#9dfb40] hover:underline"
-                          >
-                            View all 7 locations →
-                          </Link>
+                      {/* Opens on hover **and** when focus is inside, so Tab reaches
+                          the children (050; it used to be hover-only). */}
+                      <div
+                        className={`absolute left-1/2 -translate-x-1/2 top-full pt-3 ${
+                          grouped ? 'w-[480px]' : 'w-56'
+                        } opacity-0 invisible ${
+                          menusShut
+                            ? ''
+                            : 'group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible'
+                        } transition-all duration-200 z-50`}
+                      >
+                        <div
+                          className={`bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-2xl ${
+                            grouped ? 'p-6 grid grid-cols-2 gap-6' : 'p-3'
+                          }`}
+                        >
+                          {groups.map(g => (
+                            <div key={g.label ?? 'all'}>
+                              {g.label && (
+                                <p className="text-[#9dfb40] text-[10px] font-bold tracking-[0.2em] uppercase mb-3">
+                                  {g.label}
+                                </p>
+                              )}
+                              <ul className="space-y-1.5">
+                                {g.items.map(kid => (
+                                  <li key={kid.href}>
+                                    <Link
+                                      href={kid.href}
+                                      className={`block text-sm text-gray-300 hover:text-[#9dfb40] hover:translate-x-0.5 transition-all duration-150 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${
+                                        grouped ? '' : 'px-3 py-2'
+                                      }`}
+                                    >
+                                      {kid.name}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ))}
+                          {item.allLabel && (
+                            <Link
+                              href={item.href}
+                              className="col-span-2 mt-2 pt-3 border-t border-white/10 text-xs font-bold text-[#9dfb40] hover:underline"
+                            >
+                              {item.allLabel}
+                            </Link>
+                          )}
                         </div>
                       </div>
                     </div>

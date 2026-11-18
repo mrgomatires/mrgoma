@@ -65,4 +65,12 @@ describe('/tires floating size form with the picker (049)', () => {
     await open(user);
     expect(screen.getByRole('button', { name: 'Search' })).toBeDisabled();
   });
+
+  it('links the size index (050)', async () => {
+    const user = userEvent.setup();
+    await open(user);
+    const link = screen.getByRole('link', { name: 'See all sizes →' });
+    expect(link).toHaveAttribute('href', '/tires/size');
+    expect(link).toHaveAttribute('data-track-surface', 'tires_form');
+  });
 });

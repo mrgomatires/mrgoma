@@ -1,6 +1,6 @@
 import { unstable_cache } from 'next/cache';
 
-import { fetchSizes, fetchTireRanges } from '@/repositories/tiresRepository';
+import { fetchSizeCounts, fetchSizes, fetchTireRanges } from '@/repositories/tiresRepository';
 
 /**
  * Catalog reads that take no input, cached across requests.
@@ -27,6 +27,12 @@ export const getCachedTireRanges = unstable_cache(() => fetchTireRanges(), ['ran
 });
 
 export const getCachedStockedSizes = unstable_cache(() => fetchSizes(), ['stocked-sizes'], {
+  revalidate: 300,
+  tags: ['sizes'],
+});
+
+/** Sizes for sale with their tire counts — the size index (050). Same tag as the list. */
+export const getCachedSizeCounts = unstable_cache(() => fetchSizeCounts(), ['size-counts'], {
   revalidate: 300,
   tags: ['sizes'],
 });

@@ -44,6 +44,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: absUrl('/tires'), lastModified: now, changeFrequency: 'daily', priority: 0.9 },
     { url: absUrl('/tires/new'), lastModified: now, changeFrequency: 'daily', priority: 0.8 },
     { url: absUrl('/tires/used'), lastModified: now, changeFrequency: 'daily', priority: 0.8 },
+    // The size index (050): the one page that links every size page below.
+    { url: absUrl('/tires/size'), lastModified: now, changeFrequency: 'daily', priority: 0.8 },
     { url: absUrl('/guides'), lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: absUrl('/about-us'), lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: absUrl('/services'), lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
