@@ -213,6 +213,24 @@ export async function fetchSizes(): Promise<string[]> {
   return result.recordset.map(row => row.RealSize as string);
 }
 
+/**
+ * Every size for sale with how many tires it has (feature 050, the size index).
+ * Same rule as {@link fetchSizes}, so the two lists name the same sizes.
+ */
+export const SIZE_COUNTS_SQL = `SELECT RealSize, COUNT(*) AS units
+    FROM dbo.View_Tires
+    WHERE ${STOREFRONT_SELLABLE_WHERE} AND RealSize IS NOT NULL AND RealSize <> ''
+    GROUP BY RealSize`;
+
+export async function fetchSizeCounts(): Promise<{ size: string; units: number }[]> {
+  const pool = await getPool();
+  const result = await logQuery('tires.sizeCounts', () => pool.request().query(SIZE_COUNTS_SQL));
+  return result.recordset.map(row => ({
+    size: row.RealSize as string,
+    units: Number(row.units) || 0,
+  }));
+}
+
 export async function fetchDashboardStores(): Promise<string[]> {
   const pool = await getPool();
   const query = `SELECT DISTINCT VaultName

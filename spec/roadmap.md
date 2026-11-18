@@ -138,11 +138,11 @@ To be resumed after the two tracks above; no fixed order yet.
 - **Lessons from a competitor (series 049–054).** From a 2026-11-18 walk-through
   of prioritytire.com, in this order. Every one covers modern-web-guidance,
   site security, SEO, phone width and GA4 events.
-  - 🟡 **Size picker and other sizes (`049-size-picker-other-sizes`).** Pick
+  - ✅ **Size picker and other sizes (`049-size-picker-other-sizes`).** Pick
     width → ratio → rim with buttons that only offer what is for sale (7 of 293
     sizes cannot be reached today); the tire page lists the same model's other
-    sizes by rim (64% of tires have some).
-  - ⬜ **Size index page (`050`).** A `/tires/size` hub: text search, popular
+    sizes by rim (64% of tires have some). _Merged (PR #210, 2026-11-18)._
+  - 🟡 **Size index page (`050-size-index`).** A `/tires/size` hub: text search, popular
     sizes, sizes grouped by rim, linking to each size page.
   - ⬜ **Compare up to 3 tires (`051`).** From the listing: tread, life,
     patch, DOT, price side by side.

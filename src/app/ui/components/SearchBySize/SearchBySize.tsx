@@ -11,6 +11,7 @@ import { ButtonSearch, SizeSelector } from '@/app/ui/components';
 import HomeMoreFilters, {
   HomeExtraFilters,
 } from '@/app/ui/components/HomeMoreFilters/HomeMoreFilters';
+import SeeAllSizesLink from '@/app/ui/components/SeeAllSizesLink/SeeAllSizesLink';
 import SizePicker, { type SizePick } from '@/app/ui/components/SizePicker/SizePicker';
 import TirePreview3D from '@/app/ui/components/TirePreview3D/TirePreview3D';
 import TirePreview3DMobile from '@/app/ui/components/TirePreview3D/TirePreview3DMobile';
@@ -175,6 +176,7 @@ const SearchBySize: FC = () => {
 
             <div className="flex flex-wrap items-center gap-2">
               <HomeMoreFilters value={extraFilters} onApply={handleApplyFilters} />
+              <SeeAllSizesLink surface="home" className="ml-auto" />
               {extraFilters.brands.map(brand => (
                 <FilterChip key={`b-${brand}`} label={brand} onRemove={() => removeBrand(brand)} />
               ))}

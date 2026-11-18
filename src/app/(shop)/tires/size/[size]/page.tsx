@@ -85,6 +85,8 @@ export default async function SizeCategoryPage({ params }: { params: Promise<{ s
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     { name: 'Home', url: '/' },
     { name: 'Tires', url: '/tires' },
+    // The size index (050) sits between the catalog and a size.
+    { name: 'Sizes', url: '/tires/size' },
     { name: `${originalSize} Tires`, url: `/tires/size/${sizeSlug}` },
   ]);
 
@@ -110,6 +112,10 @@ export default async function SizeCategoryPage({ params }: { params: Promise<{ s
             <span>/</span>
             <Link href="/tires" className="hover:text-green-600 transition-colors">
               Tires
+            </Link>
+            <span>/</span>
+            <Link href="/tires/size" className="hover:text-green-600 transition-colors">
+              Sizes
             </Link>
             <span>/</span>
             <span className="text-gray-900 font-medium">{originalSize} Tires</span>

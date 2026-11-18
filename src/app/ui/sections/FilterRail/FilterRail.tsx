@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import Link from 'next/link';
 
+import SeeAllSizesLink from '@/app/ui/components/SeeAllSizesLink/SeeAllSizesLink';
 import { clearAll } from '@/app/utils/filterHref';
 import type { TireFacets } from '@/repositories/facetQuery';
 import type { TireFilters } from '@/repositories/filtersClause';
@@ -192,6 +193,8 @@ const FilterRail: FC<FilterRailProps> = ({
                   numeric={searchable.numeric}
                   multiSelect={additive}
                 />
+                {/* The way to every size we sell (050), under the last part of a size. */}
+                {group === 'rim' && <SeeAllSizesLink surface="rail" className="mt-1" />}
               </FacetGroup>
             );
           }

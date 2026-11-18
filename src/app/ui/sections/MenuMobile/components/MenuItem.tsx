@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import type { MenuChild } from '@/app/ui/sections/Header/MenuItems';
+import { groupChildren, type MenuChild } from '@/app/ui/sections/Header/MenuItems';
 
 interface MenuItemProps {
   name: string;
@@ -48,8 +48,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
     animationStage >= index + 2 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4';
 
   if (submenu?.length) {
-    const miamiKids = submenu.filter(c => c.city === 'Miami');
-    const orlandoKids = submenu.filter(c => c.city === 'Orlando');
+    const groups = groupChildren(submenu);
     return (
       <div className={`transition-all duration-300 ${animClass}`}>
         <div
@@ -86,49 +85,38 @@ export const MenuItem: React.FC<MenuItemProps> = ({
           </button>
         </div>
 
+        {/* `inert` while collapsed: the links are only hidden by a zero-height
+            row, and would otherwise still take Tab focus (050). */}
         <div
+          inert={!expanded}
           className={`grid transition-all duration-300 ${
             expanded ? 'grid-rows-[1fr] opacity-100 mt-2' : 'grid-rows-[0fr] opacity-0'
           }`}
         >
           <div className="overflow-hidden">
             <div className="px-3 py-3 bg-black/30 rounded-lg border border-[#333] space-y-4">
-              <div>
-                <p className="text-[#9dfb40] text-[10px] font-bold tracking-[0.2em] uppercase mb-2 px-2">
-                  Miami, FL
-                </p>
-                <ul className="space-y-0.5">
-                  {miamiKids.map(kid => (
-                    <li key={kid.href}>
-                      <Link
-                        href={kid.href}
-                        onClick={onClick}
-                        className="block px-2 py-1.5 text-sm text-gray-300 hover:text-[#9dfb40] hover:bg-white/5 rounded transition-colors"
-                      >
-                        {kid.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <p className="text-[#9dfb40] text-[10px] font-bold tracking-[0.2em] uppercase mb-2 px-2">
-                  Orlando, FL
-                </p>
-                <ul className="space-y-0.5">
-                  {orlandoKids.map(kid => (
-                    <li key={kid.href}>
-                      <Link
-                        href={kid.href}
-                        onClick={onClick}
-                        className="block px-2 py-1.5 text-sm text-gray-300 hover:text-[#9dfb40] hover:bg-white/5 rounded transition-colors"
-                      >
-                        {kid.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {groups.map(g => (
+                <div key={g.label ?? 'all'}>
+                  {g.label && (
+                    <p className="text-[#9dfb40] text-[10px] font-bold tracking-[0.2em] uppercase mb-2 px-2">
+                      {g.label}
+                    </p>
+                  )}
+                  <ul className="space-y-0.5">
+                    {g.items.map(kid => (
+                      <li key={kid.href}>
+                        <Link
+                          href={kid.href}
+                          onClick={onClick}
+                          className="block px-2 py-3 text-sm text-gray-300 hover:text-[#9dfb40] hover:bg-white/5 rounded transition-colors"
+                        >
+                          {kid.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           </div>
         </div>

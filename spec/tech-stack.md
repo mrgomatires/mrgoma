@@ -100,6 +100,9 @@ Versions taken from `package.json` (2026-06-30). Update here when they change.
   (`sizeTree.ts`). Values are the parts of `RealSize` verbatim — `/tires`
   matches a complete size as the exact string `w/s/d`. The three
   `/api/dimensions/{heights,widths,sizes}` routes remain for the dashboard only.
+- **The size index `/tires/size`** (050) is static, regenerated every five
+  minutes from `getCachedSizeCounts()` (same sellable rule as `fetchSizes()`),
+  and its search box matches against the list the page passes in — no API.
 
 ### Analytics & tracking
 
@@ -147,6 +150,11 @@ Versions taken from `package.json` (2026-06-30). Update here when they change.
   `other_sizes_open` (`label` rim) only when a rim group **opens** (a `toggle`
   listener: a `summary` click cannot tell open from close). GA4 `search` is
   unchanged. See `spec/features/049-size-picker-other-sizes/`.
+- **Size index (feature 050).** `size_index_search` (`result` found /
+  not_found; `label` = the size, which the shared field only lets be digits),
+  `size_index_select` (`source` popular / list / closest,
+  `label` size) and `see_all_sizes` (`surface` home / tires_form / rail). See
+  `spec/features/050-size-index/`.
 - **Tire sets (feature 041).** The rules live in one pure module,
   `src/app/utils/tireSets.ts` (compatible = same brand, model, size, run-flat
   and condition class; tread Δ ≤ 2/32"; **any city** — the city only breaks
