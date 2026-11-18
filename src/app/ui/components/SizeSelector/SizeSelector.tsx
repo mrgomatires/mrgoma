@@ -8,13 +8,20 @@ export interface SizeSelectorProps {
   removeFilter: (type: keyof TireSize) => void;
 }
 
+/** The names the size picker's steps use (049), so a chip and its step agree. */
+const LABELS: Record<string, string> = {
+  width: 'Width',
+  sidewall: 'Aspect ratio',
+  diameter: 'Rim',
+};
+
 export const SizeSelector: FC<SizeSelectorProps> = ({ filterKey, value, removeFilter }) => {
   return (
     <span
       key={filterKey}
       className="inline-flex items-center rounded-full bg-green-50 border border-green-300 px-1 text-xs font-medium text-green-700"
     >
-      {filterKey ? filterKey.charAt(0).toUpperCase() + filterKey.slice(1) : ''}: {value}
+      {LABELS[filterKey] ?? filterKey}: {value}
       <button
         type="button"
         onClick={() => removeFilter(filterKey as keyof TireSize)}
@@ -27,7 +34,9 @@ export const SizeSelector: FC<SizeSelectorProps> = ({ filterKey, value, removeFi
             clipRule="evenodd"
           />
         </svg>
-        <span className="sr-only">Remove {filterKey} filter</span>
+        <span className="sr-only">
+          Remove {(LABELS[filterKey] ?? filterKey).toLowerCase()} filter
+        </span>
       </button>
     </span>
   );

@@ -35,3 +35,15 @@ describe('the set block stays on the server side of the barrel', () => {
     );
   });
 });
+
+describe('"Other sizes" (049) stays on the server side of the barrel', () => {
+  it('is not exported from the sections barrel', () => {
+    expect(read('src/app/ui/sections/index.ts')).not.toMatch(/OtherSizes|otherSizesRepository/);
+  });
+
+  it('is mounted from DetailView', () => {
+    expect(read('src/app/(shop)/detail/container/DetailView/DetailView.tsx')).toMatch(
+      /<OtherSizes tire=/
+    );
+  });
+});

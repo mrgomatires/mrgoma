@@ -94,6 +94,12 @@ Versions taken from `package.json` (2026-06-30). Update here when they change.
   queries** — never concatenate user input into SQL.
 - Secrets stay server-only (no `NEXT_PUBLIC_`); the client receives only
   non-sensitive UI values. Auth via NextAuth v5.
+- **Sizes a shopper can pick come from the catalog's own list** (049):
+  `GET /api/dimensions/stocked` serves `getCachedStockedSizes()` (the sellable
+  rule, 5 min, edge-cached) and the picker derives width → ratio → rim from it
+  (`sizeTree.ts`). Values are the parts of `RealSize` verbatim — `/tires`
+  matches a complete size as the exact string `w/s/d`. The three
+  `/api/dimensions/{heights,widths,sizes}` routes remain for the dashboard only.
 
 ### Analytics & tracking
 
@@ -133,6 +139,14 @@ Versions taken from `package.json` (2026-06-30). Update here when they change.
   every size search lands (`useSearchEvent` on `/tires`), keyed on the size
   only. Filters carry `filter_group` / `filter_value` and `tire_brand` /
   `tire_condition` as `data-track-*`. See `spec/features/046-ga4-catalog-events/`.
+- **Size picker and other sizes (feature 049).** `size_picker_select`
+  (`step` width/ratio/rim, `label` value, `surface` home/tires/3d) on each
+  option button, `size_picker_complete` (`label` `w/s/d`, `surface`) via
+  `trackEvent` when the rim completes a size, `other_size_select` (`label`
+  target size, `from`, `tire_id`) on each "Other sizes" link, and
+  `other_sizes_open` (`label` rim) only when a rim group **opens** (a `toggle`
+  listener: a `summary` click cannot tell open from close). GA4 `search` is
+  unchanged. See `spec/features/049-size-picker-other-sizes/`.
 - **Tire sets (feature 041).** The rules live in one pure module,
   `src/app/utils/tireSets.ts` (compatible = same brand, model, size, run-flat
   and condition class; tread Δ ≤ 2/32"; **any city** — the city only breaks

@@ -1,6 +1,6 @@
 'use client';
 
-import { ComponentProps, FC, useContext, useEffect, useState } from 'react';
+import { ComponentProps, FC, useContext, useEffect, useRef, useState } from 'react';
 
 import dynamic from 'next/dynamic';
 
@@ -8,8 +8,8 @@ import { createPortal } from 'react-dom';
 
 import { SelectedFiltersContext } from '@/app/context/SelectedFilters';
 import { ButtonSearch, XMarkIcon } from '@/app/ui/components';
+import SizePicker from '@/app/ui/components/SizePicker/SizePicker';
 import { ArrowsToRight, CarFront } from '@/app/ui/icons';
-import { SizeSelectors } from '@/app/ui/sections';
 
 import { TIRE_3D_HINT_KEY, useDiscoveryHint } from './useDiscoveryHint';
 import { isWebglAvailable } from './webgl';
@@ -29,7 +29,8 @@ const TireScene = dynamic(() => import('./TireScene'), {
  * the 3D model in a modal — three.js loads only when the user taps it.
  */
 const TirePreview3DMobile: FC<{
-  selector: ComponentProps<typeof SizeSelectors>;
+  /** The home picker's state, shared so the model follows the size (049). */
+  selector: Omit<ComponentProps<typeof SizePicker>, 'surface' | 'onComplete'>;
   onSearch: () => void;
   canSearch: boolean;
 }> = ({ selector, onSearch, canSearch }) => {
@@ -38,6 +39,8 @@ const TirePreview3DMobile: FC<{
   const [open, setOpen] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const hint = useDiscoveryHint(TIRE_3D_HINT_KEY);
+  const searchRef = useRef<HTMLButtonElement>(null);
+  const [searchReady, setSearchReady] = useState(false);
 
   useEffect(() => {
     setSupported(isWebglAvailable());
@@ -120,14 +123,25 @@ const TirePreview3DMobile: FC<{
 
               {/* Size selectors live inside the modal so changing Width/Sidewall/
                 Diameter updates the model in view — making the link obvious. */}
-              <div className="border-b border-gray-100 px-4 py-3">
-                <SizeSelectors {...selector} showChips={false} />
+              <div className="max-h-[45%] shrink-0 overflow-y-auto overscroll-contain border-b border-gray-100 px-4 py-3">
+                <SizePicker
+                  {...selector}
+                  onChange={next => {
+                    selector.onChange(next);
+                    setSearchReady(false);
+                  }}
+                  onComplete={() => {
+                    setSearchReady(true);
+                    requestAnimationFrame(() => searchRef.current?.focus());
+                  }}
+                  surface="3d"
+                />
                 <p className="mt-2 text-center text-[11px] font-medium text-green-700">
                   Change a size — the model updates live below.
                 </p>
               </div>
 
-              <div className="relative flex-1" aria-hidden="true">
+              <div className="relative min-h-0 flex-1" aria-hidden="true">
                 <TireScene size={size} reducedMotion={reducedMotion} />
                 <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full bg-neutral-800/90 px-4 py-1 shadow-xl">
                   <ArrowsToRight className="w-8" />
@@ -137,7 +151,12 @@ const TirePreview3DMobile: FC<{
 
               {/* Footer — search straight from the preview without closing it. */}
               <div className="border-t border-gray-100 px-4 py-3">
-                <ButtonSearch onClick={onSearch} disabled={canSearch} />
+                <ButtonSearch
+                  ref={searchRef}
+                  onClick={onSearch}
+                  disabled={canSearch}
+                  highlight={searchReady && canSearch}
+                />
                 <p className="mt-2 text-center text-[10px] leading-snug text-gray-400">
                   Drag to rotate · Visual size aid only — not an exact representation of the
                   tire&apos;s condition, measurements or physical aspects.

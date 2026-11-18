@@ -15,7 +15,7 @@ const CollapsibleSearchBar: React.FC<{ redirectBasePath: string }> = ({ redirect
   const [isCompactFormOpen, setIsCompactFormOpen] = useState(false);
 
   // Use the custom hook for tire search functionality
-  const { selectedFilters, handleFilterChange, resetFilters } = useTireSearch(redirectBasePath);
+  const { selectedFilters, applySize, resetFilters } = useTireSearch(redirectBasePath);
 
   // Toggle the compact form visibility
   const toggleCompactForm = () => {
@@ -30,7 +30,10 @@ const CollapsibleSearchBar: React.FC<{ redirectBasePath: string }> = ({ redirect
       {isCompactFormOpen && (
         <CompactForm
           selectedFilters={selectedFilters}
-          onFilterChangeAction={handleFilterChange}
+          onApplyAction={size => {
+            applySize(size);
+            setIsCompactFormOpen(false);
+          }}
           onResetFiltersAction={resetFilters}
           onCloseAction={toggleCompactForm}
         />

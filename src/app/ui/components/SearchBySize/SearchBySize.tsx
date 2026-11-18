@@ -1,20 +1,22 @@
 'use client';
 
-import { FC, useContext, useState } from 'react';
+import { FC, useContext, useRef, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
 import { SelectedFiltersContext } from '@/app/context/SelectedFilters';
-import { useTireDimensions } from '@/app/hooks/useTireDimensions';
+import { useStockedSizes } from '@/app/hooks/useStockedSizes';
 import { useTireSizeWithContext } from '@/app/hooks/useTireSizeWithContext';
-import { ButtonSearch } from '@/app/ui/components';
+import { ButtonSearch, SizeSelector } from '@/app/ui/components';
 import HomeMoreFilters, {
   HomeExtraFilters,
 } from '@/app/ui/components/HomeMoreFilters/HomeMoreFilters';
+import SizePicker, { type SizePick } from '@/app/ui/components/SizePicker/SizePicker';
 import TirePreview3D from '@/app/ui/components/TirePreview3D/TirePreview3D';
 import TirePreview3DMobile from '@/app/ui/components/TirePreview3D/TirePreview3DMobile';
 import { CarFront } from '@/app/ui/icons';
-import { SizeSelectors } from '@/app/ui/sections';
+import { TireSize } from '@/app/ui/interfaces/tireSize';
+import { reconcile } from '@/app/utils/sizeTree';
 
 const URL_PARAMS = {
   width: 'w',
@@ -56,20 +58,13 @@ const FilterChip: FC<{ label: string; onRemove: () => void }> = ({ label, onRemo
 
 const SearchBySize: FC = () => {
   const { selectedFilters } = useContext(SelectedFiltersContext);
-  const { tireSize, handleFilterChange, removeFilter, isComplete } = useTireSizeWithContext();
+  const { tireSize, updateTireSize, isComplete } = useTireSizeWithContext();
 
-  // Usar el nuevo hook para cargar las dimensiones de neumáticos desde la BD
-  const {
-    widthOptions,
-    sidewallOptions,
-    diameterOptions,
-    isLoadingWidth,
-    isLoadingSidewall,
-    isLoadingDiameter,
-    handleWidthChange,
-    handleSidewallChange,
-    handleDiameterChange,
-  } = useTireDimensions();
+  // Every size for sale, loaded once; the picker derives its steps from it (049).
+  const { tree, error: sizesError } = useStockedSizes();
+
+  const searchRef = useRef<HTMLButtonElement>(null);
+  const [searchReady, setSearchReady] = useState(false);
 
   const router = useRouter();
 
@@ -111,23 +106,25 @@ const SearchBySize: FC = () => {
   const hasExtraFilters =
     extraFilters.brands.length > 0 || extraFilters.condition.length > 0 || hasPriceFilter;
 
-  // Manejador integrado para el cambio de dimensiones
-  const handleDimensionChange = (value: string, type: 'width' | 'sidewall' | 'diameter') => {
-    // Actualizar el estado del contexto
-    handleFilterChange(value, type);
+  const pick: SizePick = { w: tireSize.width, s: tireSize.sidewall, d: tireSize.diameter };
 
-    // Actualizar las opciones dependientes según el tipo de dimensión
-    switch (type) {
-      case 'width':
-        handleWidthChange(value);
-        break;
-      case 'sidewall':
-        handleSidewallChange(value);
-        break;
-      case 'diameter':
-        handleDiameterChange(value);
-        break;
-    }
+  const setPick = (next: SizePick) => {
+    updateTireSize({ width: next.w, sidewall: next.s, diameter: next.d });
+    setSearchReady(false);
+  };
+
+  // A complete size never searches by itself (D3): Search takes the focus and
+  // a highlight, so the brand/condition/price filters can still be added.
+  const onSizeComplete = () => {
+    setSearchReady(true);
+    requestAnimationFrame(() => searchRef.current?.focus());
+  };
+
+  // The chips under the picker: removing a part drops what no longer exists.
+  const removePart = (type: keyof TireSize) => {
+    const key = ({ width: 'w', sidewall: 's', diameter: 'd' } as const)[type];
+    const next = { ...pick, [key]: '' };
+    setPick(tree ? reconcile(tree, next) : { w: '', s: '', d: '' });
   };
 
   const canSearch = isComplete();
@@ -150,30 +147,31 @@ const SearchBySize: FC = () => {
               <TirePreview3DMobile
                 onSearch={handleSearch}
                 canSearch={searchEnabled}
-                selector={{
-                  currentSize: tireSize,
-                  width: widthOptions,
-                  sidewall: sidewallOptions,
-                  diameter: diameterOptions,
-                  handleFilterChange: handleDimensionChange,
-                  removeFilter,
-                  isLoadingWidth,
-                  isLoadingSidewall,
-                  isLoadingDiameter,
-                }}
+                selector={{ tree, value: pick, onChange: setPick, error: sizesError }}
               />
             </div>
-            <SizeSelectors
-              currentSize={tireSize}
-              width={widthOptions}
-              sidewall={sidewallOptions}
-              diameter={diameterOptions}
-              handleFilterChange={handleDimensionChange}
-              removeFilter={removeFilter}
-              isLoadingWidth={isLoadingWidth}
-              isLoadingSidewall={isLoadingSidewall}
-              isLoadingDiameter={isLoadingDiameter}
+            <SizePicker
+              tree={tree}
+              value={pick}
+              onChange={setPick}
+              onComplete={onSizeComplete}
+              surface="home"
+              error={sizesError}
             />
+            {(pick.w || pick.s || pick.d) && (
+              <div className="flex flex-wrap gap-2">
+                {(Object.entries(tireSize) as [keyof TireSize, string][]).map(([key, value]) =>
+                  value ? (
+                    <SizeSelector
+                      key={key}
+                      filterKey={key}
+                      value={value}
+                      removeFilter={removePart}
+                    />
+                  ) : null
+                )}
+              </div>
+            )}
 
             <div className="flex flex-wrap items-center gap-2">
               <HomeMoreFilters value={extraFilters} onApply={handleApplyFilters} />
@@ -195,11 +193,21 @@ const SearchBySize: FC = () => {
               )}
             </div>
 
-            <ButtonSearch onClick={handleSearch} disabled={searchEnabled} />
+            <ButtonSearch
+              ref={searchRef}
+              onClick={handleSearch}
+              disabled={searchEnabled}
+              highlight={searchReady && searchEnabled}
+            />
           </div>
         </div>
-        <div className="hidden md:flex items-stretch justify-center flex-1">
-          <TirePreview3D />
+        {/* Fixed at the box's closed height (h-64 minus padding) and pinned to the
+            top: when a picker step opens and the box grows, the model must not
+            grow with it (049, owner review). */}
+        <div className="hidden md:flex items-start justify-center flex-1">
+          <div className="h-56 w-full">
+            <TirePreview3D />
+          </div>
         </div>
       </div>
     </>

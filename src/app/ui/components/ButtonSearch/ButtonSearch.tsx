@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, Ref } from 'react';
 
 interface ButtonSearchProps {
   onClick?: () => void;
@@ -12,11 +12,22 @@ interface ButtonSearchProps {
    * control the first time one of these is placed inside a `<form>`.
    */
   type?: 'submit' | 'reset' | 'button';
+  /** Lets a size picker hand focus to Search once the size is complete (049). */
+  ref?: Ref<HTMLButtonElement>;
+  /** A ring that says "next" after the size is complete (049, D3). */
+  highlight?: boolean;
 }
 
-const ButtonSearch: FC<ButtonSearchProps> = ({ onClick, disabled, type = 'button' }) => {
+const ButtonSearch: FC<ButtonSearchProps> = ({
+  onClick,
+  disabled,
+  type = 'button',
+  ref,
+  highlight = false,
+}) => {
   return (
     <button
+      ref={ref}
       type={type}
       onClick={onClick}
       disabled={!disabled}
@@ -24,7 +35,7 @@ const ButtonSearch: FC<ButtonSearchProps> = ({ onClick, disabled, type = 'button
         disabled
           ? 'bg-green-600 hover:bg-green-700 text-white cursor-pointer'
           : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-      }`}
+      }${highlight ? ' search-ready' : ''}`}
     >
       {disabled ? 'Search Tires' : 'Select all measurements'}
     </button>

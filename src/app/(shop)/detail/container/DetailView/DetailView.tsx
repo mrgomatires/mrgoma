@@ -4,6 +4,7 @@ import { SingleTire } from '@/app/interfaces/tires';
 import ScrollToTopOnOpen from '@/app/ui/components/ScrollToTopOnOpen/ScrollToTopOnOpen';
 import TreadWearExplorer from '@/app/ui/components/TreadWearExplorer/TreadWearExplorer';
 import { ProductCarousel, TireInformation, TireFeatures, Benefits } from '@/app/ui/sections';
+import OtherSizes from '@/app/ui/sections/OtherSizes/OtherSizes';
 import SoldTireAlternative from '@/app/ui/sections/TireSet/SoldTireAlternative';
 import TireSetSection from '@/app/ui/sections/TireSet/TireSetSection';
 import { brandName, modelName } from '@/app/utils/tireNaming';
@@ -129,6 +130,10 @@ const DetailView = ({ product }: { product: SingleTire }) => {
               </section>
             </div>
           </div>
+          {/* Same brand and model in other sizes, by rim (049). */}
+          <Suspense fallback={null}>
+            <OtherSizes tire={product} />
+          </Suspense>
           <section aria-labelledby="tread-wear-heading" className="mt-10">
             <TreadWearExplorer singleTire={product} />
           </section>
