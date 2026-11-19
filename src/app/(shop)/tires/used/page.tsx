@@ -12,6 +12,7 @@ import { onlineInventoryLabel } from '@/app/utils/brandClaims';
 import { LISTS } from '@/app/utils/ecommerce';
 import { buildBreadcrumbJsonLd, buildItemListJsonLd, usedTiresMetadata } from '@/app/utils/seo';
 import { transformTireData } from '@/app/utils/transformTireData';
+import { pickTireListFields } from '@/repositories/tireListFields';
 import { fetchBrands, fetchTires } from '@/repositories/tiresRepository';
 
 export const revalidate = 3600;
@@ -42,7 +43,8 @@ export default async function UsedTiresPage() {
     fetchTires(0, 24, { condition: ['used'] }),
     fetchBrands().catch(() => [] as string[]),
   ]);
-  const tires = (result.records as TiresData[]).map(transformTireData);
+  // Through the same whitelist as `/api/tires`: public fields plus the city (051).
+  const tires = result.records.map(pickTireListFields).map(r => transformTireData(r as TiresData));
   const totalCount = result.totalCount;
 
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([

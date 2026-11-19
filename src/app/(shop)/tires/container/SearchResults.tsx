@@ -336,7 +336,7 @@ const SearchResults: FC<SearchResultsProps> = ({
                 suggestions={suggestions}
               />
             ) : view === 'table' ? (
-              <TireTable products={tiresData.tires} />
+              <TireTable products={tiresData.tires} list={LISTS.catalog} />
             ) : (
               <TireResults
                 products={tiresData.tires}

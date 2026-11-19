@@ -21,17 +21,13 @@ const WHITELIST = [
   'Tread',
   'KindSaleId',
   'City',
+  // Public since 051 (the comparison): on every tire page and on the tire.
+  'DOT',
+  'loadIndex',
+  'speedIndex',
 ].sort();
 
-const INTERNAL = [
-  'VaultName',
-  'Local',
-  'Trash',
-  'Amount',
-  'DOT',
-  'ModificationDate',
-  'ConditionId',
-];
+const INTERNAL = ['VaultName', 'Local', 'Trash', 'Amount', 'ModificationDate', 'ConditionId'];
 
 // A raw record as it comes off `SELECT *` — includes internal columns that are
 // not even in the DocumentRecord type but exist at runtime.
@@ -49,12 +45,14 @@ const rawRecord = {
   RemainingLife: '80%',
   Tread: '7',
   KindSaleId: 1,
+  loadIndex: '94',
+  speedIndex: 'V',
   // internal columns that must be dropped:
   VaultName: 'Vault-1',
   Local: '0',
   Trash: 'false',
   Amount: 5,
-  DOT: '1234',
+  DOT: '1234', // public (051)
   ModificationDate: '2026-01-01',
   ConditionId: 7,
 } as unknown as DocumentRecord;

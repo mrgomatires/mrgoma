@@ -419,7 +419,7 @@ export default function AiChat({
       )}
 
       {/* Floating Toggle Button */}
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-[calc(1.5rem+var(--compare-tray-h,0px))] right-6 z-50">
         {isOpen ? (
           <button
             type="button"

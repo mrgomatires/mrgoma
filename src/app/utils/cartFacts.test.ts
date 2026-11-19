@@ -20,6 +20,12 @@ describe('cart facts (047, owner review)', () => {
     expect(facts).toEqual({ tread: 9, life: '90%', patched: false, dot: undefined });
   });
 
+  it("carries the card's DOT since listings include it (051)", () => {
+    const facts = factsFromCardTire({ features: [], dot: '2324' } as never);
+    expect(facts.dot).toBe('2324');
+    expect(factsParts(facts)).toContain('DOT 2324');
+  });
+
   it('drops blanks and placeholders', () => {
     expect(
       factsFromSingleTire({ treadDepth: '-', remainingLife: '-', patched: '', dot: 'N/A' })

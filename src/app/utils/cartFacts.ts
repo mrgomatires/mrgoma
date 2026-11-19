@@ -42,15 +42,15 @@ export function factsFromSingleTire(
   };
 }
 
-/** A catalog card's tire: its facts come as named features (no DOT there). */
-export function factsFromCardTire(t: Pick<TransformedTire, 'features'>): AllFacts {
+/** A catalog card's tire: facts from its named features; DOT as a field since 051. */
+export function factsFromCardTire(t: Pick<TransformedTire, 'features' | 'dot'>): AllFacts {
   const value = (name: string) =>
     t.features?.find(f => f.name.toLowerCase() === name.toLowerCase())?.value;
   return {
     tread: parseTread(value('Tread depth')),
     life: clean(value('Remaining life')),
     patched: yesNo(value('Patched')),
-    dot: undefined,
+    dot: clean(t.dot),
   };
 }
 

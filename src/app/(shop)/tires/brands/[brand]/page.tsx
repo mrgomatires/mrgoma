@@ -15,6 +15,7 @@ import { brandMetadata, buildBreadcrumbJsonLd, buildItemListJsonLd } from '@/app
 import { brandName as displayBrand } from '@/app/utils/tireNaming';
 import { matchSlug, slugify } from '@/app/utils/tireSlug';
 import { transformTireData } from '@/app/utils/transformTireData';
+import { pickTireListFields } from '@/repositories/tireListFields';
 import { fetchBrands, fetchTires } from '@/repositories/tiresRepository';
 
 export const revalidate = 3600;
@@ -57,7 +58,8 @@ export default async function BrandCategoryPage({
     fetchTires(0, 24, { brands: [brandName] }),
     fetchBrands().catch(() => [] as string[]),
   ]);
-  const tires = (result.records as TiresData[]).map(transformTireData);
+  // Through the same whitelist as `/api/tires`: public fields plus the city (051).
+  const tires = result.records.map(pickTireListFields).map(r => transformTireData(r as TiresData));
   const totalCount = result.totalCount;
   const brandId = result.records.length > 0 ? (result.records[0] as TiresData).BrandId : undefined;
 

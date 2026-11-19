@@ -43,7 +43,7 @@ const rawRecord = {
   Local: '0',
   Trash: 'false',
   Amount: 5,
-  DOT: '1234',
+  DOT: '1234', // public since 051
   ModificationDate: '2026-01-01',
   ConditionId: 7,
 };
@@ -67,7 +67,7 @@ describe('GET /api/tires', () => {
       'Local',
       'Trash',
       'Amount',
-      'DOT',
+      // DOT is public since 051 (the comparison): on every tire page and the tire.
       'ModificationDate',
       'ConditionId',
     ]) {
