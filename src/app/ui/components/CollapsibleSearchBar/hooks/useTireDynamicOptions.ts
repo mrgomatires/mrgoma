@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
+import { sharedJson } from '@/app/utils/sharedFetch';
+
 import { TireFilters } from './useTireSearch';
 
 // Definimos la interfaz para las opciones de dimensiones
@@ -26,10 +28,9 @@ export const useTireDynamicOptions = (selectedFilters: TireFilters) => {
   const loadWidthOptions = useCallback(async () => {
     setIsLoadingWidth(true);
     try {
-      const response = await fetch('/api/dimensions/heights');
-      if (!response.ok) throw new Error('Failed to fetch width options');
-      const data = await response.json();
-      setWidthOptions(data);
+      // Shared (058): the dashboard and the storefront mount more than one size
+      // picker, and each used to ask for the same list.
+      setWidthOptions(await sharedJson<DimensionOption[]>('/api/dimensions/heights'));
     } catch (error) {
       console.error('Error loading width options:', error);
       setWidthOptions([]);
@@ -47,10 +48,11 @@ export const useTireDynamicOptions = (selectedFilters: TireFilters) => {
 
     setIsLoadingSidewall(true);
     try {
-      const response = await fetch(`/api/dimensions/widths?height=${encodeURIComponent(width)}`);
-      if (!response.ok) throw new Error('Failed to fetch sidewall options');
-      const data = await response.json();
-      setSidewallOptions(data);
+      setSidewallOptions(
+        await sharedJson<DimensionOption[]>(
+          `/api/dimensions/widths?height=${encodeURIComponent(width)}`
+        )
+      );
     } catch (error) {
       console.error('Error loading sidewall options:', error);
       setSidewallOptions([]);
@@ -69,13 +71,7 @@ export const useTireDynamicOptions = (selectedFilters: TireFilters) => {
     setIsLoadingDiameter(true);
     try {
       const url = `/api/dimensions/sizes?height=${encodeURIComponent(width)}&width=${encodeURIComponent(sidewall)}`;
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error('Failed to fetch diameter options');
-      }
-
-      const data = await response.json();
-      setDiameterOptions(data);
+      setDiameterOptions(await sharedJson<DimensionOption[]>(url));
     } catch (error) {
       console.error('Error loading diameter options:', error);
       setDiameterOptions([]);

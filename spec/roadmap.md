@@ -41,11 +41,11 @@ performance budget is in place (P1.8).
   no flashes; subset if applicable.
 - ⬜ **P1.4 — Structural CLS.** Reserve space for badges, carousels and media;
   avoid jumps on hydration.
-- 🟡 **P1.5 — JS / bundle (`056-bundle-lcp-mobile` ✅ PR #217, 2026-11-19: tire page JS 578 → 272 KB; `057-split-barrels` 🟡).** Audit heavy imports; confirm that 3D (three.js) and
+- 🟡 **P1.5 — JS / bundle (`056-bundle-lcp-mobile` ✅ PR #217, 2026-11-19: tire page JS 578 → 272 KB; `057-split-barrels` ✅ PR #218, 2026-11-19: unused JS ~100 → 21 KB per page).** Audit heavy imports; confirm that 3D (three.js) and
   other non-critical chunks load deferred; trim the rest.
 - ⬜ **P1.6 — INP / interactivity.** Reduce main-thread work; confirm the 3D
   canvases only run when active.
-- ⬜ **P1.7 — Data / routes.** Review caching/ISR where applicable and hot SQL
+- 🟡 **P1.7 — Data / routes (`058-dashboard-requests-local-auth`: dashboard requests once).** Review caching/ISR where applicable and hot SQL
   queries that affect TTFB.
 - ⬜ **P1.8 — Re-measure and budget.** Confirm CWV in the green and set a
   performance budget to prevent regressions.
