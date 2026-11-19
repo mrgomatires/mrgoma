@@ -4,6 +4,7 @@ import { FC, useState } from 'react';
 
 import Image from 'next/image';
 
+import { brandLogoSrc, hasBrandLogo } from '@/app/utils/brandLogos';
 import { brandName } from '@/app/utils/tireNaming';
 
 interface BrandImageProps {
@@ -29,15 +30,25 @@ interface BrandImageProps {
  * The row wraps, so the extra 32 px costs nothing on a narrow card.
  */
 const BrandImage: FC<BrandImageProps> = ({ product }) => {
-  const [src, setSrc] = useState(`/assets/images/TireBrand/${product.brandId}-logo.webp`);
+  const [failed, setFailed] = useState(false);
+  const name = brandName(product.brand);
+
+  // A brand with no logo file shows its name — and asks for no file. Before
+  // 055 every such card requested `{id}-logo.webp`, got a 404, then fell back.
+  if (failed || !hasBrandLogo(product.brandId)) {
+    return (
+      <span className="flex h-full max-w-40 items-center truncate pl-1 text-sm font-black uppercase tracking-wide text-gray-800">
+        {name}
+      </span>
+    );
+  }
+
   return (
     <Image
       className="h-full aspect-auto w-full max-w-40 pl-1 object-contain object-center"
-      src={src}
-      alt={brandName(product.brand)}
-      title={brandName(product.brand)}
-      aria-label={brandName(product.brand)}
-      priority
+      src={brandLogoSrc(product.brandId)}
+      alt={name}
+      title={name}
       /*
        * The box, not the file. These told `next/image` the mark was 128×96 —
        * 4:3 — which no logo here is, and which stopped matching anything once
@@ -46,7 +57,7 @@ const BrandImage: FC<BrandImageProps> = ({ product }) => {
        */
       width={160}
       height={32}
-      onError={() => setSrc('/assets/images/TireBrand/no-brand.webp')}
+      onError={() => setFailed(true)}
     />
   );
 };

@@ -1,0 +1,80 @@
+
+> mrgoma-store@0.1.0 a11y
+> node scripts/a11y-check.mjs
+
+✗ home     mobile   97  /
+    ✗ target-size — Touch targets do not have sufficient size or spacing.
+        <button type="button" class="h-2 rounded-full transition-all duration-300 cursor-pointer bg-gray-300 ho…" aria-label="Go
+        <button type="button" class="h-2 rounded-full transition-all duration-300 cursor-pointer bg-gray-300 ho…" aria-label="Go
+        <button type="button" class="h-2 rounded-full transition-all duration-300 cursor-pointer bg-gray-300 ho…" aria-label="Go
+    ✗ label-content-name-mismatch — Elements with visible text labels do not have matching accessible names.
+        <button type="button" class="flex gap-2 transition-colors cursor-pointer group" aria-label="Open address link">
+✗ home     desktop  97  /
+    ✗ target-size — Touch targets do not have sufficient size or spacing.
+        <button type="button" class="h-2 rounded-full transition-all duration-300 cursor-pointer bg-gray-300 ho…" aria-label="Go
+        <button type="button" class="h-2 rounded-full transition-all duration-300 cursor-pointer bg-gray-300 ho…" aria-label="Go
+        <button type="button" class="h-2 rounded-full transition-all duration-300 cursor-pointer bg-gray-300 ho…" aria-label="Go
+    ✗ label-content-name-mismatch — Elements with visible text labels do not have matching accessible names.
+        <button type="button" class="flex gap-2 transition-colors cursor-pointer group" aria-label="Open address link">
+        <button type="button" class="flex gap-2 transition-colors cursor-pointer group" aria-label="Open address link">
+✓ tires    mobile  100  /tires
+✓ tires    desktop 100  /tires
+✗ used     mobile   96  /tires/used
+    ✗ target-size — Touch targets do not have sufficient size or spacing.
+        <a class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-[#0a0a0a] text-[#9d…" href="/tires/size/315-35-21">
+        <a class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-[#0a0a0a] text-[#9d…" href="/tires/size/315-35-21">
+        <a class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-[#0a0a0a] text-[#9d…" href="/tires/size/275-40-22">
+✓ used     desktop 100  /tires/used
+✓ tire     mobile  100  /tires/514637-michelin-315-30-22
+✓ tire     desktop 100  /tires/514637-michelin-315-30-22
+✗ store    mobile   96  /locations/cutler-bay
+    ✗ color-contrast — Background and foreground colors do not have a sufficient contrast ratio.
+        <a class="hover:text-[#9dfb40] transition-colors" href="/">
+        <a class="hover:text-[#9dfb40] transition-colors" href="/locations">
+        <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">
+✗ store    desktop  96  /locations/cutler-bay
+    ✗ color-contrast — Background and foreground colors do not have a sufficient contrast ratio.
+        <a class="hover:text-[#9dfb40] transition-colors" href="/">
+        <a class="hover:text-[#9dfb40] transition-colors" href="/locations">
+        <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">
+✗ service  mobile   96  /services/tire-mounting-balancing
+    ✗ color-contrast — Background and foreground colors do not have a sufficient contrast ratio.
+        <a class="hover:text-[#9dfb40] transition-colors" href="/">
+        <a class="hover:text-[#9dfb40] transition-colors" href="/services">
+        <span class="text-gray-500 text-sm leading-relaxed">
+✗ service  desktop  96  /services/tire-mounting-balancing
+    ✗ color-contrast — Background and foreground colors do not have a sufficient contrast ratio.
+        <a class="hover:text-[#9dfb40] transition-colors" href="/">
+        <a class="hover:text-[#9dfb40] transition-colors" href="/services">
+        <span class="text-gray-500 text-sm leading-relaxed">
+✓ about    mobile  100  /about-us
+✓ about    desktop 100  /about-us
+✗ size     mobile   95  /tires/size/110-80-19
+    ✗ color-contrast — Background and foreground colors do not have a sufficient contrast ratio.
+        <span class="text-gray-500">
+        <span class="text-gray-500">
+        <span class="text-gray-500">
+    ✗ heading-order — Heading elements are not in a sequentially-descending order
+        <h3 class="text-base sm:text-lg md:text-xl font-bold text-gray-900 leading-snug line-…">
+✗ size     desktop  95  /tires/size/110-80-19
+    ✗ color-contrast — Background and foreground colors do not have a sufficient contrast ratio.
+        <span class="text-gray-500">
+        <span class="text-gray-500">
+        <span class="text-gray-500">
+    ✗ heading-order — Heading elements are not in a sequentially-descending order
+        <h3 class="text-base sm:text-lg md:text-xl font-bold text-gray-900 leading-snug line-…">
+✗ brand    mobile   98  /tires/brands/accelera
+    ✗ heading-order — Heading elements are not in a sequentially-descending order
+        <h3 class="text-base sm:text-lg md:text-xl font-bold text-gray-900 leading-snug line-…">
+✗ brand    desktop  98  /tires/brands/accelera
+    ✗ heading-order — Heading elements are not in a sequentially-descending order
+        <h3 class="text-base sm:text-lg md:text-xl font-bold text-gray-900 leading-snug line-…">
+✗ checkout mobile   98  /checkout
+    ✗ heading-order — Heading elements are not in a sequentially-descending order
+        <h3 class="text-white text-lg font-semibold mb-4">
+✗ checkout desktop  98  /checkout
+    ✗ heading-order — Heading elements are not in a sequentially-descending order
+        <h3 class="text-white text-lg font-semibold mb-4">
+
+✗ 17 accessibility failure(s). Fix them, or allow-list one with a reason.
+exit 1

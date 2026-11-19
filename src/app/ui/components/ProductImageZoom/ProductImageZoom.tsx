@@ -166,7 +166,6 @@ const ProductImageZoom: FC<ProductImageZoomProps> = ({
           isActive ? 'opacity-100' : 'opacity-0'
         }`}
         sizes={sizes}
-        priority={priority && isActive}
         /*
          * The photos behind the current one are fetched, not deferred — that is
          * the whole point of mounting them. Left to `lazy` they stayed
@@ -177,8 +176,10 @@ const ProductImageZoom: FC<ProductImageZoomProps> = ({
          * and behind the page itself: they are for the click that may come, not
          * for the frame on screen now.
          */
-        loading={isActive ? undefined : 'eager'}
-        fetchPriority={isActive ? undefined : 'low'}
+        // The photo on screen is the page's LCP: eager and `high` when the page
+        // asks for it (Next 16's `priority` only preloads, without the hint — 055).
+        loading="eager"
+        fetchPriority={isActive ? (priority ? 'high' : undefined) : 'low'}
       />
     );
   });

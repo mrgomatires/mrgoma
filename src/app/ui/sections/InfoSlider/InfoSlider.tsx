@@ -49,7 +49,7 @@ const InfoSlider = () => {
                 alt={slide.title}
                 fill
                 className="object-cover brightness-75"
-                priority={index === 0}
+                loading={index === 0 ? 'eager' : 'lazy'}
                 sizes="100vw"
               />
             </div>
@@ -76,11 +76,18 @@ const InfoSlider = () => {
             type="button"
             key={index}
             onClick={() => goToSlide(index)}
-            className={`w-12 h-3 rounded-full transition-all duration-300 cursor-pointer ${
-              index === currentSlide ? 'bg-[#9dfb40]' : 'bg-gray-600 hover:bg-gray-400'
-            }`}
             aria-label={`Go to slide ${index + 1}`}
-          />
+            aria-current={index === currentSlide ? 'true' : undefined}
+            // A 24 px tall target around the 12 px bar (WCAG 2.5.8, 055).
+            className="group grid h-6 w-12 cursor-pointer place-items-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
+          >
+            <span
+              aria-hidden="true"
+              className={`h-3 w-12 rounded-full transition-all duration-300 ${
+                index === currentSlide ? 'bg-[#9dfb40]' : 'bg-gray-600 group-hover:bg-gray-400'
+              }`}
+            />
+          </button>
         ))}
       </div>
     </div>

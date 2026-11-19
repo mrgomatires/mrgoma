@@ -281,13 +281,33 @@ A change is done when:
 2. `npm run lint` passes.
 3. `npm test` passes (382+ green; add tests for new logic).
 4. `npm run build` compiles.
-5. Manual behavior check when it's UI (ideally on mobile).
+5. `npm run perf:budget` and **`npm run a11y`** pass (both run over the build,
+   so after step 4; local pre-deploy gates, not CI — see below).
+6. Manual behavior check when it's UI (ideally on mobile).
 
 ### Accessibility
 
 - Target **WCAG 2.1 AA** on key flows: semantic HTML, labelled controls, keyboard
-  operability, visible focus, and `prefers-reduced-motion` respected. Aim to add
-  `eslint-plugin-jsx-a11y` / axe checks to catch regressions.
+  operability, visible focus, and `prefers-reduced-motion` respected.
+- **`npm run a11y`** (055, `scripts/a11y-check.mjs`): Lighthouse 13.6.0 (a
+  pinned devDependency), accessibility only, on the key pages of the local
+  production build — home, `/tires`, `/tires/used`, a tire page, a store, a
+  service, `/about-us`, a size page, a brand page, `/checkout` — mobile and
+  desktop, real paths taken from the sitemap. Any failing audit fails it unless
+  `scripts/a11y-allowlist.json` names that audit and page **with a reason**
+  (printed on every run).
+- **Secondary text on dark sections** (`#0a0a0a`, `#111`, `#161616`) is
+  `text-gray-400` (≥ 6.5:1), never `gray-500`/`600` (3.7–4.1:1 and 2.5:1);
+  on `bg-gray-100`, `text-gray-600`. `darkContrast.guard.test.ts` lists the
+  dark pages.
+- **Targets ≥ 24 × 24 px** (WCAG 2.5.8): small visuals (carousel dots, the
+  size pill) sit inside a 24 px button/link, the look unchanged.
+- **A control's name contains its visible text** (2.5.3): extra words for
+  screen readers go after it as `sr-only`, never in an `aria-label` that
+  replaces it; spaces are their own text nodes.
+- **Brand logos:** `src/app/utils/brandLogos.ts` is generated from
+  `public/assets/images/TireBrand` (`node scripts/brand-logos.mjs`); a brand
+  without a file shows its name and requests nothing.
 
 ### Performance budget
 
@@ -304,6 +324,11 @@ A change is done when:
   `009-perf-budget`.) Next 16/Turbopack doesn't emit per-route First-Load JS, so
   the shared floor + total are the reliable proxy. Bump the limits deliberately in
   a PR when a real increase is justified.
+- **Lab measurements:** `npm run perf:lab` (055, `scripts/perf-lab.mjs`) — 5
+  Lighthouse runs per page and form factor on the local production build,
+  medians of LCP/TBT/CLS/FCP/TTFB plus the LCP element, long-task scripts and
+  shift culprits (`--runs 3 --page home` for quick checks). Compare runs made
+  back to back on one machine; it is lab data, not field data.
 
 ### Working rules
 

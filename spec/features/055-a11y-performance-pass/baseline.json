@@ -1,0 +1,182 @@
+{
+  "date": "2026-11-19T14:35:31.538Z",
+  "runs": 5,
+  "pages": {
+    "home": {
+      "mobile": {
+        "path": "/",
+        "lcp": 4358.3054250000005,
+        "tbt": 0.9999999999997726,
+        "cls": 0,
+        "fcp": 1353.85055,
+        "ttfb": 3,
+        "score": 85,
+        "lcpElement": null,
+        "longTasks": [
+          {
+            "url": "/",
+            "ms": 61
+          },
+          {
+            "url": "Unattributable",
+            "ms": 58
+          },
+          {
+            "url": "/_next/static/chunks/3rw667ah2yx24.js",
+            "ms": 58
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/",
+        "lcp": 942.5564500000003,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 363.5589,
+        "ttfb": 4,
+        "score": 99,
+        "lcpElement": null,
+        "longTasks": [],
+        "shifts": []
+      }
+    },
+    "tires": {
+      "mobile": {
+        "path": "/tires",
+        "lcp": 3684.2002500000003,
+        "tbt": 0.5,
+        "cls": 0,
+        "fcp": 1353.747,
+        "ttfb": 5,
+        "score": 89,
+        "lcpElement": null,
+        "longTasks": [],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/tires",
+        "lcp": 1350.4496000000006,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 363.58900000000006,
+        "ttfb": 5,
+        "score": 96,
+        "lcpElement": null,
+        "longTasks": [],
+        "shifts": []
+      }
+    },
+    "tire": {
+      "mobile": {
+        "path": "/tires/514637-michelin-315-30-22",
+        "lcp": 5407.901024999999,
+        "tbt": 36,
+        "cls": 0,
+        "fcp": 1202.8731,
+        "ttfb": 4,
+        "score": 80,
+        "lcpElement": null,
+        "longTasks": [
+          {
+            "url": "/_next/static/chunks/3i6peuv68p2y0.js",
+            "ms": 118
+          },
+          {
+            "url": "/_next/static/chunks/3rw667ah2yx24.js",
+            "ms": 54
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/tires/514637-michelin-315-30-22",
+        "lcp": 1110.4625000000005,
+        "tbt": 0,
+        "cls": 0.03723404255319149,
+        "fcp": 322.572,
+        "ttfb": 4,
+        "score": 98,
+        "lcpElement": null,
+        "longTasks": [],
+        "shifts": [
+          {
+            "node": "<footer class=\"bg-black relative overflow-hidden \">",
+            "score": 0.0372
+          }
+        ]
+      }
+    },
+    "store": {
+      "mobile": {
+        "path": "/locations/cutler-bay",
+        "lcp": 3829.025525,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 1202.3336,
+        "ttfb": 2,
+        "score": 88,
+        "lcpElement": null,
+        "longTasks": [],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/locations/cutler-bay",
+        "lcp": 766.1248,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 322.141,
+        "ttfb": 2,
+        "score": 100,
+        "lcpElement": null,
+        "longTasks": [],
+        "shifts": []
+      }
+    },
+    "checkout": {
+      "mobile": {
+        "path": "/checkout",
+        "lcp": 3381.091425,
+        "tbt": 0,
+        "cls": 0.6242945636463226,
+        "fcp": 1052.431,
+        "ttfb": 1,
+        "score": 69,
+        "lcpElement": null,
+        "longTasks": [
+          {
+            "url": "Unattributable",
+            "ms": 64
+          }
+        ],
+        "shifts": [
+          {
+            "node": "<footer class=\"bg-black relative overflow-hidden \">",
+            "score": 0.6243
+          },
+          {
+            "node": "<p class=\"text-gray-600\">",
+            "score": 0.0004
+          }
+        ]
+      },
+      "desktop": {
+        "path": "/checkout",
+        "lcp": 664.87215,
+        "tbt": 0,
+        "cls": 0.2955555555555556,
+        "fcp": 282.1654,
+        "ttfb": 1,
+        "score": 85,
+        "lcpElement": null,
+        "longTasks": [],
+        "shifts": [
+          {
+            "node": "<footer class=\"bg-black relative overflow-hidden \">",
+            "score": 0.2956
+          }
+        ]
+      }
+    }
+  }
+}

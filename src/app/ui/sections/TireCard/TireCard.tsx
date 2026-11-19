@@ -100,6 +100,28 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
         const isNew = (product.condition || '').trim().toLowerCase() === 'new';
         const { size: tireSize, displayName } = parseTireName(product.name);
         const setOffer = isSold ? undefined : setOffers[String(product.id)];
+        // "Set of 4 · $640 total", to the tire page with the builder open on
+        // exactly that set (054). Rendered in one place per breakpoint.
+        const setLink = setOffer ? (
+          <Link
+            href={setHref(String(product.id), product.brand || '', tireSize, setOffer.ids)}
+            data-track="set_offer_select"
+            data-track-category="sets"
+            data-track-set-size={setOffer.size}
+            data-track-list={list?.id}
+            data-track-tire-id={String(product.id)}
+            className="inline-flex min-h-6 items-center gap-1.5 rounded-sm text-sm font-semibold text-green-700 underline-offset-2 hover:text-green-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
+          >
+            <SetIcon />
+            <span>Set of {setOffer.size}</span>{' '}
+            <span aria-hidden="true" className="h-1 w-1 rounded-full bg-current opacity-60" />{' '}
+            <span>
+              ${setOffer.total.toLocaleString('en-US', { maximumFractionDigits: 2 })} total
+            </span>{' '}
+            <span className="sr-only">— build this set</span>
+            <span aria-hidden="true">→</span>
+          </Link>
+        ) : null;
 
         const slug = product.id
           ? buildTireSlug(String(product.id), product.brand || '', tireSize)
@@ -147,7 +169,7 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
                 tabIndex={-1}
               >
                 <div className="relative h-48 sm:h-full sm:min-h-[180px] group-hover:scale-105 transition-transform duration-300 origin-center">
-                  <ProductImage product={product} priority={index < 2} />
+                  <ProductImage product={product} priority={index === 0} coverFromSm />
                 </div>
               </Link>
 
@@ -155,10 +177,13 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
               <div className="flex-1 min-w-0 flex flex-col px-4 pt-3 pb-4 sm:px-6 sm:py-5 gap-2.5 sm:gap-2">
                 {/* Desktop: meta row + CTA */}
                 <div className="hidden sm:flex items-start justify-between gap-3">
-                  <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider pt-0.5">
-                    {/* With a set on offer the tire is not only sold singly (054). */}
-                    {setOffer ? 'Single or set · Free Shipping' : 'Single · Free Shipping'}
-                  </span>
+                  <div className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1">
+                    <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
+                      {/* With a set on offer the tire is not only sold singly (054). */}
+                      {setOffer ? 'Single or set · Free Shipping' : 'Single · Free Shipping'}
+                    </span>
+                    {setLink}
+                  </div>
                   <div className="shrink-0">
                     <button
                       type="button"
@@ -183,12 +208,15 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
                       {condLabel}
                     </Link>
                     {tireSize && sizeSlug && (
+                      // A 24 px tall target around the 20 px pill (WCAG 2.5.8, 055).
                       <Link
                         href={`/tires/size/${sizeSlug}`}
                         onClick={e => e.stopPropagation()}
-                        className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-[#0a0a0a] text-[#9dfb40] text-xs font-black tracking-wider hover:bg-[#9dfb40] hover:text-[#0a0a0a] transition-colors duration-150"
+                        className="group/size inline-flex min-h-6 items-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
                       >
-                        {tireSize}
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-[#0a0a0a] text-[#9dfb40] text-xs font-black tracking-wider group-hover/size:bg-[#9dfb40] group-hover/size:text-[#0a0a0a] transition-colors duration-150">
+                          {tireSize}
+                        </span>
                       </Link>
                     )}
                   </div>
@@ -235,41 +263,12 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
                   )}
                 </div>
 
-                {/* The set this tire can be part of (054): "Set of 4 · $640 total",
-                    to the tire page with the builder open on exactly that set.
-                    The line's height is reserved, so it arriving after the cards
-                    moves nothing (D6). */}
-                <div className="flex h-7 items-center">
-                  {setOffer && (
-                    <Link
-                      href={setHref(
-                        String(product.id),
-                        product.brand || '',
-                        tireSize,
-                        setOffer.ids
-                      )}
-                      data-track="set_offer_select"
-                      data-track-category="sets"
-                      data-track-set-size={setOffer.size}
-                      data-track-list={list?.id}
-                      data-track-tire-id={String(product.id)}
-                      className="inline-flex min-h-6 items-center gap-1.5 rounded-sm text-sm font-semibold text-green-700 underline-offset-2 hover:text-green-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
-                    >
-                      <SetIcon />
-                      <span>Set of {setOffer.size}</span>{' '}
-                      <span
-                        aria-hidden="true"
-                        className="h-1 w-1 rounded-full bg-current opacity-60"
-                      />{' '}
-                      <span>
-                        ${setOffer.total.toLocaleString('en-US', { maximumFractionDigits: 2 })}{' '}
-                        total
-                      </span>{' '}
-                      <span className="sr-only">— build this set</span>
-                      <span aria-hidden="true">→</span>
-                    </Link>
-                  )}
-                </div>
+                {/* The set this tire can be part of (054), on a phone: its own line
+                    under the price, its 28 px reserved so it arriving after the
+                    cards moves nothing (D6). On a wider card it sits in the top row
+                    instead (below), where it adds no height — a taller text column
+                    left a grey band under the square tire photo. */}
+                <div className="flex h-7 items-center sm:hidden">{setOffer && setLink}</div>
 
                 {/* Mobile CTA */}
                 <div className="sm:hidden mt-0.5">

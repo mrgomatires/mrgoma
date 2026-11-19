@@ -115,7 +115,7 @@ export default function AboutUs() {
           </p>
 
           {/* Scroll cue */}
-          <div className="mt-12 flex items-center gap-3 text-gray-600">
+          <div className="mt-12 flex items-center gap-3 text-gray-400">
             <div className="w-px h-10 bg-gradient-to-b from-[#9dfb40]/60 to-transparent" />
             <span className="text-xs uppercase tracking-widest font-medium">Scroll to explore</span>
           </div>

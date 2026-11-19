@@ -2,6 +2,8 @@
 
 import { FC, useEffect, useRef, useState } from 'react';
 
+import { preload } from 'react-dom';
+
 interface HeroVideoProps {
   src: string;
   poster: string;
@@ -55,6 +57,14 @@ const GESTURE_EVENTS = ['pointerdown', 'touchend', 'click', 'keydown'] as const;
  * Motion is opt-out: `prefers-reduced-motion` leaves the poster in place.
  */
 const HeroVideo: FC<HeroVideoProps> = ({ src, poster, className }) => {
+  // The poster wins the home's LCP, and a <video> poster has no fetchpriority,
+  // so preload it at high priority (spec 002). Called here, in a client
+  // component, rather than in the server `Home` (055): from a server component
+  // the hint rides the RSC payload, so every page that prefetched "/" (the
+  // logo and the "Home" links, on every page) downloaded the home's hero at
+  // high priority while its own LCP image waited. A client component's
+  // `preload` is emitted when it renders — the home page only.
+  preload(poster, { as: 'image', fetchPriority: 'high' });
   const ref = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 

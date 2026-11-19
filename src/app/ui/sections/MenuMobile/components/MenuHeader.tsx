@@ -29,7 +29,6 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({ onClose, animationStage 
           title="Go to the home page"
           src={mrGomaLogoLight}
           className="h-8 w-auto"
-          priority
         />
       </Link>
       <button

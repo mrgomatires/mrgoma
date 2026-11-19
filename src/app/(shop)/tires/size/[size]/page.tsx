@@ -171,22 +171,25 @@ export default async function SizeCategoryPage({ params }: { params: Promise<{ s
         <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-8 pb-2">
           <div className="flex flex-wrap gap-3 text-sm">
             <div className="flex items-center gap-2 bg-gray-100 rounded-full px-4 py-2">
-              <span className="text-gray-500">Width</span>
+              <span className="text-gray-600">Width</span>
               <span className="font-bold text-gray-900">{width}</span>
             </div>
             <div className="flex items-center gap-2 bg-gray-100 rounded-full px-4 py-2">
-              <span className="text-gray-500">Sidewall</span>
+              <span className="text-gray-600">Sidewall</span>
               <span className="font-bold text-gray-900">{sidewall}</span>
             </div>
             <div className="flex items-center gap-2 bg-gray-100 rounded-full px-4 py-2">
-              <span className="text-gray-500">Diameter</span>
+              <span className="text-gray-600">Diameter</span>
               <span className="font-bold text-gray-900">{diameter}</span>
             </div>
           </div>
         </div>
 
-        {/* Tire grid */}
-        <section className="py-8">
+        {/* Tire grid — under its own <h2>, so the cards' <h3> do not skip a level (055). */}
+        <section className="py-8" aria-labelledby="size-tires-heading">
+          <h2 id="size-tires-heading" className="sr-only">
+            {`${originalSize} tires in stock`}
+          </h2>
           <TireGrid
             tires={tires}
             totalCount={totalCount}

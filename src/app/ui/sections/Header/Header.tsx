@@ -64,7 +64,16 @@ const Header: FC<{ compact?: boolean }> = ({ compact = false }): ReactNode => {
       <header className="w-full sticky top-0 z-40 bg-black backdrop-blur-sm backdrop-filter backdrop-saturate-150 border-b border-white/10 shadow-sm">
         <div className="absolute inset-0 bg-[#111]">
           <div className="absolute z-10 w-full h-full bg-linear-to-r from-black via-[#1A1A1A] to-[#9DFB40] opacity-80"></div>
-          <Image src="/assets/images/bg-header.svg" alt="" fill className="object-cover" priority />
+          {/* The largest image on text-led pages (the LCP on /tires): eager and
+              `high` — Next 16's `priority` only preloads, without the hint (055). */}
+          <Image
+            src="/assets/images/bg-header.svg"
+            alt=""
+            fill
+            className="object-cover"
+            loading="eager"
+            fetchPriority="high"
+          />
         </div>
 
         <nav
@@ -83,7 +92,7 @@ const Header: FC<{ compact?: boolean }> = ({ compact = false }): ReactNode => {
                 className={`w-auto transition-all duration-300 ${compact ? 'h-6' : 'h-8'}`}
                 width={185}
                 height={32}
-                priority
+                loading="eager"
               />
             </Link>
             <div className="hidden lg:flex lg:gap-x-12">

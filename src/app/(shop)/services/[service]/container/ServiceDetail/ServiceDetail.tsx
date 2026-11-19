@@ -79,7 +79,7 @@ export default function ServiceDetail({ service }: Props) {
       {/* Breadcrumb */}
       <nav className="border-b border-white/8" aria-label="Breadcrumb">
         <div className="max-w-6xl mx-auto px-6 lg:px-8 py-4">
-          <ol className="flex items-center gap-2 text-sm text-gray-500">
+          <ol className="flex items-center gap-2 text-sm text-gray-400">
             <li>
               <Link href="/" className="hover:text-[#9dfb40] transition-colors">
                 Home
@@ -110,7 +110,8 @@ export default function ServiceDetail({ service }: Props) {
               fill
               className="object-cover brightness-[0.25]"
               sizes="45vw"
-              priority
+              loading="eager"
+              fetchPriority="high"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/60 to-transparent" />
           </div>
@@ -124,7 +125,7 @@ export default function ServiceDetail({ service }: Props) {
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight mb-6">
             {service.title}{' '}
-            <span className="block text-gray-500 text-2xl sm:text-3xl font-bold">
+            <span className="block text-gray-400 text-2xl sm:text-3xl font-bold">
               Miami & Orlando, FL
             </span>
           </h1>
@@ -175,7 +176,7 @@ export default function ServiceDetail({ service }: Props) {
                 ].map(item => (
                   <div key={item.title} className="flex flex-col gap-2">
                     <span className="text-[#9dfb40] font-bold text-sm">{item.title}</span>
-                    <span className="text-gray-500 text-sm leading-relaxed">{item.body}</span>
+                    <span className="text-gray-400 text-sm leading-relaxed">{item.body}</span>
                   </div>
                 ))}
               </div>
@@ -283,7 +284,7 @@ export default function ServiceDetail({ service }: Props) {
         <div className="max-w-6xl mx-auto px-6 lg:px-8 py-12 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
             <p className="font-black text-xl">Need {service.title}?</p>
-            <p className="text-gray-500 text-sm mt-1">
+            <p className="text-gray-400 text-sm mt-1">
               Walk in at any of our 7 locations — no appointment needed.
             </p>
           </div>

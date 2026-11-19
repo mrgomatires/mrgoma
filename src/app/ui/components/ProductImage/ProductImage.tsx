@@ -14,6 +14,12 @@ interface ProductImageProps {
   };
   /** Only set on the first 1-2 above-the-fold cards to help LCP. */
   priority?: boolean;
+  /**
+   * Fill the box on wider screens (`sm:` and up), cropping a little instead of
+   * leaving a grey band: the listing card's photo column is as tall as the
+   * card's text, and the 4:3 photos are shorter than that (055).
+   */
+  coverFromSm?: boolean;
 }
 
 /**
@@ -34,7 +40,11 @@ export const DEFAULT_IMAGE_URL = '/assets/images/generic-tire-image.webp';
  * detail page and blanking every filtered view it appeared in.
  */
 
-const ProductImage: FC<ProductImageProps> = ({ product, priority = false }) => {
+const ProductImage: FC<ProductImageProps> = ({
+  product,
+  priority = false,
+  coverFromSm = false,
+}) => {
   const [imgSrc, setImgSrc] = useState<string>(() => {
     return isOptimisableImage(product.imageSrc) ? product.imageSrc : DEFAULT_IMAGE_URL;
   });
@@ -52,12 +62,16 @@ const ProductImage: FC<ProductImageProps> = ({ product, priority = false }) => {
   return (
     <div className="relative z-20 h-full w-full overflow-hidden rounded-lg">
       <Image
-        className={`w-full object-contain object-center transition ease-in-out hover:scale-105 duration-300`}
+        className={`w-full object-contain object-center transition ease-in-out hover:scale-105 duration-300 ${
+          coverFromSm ? 'sm:h-full sm:object-cover' : ''
+        }`}
         alt={product.imageAlt || product.brand || 'Tire image'}
         src={imgSrc}
         onError={handleImageError}
-        priority={priority}
-        loading={priority ? undefined : 'lazy'}
+        // The first cards may be the LCP: eager and `high` (Next 16's `priority`
+        // only preloads, without the hint — 055); the rest lazy.
+        loading={priority ? 'eager' : 'lazy'}
+        fetchPriority={priority ? 'high' : undefined}
         sizes="(min-width: 768px) 256px, (min-width: 640px) 208px, 100vw"
         width={500}
         height={500}

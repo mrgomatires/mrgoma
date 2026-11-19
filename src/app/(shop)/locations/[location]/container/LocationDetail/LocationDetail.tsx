@@ -78,7 +78,7 @@ export default function LocationDetail({ location }: Props) {
       {/* Breadcrumb */}
       <nav className="border-b border-white/8" aria-label="Breadcrumb">
         <div className="max-w-6xl mx-auto px-6 lg:px-8 py-4">
-          <ol className="flex items-center gap-2 text-sm text-gray-500">
+          <ol className="flex items-center gap-2 text-sm text-gray-400">
             <li>
               <Link href="/" className="hover:text-[#9dfb40] transition-colors">
                 Home
@@ -98,34 +98,26 @@ export default function LocationDetail({ location }: Props) {
 
       {/* Hero */}
       <section className="relative border-b border-white/8 overflow-hidden">
+        {/* One image for both layouts (055): it was two — a full-bleed copy for
+            phones and a right-half copy for desktop — and both were downloaded,
+            at different sizes, on every visit. */}
         {heroImage && (
           <div
-            className="hidden lg:block absolute inset-y-0 right-0 w-[50%] pointer-events-none"
+            className="absolute inset-0 pointer-events-none lg:inset-y-0 lg:left-auto lg:right-0 lg:w-[50%]"
             aria-hidden="true"
           >
             <Image
               src={heroImage}
               alt=""
               fill
-              className="object-cover brightness-[0.35]"
-              sizes="50vw"
-              priority
+              className="object-cover brightness-[0.25] lg:brightness-[0.35]"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              loading="eager"
+              fetchPriority="high"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/70 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/80 via-transparent to-transparent" />
-          </div>
-        )}
-        {heroImage && (
-          <div className="lg:hidden absolute inset-0 pointer-events-none" aria-hidden="true">
-            <Image
-              src={heroImage}
-              alt=""
-              fill
-              className="object-cover brightness-[0.25]"
-              sizes="100vw"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/85 to-[#0a0a0a]/70" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/85 to-[#0a0a0a]/70 lg:hidden" />
+            <div className="absolute inset-0 hidden bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/70 to-transparent lg:block" />
+            <div className="absolute inset-0 hidden bg-gradient-to-t from-[#0a0a0a]/80 via-transparent to-transparent lg:block" />
           </div>
         )}
         {!heroImage && (
@@ -192,7 +184,7 @@ export default function LocationDetail({ location }: Props) {
                 <div className="flex items-start gap-4 p-5">
                   <MapIcon />
                   <div>
-                    <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">Address</p>
+                    <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Address</p>
                     <p className="text-white font-medium">{location.address}</p>
                     <a
                       href={location.mapLink}
@@ -207,7 +199,7 @@ export default function LocationDetail({ location }: Props) {
                 <div className="flex items-center gap-4 p-5">
                   <PhoneIcon />
                   <div>
-                    <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">Phone</p>
+                    <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Phone</p>
                     <a
                       href={location.tel}
                       data-track="call_store"
@@ -220,7 +212,7 @@ export default function LocationDetail({ location }: Props) {
                   </div>
                 </div>
                 <div className="p-5">
-                  <p className="text-xs text-gray-500 uppercase tracking-widest mb-2">Hours</p>
+                  <p className="text-xs text-gray-400 uppercase tracking-widest mb-2">Hours</p>
                   <p className="text-gray-400 text-sm">
                     {/* This store's own hours, not the chain's. They are uniform
                       today, but the config models them per store precisely so a
@@ -233,7 +225,7 @@ export default function LocationDetail({ location }: Props) {
                           {line}
                         </span>
                       ))}
-                    <span className="block text-gray-600 text-xs mt-2">
+                    <span className="block text-gray-400 text-xs mt-2">
                       * Hours may vary — call ahead to confirm
                     </span>
                   </p>
@@ -244,7 +236,7 @@ export default function LocationDetail({ location }: Props) {
             {/* Neighborhoods */}
             <section>
               <h2 className="text-2xl font-black tracking-tight mb-4">Areas We Serve</h2>
-              <p className="text-gray-500 mb-5 text-sm leading-relaxed">
+              <p className="text-gray-400 mb-5 text-sm leading-relaxed">
                 This location is conveniently accessible from the following neighborhoods and
                 communities:
               </p>
@@ -339,7 +331,7 @@ export default function LocationDetail({ location }: Props) {
             {/* Shop tires */}
             <div className="border border-[#9dfb40]/20 rounded-2xl p-6 bg-[#9dfb40]/5">
               <h3 className="font-bold text-white mb-2">Need a tire?</h3>
-              <p className="text-gray-500 text-sm mb-4">
+              <p className="text-gray-400 text-sm mb-4">
                 Browse our inventory of 15,000+ new and used tires online.
               </p>
               <Link

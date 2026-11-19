@@ -370,7 +370,6 @@ export default function AiChat({
                 </div>
               </div>
             )}
-
           </div>
 
           {/* Input — native form submit is the most reliable on iOS */}
@@ -465,7 +464,6 @@ export default function AiChat({
                 src={mrGomaAvatar || '/placeholder.svg'}
                 fill
                 className="object-cover object-top"
-                priority
               />
             </span>
             {/* AI badge — signals this is an interactive AI assistant */}
