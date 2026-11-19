@@ -93,4 +93,11 @@ describe('GET /api/tires', () => {
     const pageSizeArg = h.calls[0][1] as number;
     expect(pageSizeArg).toBeLessThanOrEqual(100);
   });
+
+  it('reads the used filters as the page does (052): new only drops them, none narrows to used', async () => {
+    await GET(req('http://x/api/tires?condition=new&minTreadDepth=8&patched=no'));
+    expect(h.calls[0][2]).toEqual({ condition: ['new'] });
+    await GET(req('http://x/api/tires?minTreadDepth=8'));
+    expect(h.calls[1][2]).toEqual({ condition: ['used'], minTreadDepth: 8 });
+  });
 });

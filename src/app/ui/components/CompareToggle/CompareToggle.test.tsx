@@ -67,6 +67,26 @@ describe('CompareToggle (051)', () => {
     expect(screen.getByTestId('count')).toHaveTextContent('3');
   });
 
+  it('disables the other boxes when full and says why; the picked ones stay usable (052 review)', async () => {
+    const user = userEvent.setup();
+    render(
+      <CompareProvider>
+        {['1', '2', '3', '4'].map(id => (
+          <CompareToggle key={id} tire={tire(id)} />
+        ))}
+      </CompareProvider>
+    );
+    const boxes = screen.getAllByRole('checkbox');
+    for (const b of boxes.slice(0, 3)) await user.click(b);
+    expect(boxes[3]).toBeDisabled();
+    expect(boxes[3]).toHaveAccessibleName(/^Compare .*up to 3 tires — remove one to add another/);
+    expect(boxes[3].closest('label')).toHaveAttribute('title', expect.stringMatching(/up to 3/));
+    expect(boxes[0]).toBeEnabled();
+    // Removing one re-enables the rest.
+    await user.click(boxes[0]);
+    expect(boxes[3]).toBeEnabled();
+  });
+
   it('renders nothing without the provider', () => {
     const { container } = render(<CompareToggle tire={tire('1')} />);
     expect(container).toBeEmptyDOMElement();

@@ -195,3 +195,30 @@ describe('a suggestion promises what its own link delivers', () => {
     expect(byLabel.Pirelli.count).toBe(2);
   });
 });
+
+describe('used filters (052)', () => {
+  it('shows the tread chip and removes only the tread (AC7)', () => {
+    const chips = appliedChips(
+      { condition: ['used'], minTreadDepth: 8 },
+      '?condition=used&minTreadDepth=8',
+      '/tires'
+    );
+    const tread = chips.find(c => c.group === 'tread')!;
+    expect(tread.label).toBe('Tread 8/32"+');
+    expect(tread.href).toBe('/tires?condition=used');
+  });
+
+  it('removing Used drops the used filters with it', () => {
+    const chips = appliedChips(
+      { condition: ['used'], patched: ['no'] },
+      '?condition=used&patched=no',
+      '/tires'
+    );
+    expect(chips.find(c => c.group === 'condition')!.href).toBe('/tires');
+  });
+
+  it('leaves the condition out on /tires/used', () => {
+    const chips = appliedChips({ condition: ['used'] }, '', '/tires/used', { hideCondition: true });
+    expect(chips).toEqual([]);
+  });
+});

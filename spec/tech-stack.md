@@ -109,6 +109,17 @@ Versions taken from `package.json` (2026-06-30). Update here when they change.
   city is derived from `VaultName` on the server and the warehouse name never
   leaves. `GET /api/tires/compare?ids=` (1–3 numeric ids, Zod) answers only
   `id`, `available`, `price`, `no-store`.
+- **Used filters mean used tires** (052): tread (`minTreadDepth`, steps
+  6–9/32"+), remaining life and patched. Links that apply one also write
+  `condition=used`; a condition change keeps them only if the next set is
+  exactly `used` (`usedFilters.ts`). The storefront (`/tires`, `/api/tires`,
+  `fetchTiresServer`, `/tires/used`) reads URLs through
+  `normalizeUsedFilters`; `buildTireFilters` stays raw because the seller
+  dashboard uses it too. Their facet counts cover used tires only. The
+  dashboard size selects use `STOREFRONT_SELLABLE_WHERE`; remaining life is
+  never compared as text (`sellableRule.guard`). `/tires/used` filters in
+  place (dynamic; the plain URL from `getCachedUsedLanding`, 5 min) and its
+  filtered URLs are disallowed in `robots.txt` like `/tires`'.
 
 ### Analytics & tracking
 
@@ -166,6 +177,11 @@ Versions taken from `package.json` (2026-06-30). Update here when they change.
   `same_size`) via `trackEvent`; `compare_view_tire` as `data-track`; adding to
   the cart from the comparison sends the card's own `add_to_cart`
   (`useAddTireToCart`). See `spec/features/051-compare-tires/`.
+- **Used-tire filters (feature 052).** No new events: the tread steps report
+  `filter_apply` with `filter_group` `tread` and `filter_value` the step; the
+  quick chips ("Not patched", "Run-flat", "8/32"+") send the same
+  `filter_apply` with `surface` `quick_chips`. See
+  `spec/features/052-used-tire-filters/`.
 - **Tire sets (feature 041).** The rules live in one pure module,
   `src/app/utils/tireSets.ts` (compatible = same brand, model, size, run-flat
   and condition class; tread Δ ≤ 2/32"; **any city** — the city only breaks

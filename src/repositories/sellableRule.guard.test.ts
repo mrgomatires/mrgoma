@@ -46,6 +46,16 @@ describe('the sellable rule is written once', () => {
     expect(offenders).toEqual([]);
   });
 
+  it('no query compares remaining life as text (052)', () => {
+    // `RemainingLife > '70%'` orders lexicographically: '100%' < '70%'.
+    const textCompare = /AND\s+RemainingLife\s*[<>]=?\s*'/;
+    const offenders = sourceFiles('src')
+      .filter(file => !file.endsWith('.test.ts') && !file.endsWith('.test.tsx'))
+      .filter(file => textCompare.test(readFileSync(file, 'utf8')));
+
+    expect(offenders).toEqual([]);
+  });
+
   it('and the constant still says what it should', () => {
     const source = readFileSync(DEFINITION, 'utf8');
     for (const part of [

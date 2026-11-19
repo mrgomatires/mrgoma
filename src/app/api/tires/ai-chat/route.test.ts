@@ -122,6 +122,26 @@ describe('partial filters are complete searches', () => {
   });
 });
 
+describe('used-tire filters reach the catalog as the rail writes them (052)', () => {
+  it('"no patches, 8/32 or more" → patched=no, tread 8, used', async () => {
+    h.toolInput = { patched: 'no', minTreadDepth: 8.4 };
+    const body = await (await POST(ask('used tires without patches, 8/32 or more'))).json();
+    expect(body.filters).toEqual({ patched: 'no', minTreadDepth: 8, condition: 'used' });
+  });
+
+  it('reads the old boolean patched and a run-flat request', async () => {
+    h.toolInput = { patched: false, runFlat: true };
+    const body = await (await POST(ask('run flat sin parche'))).json();
+    expect(body.filters).toEqual({ patched: 'no', kindSale: 'yes', condition: 'used' });
+  });
+
+  it('drops used filters on a new-tire search', async () => {
+    h.toolInput = { condition: 'new', minTreadDepth: 8, runFlat: true };
+    const body = await (await POST(ask('new run flat tires'))).json();
+    expect(body.filters).toEqual({ condition: 'new', kindSale: 'yes' });
+  });
+});
+
 describe('the narrowing hint', () => {
   it('offers what is left and never what was used', async () => {
     h.toolInput = { brands: 'Michelin' };

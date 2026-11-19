@@ -10,6 +10,7 @@ import {
   MAX_PAGE_SIZE,
   validatePageSize,
 } from '@/app/utils/paginationUtils';
+import { normalizeUsedFilters } from '@/app/utils/usedFilters';
 import { pickTireListFields } from '@/repositories/tireListFields';
 import { TireFilters, fetchTires } from '@/repositories/tiresRepository';
 import { logger } from '@/utils/logger';
@@ -39,7 +40,8 @@ export const GET = withLogging('tires.GET', async (req: NextRequest) => {
   const offset = (page - 1) * pageSize;
 
   // Build filters from search parameters
-  const filters = buildTireFilters(searchParams);
+  // Same reading of the used filters as the server-rendered page (052).
+  const filters = normalizeUsedFilters(buildTireFilters(searchParams));
 
   try {
     const result = await getCachedTires(offset, pageSize, filters);

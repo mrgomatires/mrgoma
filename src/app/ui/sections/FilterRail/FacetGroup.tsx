@@ -11,6 +11,12 @@ export type FacetOption = {
   count: number;
   href: string;
   applied: boolean;
+  /**
+   * Words for screen readers after a shorthand label (`8/32"+` → "minimum
+   * tread", 052). Appended, never replacing it: the accessible name must
+   * contain the visible text (WCAG 2.5.3).
+   */
+  srHint?: string;
 };
 
 interface FacetGroupProps {
@@ -131,7 +137,16 @@ const FacetGroup: FC<FacetGroupProps> = ({
                     ✓
                   </span>
                 )}
-                <span className="truncate">{option.label}</span>
+                <span className="truncate">
+                  {option.label}
+                  {/* The space is its own text node, outside the span (the 023 lesson). */}
+                  {option.srHint && (
+                    <>
+                      {' '}
+                      <span className="sr-only">{option.srHint}</span>
+                    </>
+                  )}
+                </span>
                 {option.applied && !multiSelect && (
                   <span aria-hidden="true" className="shrink-0 text-green-800">
                     ×

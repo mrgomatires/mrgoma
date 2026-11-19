@@ -2,6 +2,7 @@ import { TiresData, TransformedTire } from '@/app/interfaces/tires';
 import { buildTireFilters } from '@/app/utils/filterUtils';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, validatePageSize } from '@/app/utils/paginationUtils';
 import { createPaginatedResponse } from '@/app/utils/transformTireData';
+import { normalizeUsedFilters } from '@/app/utils/usedFilters';
 import { pickTireListFields } from '@/repositories/tireListFields';
 import { fetchTires } from '@/repositories/tiresRepository';
 
@@ -33,7 +34,8 @@ export async function fetchTiresServer(
     parseInt(sp.get('pageSize') || String(DEFAULT_PAGE_SIZE), 10) || DEFAULT_PAGE_SIZE
   );
   const offset = (page - 1) * pageSize;
-  const filters = buildTireFilters(sp);
+  // Same reading of the used filters as the server-rendered page (052).
+  const filters = normalizeUsedFilters(buildTireFilters(sp));
 
   try {
     const result = await fetchTires(offset, pageSize, filters);

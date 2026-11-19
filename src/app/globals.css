@@ -565,3 +565,54 @@ body {
     transition: translate 0.15s ease-out;
   }
 }
+
+/*
+ * Quick filter chips (052). One row; on a phone it scrolls sideways and fades
+ * out at the edge that has more (modern-web-guidance, scrollability affordance
+ * hints: a fade for a horizontal row of chips, driven by the scroll itself).
+ */
+@property --fade-start {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+@property --fade-end {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+.quick-chips {
+  overflow-x: auto;
+  scrollbar-width: none;
+  /* Focused chips never stop under a fade. */
+  scroll-padding-inline: 2rem;
+  /* Room for the focus ring, which overflow would clip. */
+  padding-block: 0.25rem;
+  margin-block: -0.25rem;
+  --fade-size: 2rem;
+}
+@supports (animation-timeline: scroll()) {
+  .quick-chips {
+    mask:
+      linear-gradient(black, black) no-clip subtract,
+      linear-gradient(to right, black, transparent) 0 0 / var(--fade-start) 100% no-repeat no-clip,
+      linear-gradient(to right, transparent, black) 100% 0 / var(--fade-end) 100% no-repeat no-clip;
+    animation:
+      quick-chips-fade-start linear both,
+      quick-chips-fade-end linear both;
+    animation-timeline: scroll(self inline);
+    animation-range:
+      0 var(--fade-size),
+      calc(100% - var(--fade-size)) 100%;
+  }
+}
+@keyframes quick-chips-fade-start {
+  to {
+    --fade-start: var(--fade-size);
+  }
+}
+@keyframes quick-chips-fade-end {
+  from {
+    --fade-end: var(--fade-size);
+  }
+}

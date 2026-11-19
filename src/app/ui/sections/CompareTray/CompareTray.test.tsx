@@ -120,7 +120,10 @@ describe('CompareTray (051)', () => {
     renderAll();
     for (const b of screen.getAllByRole('checkbox')) await user.click(b);
     const tray = screen.getByRole('complementary', { name: 'Tires to compare' });
-    expect(within(tray).getByRole('status')).toHaveTextContent(/up to 3 tires/);
+    expect(within(tray).getByRole('status')).toHaveTextContent(
+      '3 of 3 tires · remove one to add another'
+    );
+    expect(screen.getAllByRole('checkbox')[3]).toBeDisabled();
     expect(within(tray).getAllByRole('button', { name: /^Remove/ })).toHaveLength(3);
   });
 
@@ -186,6 +189,13 @@ describe('CompareDialog (051)', () => {
     await user.click(within(dialog).getAllByRole('button', { name: /^Add to cart/ })[0]);
     expect(h.addToCart).toHaveBeenCalledWith(expect.objectContaining({ id: '1', tread: 9 }));
     expect(h.ecommerce).toHaveBeenCalledWith('add_to_cart', expect.anything());
+    // Closed, so the cart that opens is not hidden behind it; the picks stay.
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(screen.getByRole('complementary', { name: 'Tires to compare' })).toBeInTheDocument();
+  });
+
+  it('links each tire page (AC5)', async () => {
+    const { dialog } = await openWith(2);
     expect(within(dialog).getAllByRole('link', { name: 'View tire' })[0]).toHaveAttribute(
       'href',
       '/tires/1-pirelli-235-45-18'
@@ -202,6 +212,15 @@ describe('CompareDialog (051)', () => {
     await waitFor(() => expect(within(dialog).getByText('Sold')).toBeInTheDocument());
     expect(within(dialog).getAllByRole('button', { name: /^Add to cart/ })).toHaveLength(1);
     expect(within(dialog).getAllByText(/\$85/).length).toBeGreaterThan(0);
+  });
+
+  it('closes when "View tire" is followed, keeping the picks (051 review)', async () => {
+    const { user, dialog } = await openWith(2);
+    const link = within(dialog).getAllByRole('link', { name: 'View tire' })[0];
+    link.addEventListener('click', e => e.preventDefault());
+    await user.click(link);
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(screen.getByRole('complementary', { name: 'Tires to compare' })).toBeInTheDocument();
   });
 
   it('says so when availability cannot be confirmed (AC12)', async () => {

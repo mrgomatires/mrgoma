@@ -31,7 +31,7 @@ export const BrowseFilters: FC<BrowseFiltersProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-4">
         {brands.length > 0 && (
           <div>
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.18em] mb-2.5">
+            <p className="text-[10px] font-bold text-gray-600 uppercase tracking-[0.18em] mb-2.5">
               Browse by brand
             </p>
             {isBrowse && !activeBrand ? (
@@ -42,7 +42,7 @@ export const BrowseFilters: FC<BrowseFiltersProps> = ({
           </div>
         )}
         <div>
-          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.18em] mb-2.5">
+          <p className="text-[10px] font-bold text-gray-600 uppercase tracking-[0.18em] mb-2.5">
             Browse by rim size
           </p>
           <div className="flex gap-2 flex-wrap">
@@ -51,29 +51,41 @@ export const BrowseFilters: FC<BrowseFiltersProps> = ({
             <a
               href={isNew ? '/tires' : '/tires/new'}
               aria-current={isNew ? 'true' : undefined}
-              aria-label={isNew ? 'Clear new tires filter' : 'Shop new tires'}
               className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full border text-xs font-semibold transition-colors duration-150 ${
                 isNew
-                  ? 'border-green-600 bg-green-600 text-white hover:bg-green-700 hover:border-green-700'
+                  ? 'border-green-700 bg-green-700 text-white hover:bg-green-800 hover:border-green-800'
                   : 'border-green-200 text-green-700 bg-green-50 hover:bg-green-600 hover:text-white hover:border-green-600'
               }`}
             >
               Shop New
-              {isNew && <ClearIcon />}
+              {/* The visible words stay first in the name (WCAG 2.5.3), then what a
+                  tap does here (052 site review). */}
+              {isNew && (
+                <>
+                  {' '}
+                  <span className="sr-only">(showing now, tap for all tires)</span>
+                  <ClearIcon />
+                </>
+              )}
             </a>
 
             <a
               href={isUsed ? '/tires' : '/tires/used'}
               aria-current={isUsed ? 'true' : undefined}
-              aria-label={isUsed ? 'Clear used tires filter' : 'Shop used tires'}
               className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full border text-xs font-semibold transition-colors duration-150 ${
                 isUsed
-                  ? 'border-amber-500 bg-amber-500 text-white hover:bg-amber-600 hover:border-amber-600'
+                  ? 'border-amber-400 bg-amber-400 text-gray-950 hover:bg-amber-500 hover:border-amber-500'
                   : 'border-amber-200 text-amber-700 bg-amber-50 hover:bg-amber-500 hover:text-white hover:border-amber-500'
               }`}
             >
               Shop Used
-              {isUsed && <ClearIcon />}
+              {isUsed && (
+                <>
+                  {' '}
+                  <span className="sr-only">(showing now, tap for all tires)</span>
+                  <ClearIcon />
+                </>
+              )}
             </a>
           </div>
         </div>

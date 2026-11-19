@@ -1,6 +1,13 @@
 import { LIFE_BUCKETS, PRICE_BUCKETS, bucketOfRange } from '@/app/utils/facetBuckets';
 import { hasValue, setParam, setRange, toggleValue } from '@/app/utils/filterHref';
 import { brandName } from '@/app/utils/tireNaming';
+import {
+  TREAD_STEPS,
+  conditionHref,
+  TREAD_SR_HINT,
+  treadLabel,
+  withUsed,
+} from '@/app/utils/usedFilters';
 import type { TireFacets } from '@/repositories/facetQuery';
 import type { TireFilters } from '@/repositories/filtersClause';
 
@@ -128,6 +135,64 @@ export function rangeOptions(
     });
 }
 
+/**
+ * Minimum tread, in steps (052, D1): "at least 8/32"" counts every used tire
+ * whose whole 32nds are 8 or more — the facet holds whole-32nd buckets, so the
+ * step's count is the sum of the buckets from it up, which is exactly what
+ * `TRY_CAST(Tread AS float) >= 8` returns. Single-select: another step replaces
+ * it, the applied one clears it. Applying narrows the view to used (D3).
+ */
+export function treadOptions(
+  counts: Record<string, number>,
+  search: string,
+  basePath: string,
+  current: number | undefined
+): FacetOption[] {
+  const buckets = tally(counts).map(([value, count]) => [Number(value), count] as const);
+  return TREAD_STEPS.map(step => ({
+    step,
+    count: buckets.filter(([value]) => value >= step).reduce((sum, [, n]) => sum + n, 0),
+  }))
+    .filter(({ count }) => count > 0)
+    .map(({ step, count }) => {
+      const applied = current === step;
+      return {
+        value: String(step),
+        label: treadLabel(step),
+        srHint: TREAD_SR_HINT,
+        count,
+        href: `${basePath}${
+          applied
+            ? setParam(search, 'minTreadDepth', undefined)
+            : setParam(withUsed(search), 'minTreadDepth', String(step))
+        }`,
+        applied,
+      };
+    });
+}
+
+/**
+ * The condition options, whose links follow the used rule (052, D3): the used
+ * filters survive only when the next set is exactly `used`.
+ */
+function conditionOptions(
+  counts: Record<string, number>,
+  search: string,
+  basePath: string
+): FacetOption[] {
+  const params = new URLSearchParams(search.startsWith('?') ? search.slice(1) : search);
+  const current = (params.get('condition') ?? '').split(',').filter(Boolean);
+  return setOptions(counts, 'condition', search, basePath, {
+    label: v => CONDITION_LABELS[v] ?? v,
+    order: ['used', 'new'],
+  }).map(option => {
+    const next = option.applied
+      ? current.filter(c => c.toLowerCase() !== option.value)
+      : [...current, option.value];
+    return { ...option, href: `${basePath}${conditionHref(search, next)}` };
+  });
+}
+
 export type RailGroups = {
   condition: FacetOption[];
   width: FacetOption[];
@@ -136,6 +201,7 @@ export type RailGroups = {
   brand: FacetOption[];
   price: RangeOption[];
   life: RangeOption[];
+  tread: FacetOption[];
   patched: FacetOption[];
   runFlat: FacetOption[];
 };
@@ -153,10 +219,7 @@ export function buildRailGroups(
   basePath: string
 ): RailGroups {
   return {
-    condition: setOptions(facets.condition, 'condition', search, basePath, {
-      label: v => CONDITION_LABELS[v] ?? v,
-      order: ['used', 'new'],
-    }),
+    condition: conditionOptions(facets.condition, search, basePath),
     width: sizeOptions(facets.width, 'w', search, basePath, filters.width),
     sidewall: sizeOptions(facets.sidewall, 's', search, basePath, filters.sidewall),
     rim: sizeOptions(facets.rim, 'd', search, basePath, filters.diameter, '"'),
@@ -167,16 +230,18 @@ export function buildRailGroups(
       filters.minPrice,
       filters.maxPrice,
     ]),
+    // Life and patched are used filters: applying one narrows to used (052, D3).
     life: rangeOptions(
       LIFE_BUCKETS,
       facets.life,
-      search,
+      withUsed(search),
       basePath,
       'minRemainingLife',
       'maxRemainingLife',
       [filters.minRemainingLife, filters.maxRemainingLife]
     ),
-    patched: setOptions(facets.patched, 'patched', search, basePath, {
+    tread: treadOptions(facets.tread ?? {}, search, basePath, filters.minTreadDepth),
+    patched: setOptions(facets.patched, 'patched', withUsed(search), basePath, {
       label: v => YES_NO_LABELS[v] ?? v,
       order: ['no', 'yes'],
     }),

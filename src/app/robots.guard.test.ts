@@ -124,6 +124,11 @@ describe('robots.txt', () => {
     expect(isBlocked(`/tires?w=235&s=50&d=20&${param}=x`)).toBe(true);
   });
 
+  it.each(FACET_PARAMS)('blocks the %s facet on /tires/used too (052)', param => {
+    expect(isBlocked(`/tires/used?${param}=x`)).toBe(true);
+    expect(isBlocked(`/tires/used?brands=michelin&${param}=x`)).toBe(true);
+  });
+
   it('blocks a stacked combination of facets', () => {
     expect(isBlocked('/tires?brands=michelin&brands=bridgestone&condition=used&minPrice=50')).toBe(
       true

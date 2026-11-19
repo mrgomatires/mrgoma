@@ -25,6 +25,7 @@ const facets = (over: Partial<TireFacets> = {}): TireFacets => ({
   sidewall: {},
   price: {},
   life: {},
+  tread: {},
   total: 0,
   ...over,
 });
@@ -193,5 +194,58 @@ describe('buildRailGroups', () => {
     const groups = buildRailGroups(facets(), {}, '', '/tires');
     expect(groups.brand).toEqual([]);
     expect(groups.price).toEqual([]);
+  });
+});
+
+describe('used filters (052)', () => {
+  const withTread = facets({
+    condition: { used: 3807, new: 3093 },
+    tread: { '5': 4, '6': 623, '7': 1449, '8': 932, '9': 576, '10': 223 },
+    patched: { no: 1802, yes: 2005 },
+  });
+
+  it('offers tread steps with cumulative counts (AC1)', () => {
+    const { tread } = buildRailGroups(withTread, {}, '', '/tires');
+    expect(tread.map(o => [o.label, o.count])).toEqual([
+      ['6/32"+', 3803],
+      ['7/32"+', 3180],
+      ['8/32"+', 1731],
+      ['9/32"+', 799],
+    ]);
+  });
+
+  it('a step narrows to used; the applied step clears itself', () => {
+    const groups = buildRailGroups(withTread, {}, '?brands=PIRELLI', '/tires');
+    expect(groups.tread[2].href).toBe('/tires?brands=PIRELLI&condition=used&minTreadDepth=8');
+    const applied = buildRailGroups(
+      withTread,
+      { condition: ['used'], minTreadDepth: 8 },
+      '?condition=used&minTreadDepth=8',
+      '/tires'
+    );
+    expect(applied.tread[2].applied).toBe(true);
+    expect(applied.tread[2].href).toBe('/tires?condition=used');
+    expect(applied.tread[3].href).toBe('/tires?condition=used&minTreadDepth=9');
+  });
+
+  it('patched and life links narrow to used', () => {
+    const groups = buildRailGroups(withTread, {}, '', '/tires');
+    expect(groups.patched.find(o => o.value === 'no')!.href).toBe(
+      '/tires?condition=used&patched=no'
+    );
+  });
+
+  it('"New" from a used view with tread leads to a URL without the tread (AC5)', () => {
+    const search = '?condition=used&minTreadDepth=8';
+    const groups = buildRailGroups(
+      withTread,
+      { condition: ['used'], minTreadDepth: 8 },
+      search,
+      '/tires'
+    );
+    const newOption = groups.condition.find(o => o.value === 'new')!;
+    expect(newOption.href).not.toContain('minTreadDepth');
+    // Unticking Used drops it too.
+    expect(groups.condition.find(o => o.value === 'used')!.href).toBe('/tires');
   });
 });

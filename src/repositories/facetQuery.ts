@@ -35,6 +35,8 @@ export type TireFacets = {
   sidewall: FacetTally;
   price: FacetTally;
   life: FacetTally;
+  /** Used tires by whole 32nds of tread (`'8'` → 8.0–8.9/32"); new tires are not counted (052). */
+  tread: FacetTally;
   /** Every tire matching the filters, whatever its facets. */
   total: number;
 };
@@ -48,6 +50,7 @@ export const FACET_GROUPS = [
   'brand',
   'price',
   'life',
+  'tread',
   'patched',
   'runFlat',
 ] as const;
@@ -67,7 +70,15 @@ const RIM_EXPR = `CASE WHEN ${WELL_FORMED} THEN RIGHT(RealSize, CHARINDEX('/', R
 const SIDEWALL_EXPR = `CASE WHEN ${WELL_FORMED} THEN SUBSTRING(RealSize, CHARINDEX('/', RealSize) + 1, LEN(RealSize) - CHARINDEX('/', RealSize) - CHARINDEX('/', REVERSE(RealSize))) END`;
 
 const PRICE_EXPR = bucketCase('TRY_CAST(Price AS float)', PRICE_BUCKETS);
-const LIFE_EXPR = bucketCase("TRY_CAST(REPLACE(RemainingLife, '%', '') AS int)", LIFE_BUCKETS);
+/**
+ * Tread, life and patched describe **used** tires (052, D3): their links narrow
+ * the view to used, so their counts must leave new tires out or the number
+ * beside an option would not be what the link returns. A new tire gets `NULL`,
+ * which `mapFacetRows` skips (it still counts in the total).
+ */
+const USED = 'ISNULL(ProductTypeId, 0) <> 1';
+const LIFE_EXPR = `CASE WHEN ${USED} THEN ${bucketCase("TRY_CAST(REPLACE(RemainingLife, '%', '') AS int)", LIFE_BUCKETS)} END`;
+const TREAD_EXPR = `CASE WHEN ${USED} THEN CAST(FLOOR(TRY_CAST(Tread AS float)) AS int) END`;
 
 /** Column alias → the facet group it fills. Order matters only for readability. */
 const DIMENSIONS: { alias: string; group: FacetGroupName; expr: string }[] = [
@@ -77,7 +88,11 @@ const DIMENSIONS: { alias: string; group: FacetGroupName; expr: string }[] = [
     group: 'condition',
     expr: "CASE WHEN ProductTypeId = 1 THEN 'new' ELSE 'used' END",
   },
-  { alias: 'fPatched', group: 'patched', expr: "CASE WHEN Patched = '0' THEN 'no' ELSE 'yes' END" },
+  {
+    alias: 'fPatched',
+    group: 'patched',
+    expr: `CASE WHEN ${USED} THEN CASE WHEN Patched = '0' THEN 'no' ELSE 'yes' END END`,
+  },
   {
     alias: 'fRunFlat',
     group: 'runFlat',
@@ -88,6 +103,7 @@ const DIMENSIONS: { alias: string; group: FacetGroupName; expr: string }[] = [
   { alias: 'fSidewall', group: 'sidewall', expr: SIDEWALL_EXPR },
   { alias: 'fPrice', group: 'price', expr: PRICE_EXPR },
   { alias: 'fLife', group: 'life', expr: LIFE_EXPR },
+  { alias: 'fTread', group: 'tread', expr: TREAD_EXPR },
 ];
 
 export function buildFacetQuery(filters: TireFilters): { query: string; params: SqlParam[] } {
@@ -118,7 +134,7 @@ GROUP BY GROUPING SETS (${sets})`;
 
 type FacetRow = Record<string, string | number | null>;
 
-function emptyFacets(): TireFacets {
+export function emptyFacets(): TireFacets {
   return {
     brand: {},
     condition: {},
@@ -129,6 +145,7 @@ function emptyFacets(): TireFacets {
     sidewall: {},
     price: {},
     life: {},
+    tread: {},
     total: 0,
   };
 }
@@ -174,6 +191,7 @@ const GROUP_KEYS: Record<FacetGroupName, (keyof TireFilters)[]> = {
   brand: ['brands'],
   price: ['minPrice', 'maxPrice'],
   life: ['minRemainingLife', 'maxRemainingLife'],
+  tread: ['minTreadDepth', 'maxTreadDepth'],
   patched: ['patched'],
   runFlat: ['kindSale'],
 };

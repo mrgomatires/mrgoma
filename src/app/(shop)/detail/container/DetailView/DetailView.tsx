@@ -23,7 +23,9 @@ const DetailView = ({ product }: { product: SingleTire }) => {
   const isNewTire = product.condition?.toLowerCase() === 'new';
 
   return (
-    <>
+    // The page's main landmark — the tire page had none (052 site review), so a
+    // screen reader's "skip to main content" had nowhere to go.
+    <main>
       {/* ── Dark hero ── */}
       <ScrollToTopOnOpen id={String(product.id)} />
       <div className="bg-[#0a0a0a] relative overflow-hidden">
@@ -142,7 +144,7 @@ const DetailView = ({ product }: { product: SingleTire }) => {
           <Benefits />
         </section>
       </div>
-    </>
+    </main>
   );
 };
 

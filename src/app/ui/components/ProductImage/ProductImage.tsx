@@ -16,8 +16,13 @@ interface ProductImageProps {
   priority?: boolean;
 }
 
-// URL de imagen por defecto cuando la URL original no es válida
-const DEFAULT_IMAGE_URL = '/images/default-tire.png';
+/**
+ * The generic tire photo, when a tire has no usable one. The same file the
+ * gallery and the comparison use. It used to be `/images/default-tire.png`,
+ * which does not exist: a tire without a photo showed a broken image (found
+ * in the 052 site review).
+ */
+export const DEFAULT_IMAGE_URL = '/assets/images/generic-tire-image.webp';
 
 /**
  * A URL only counts as usable if `next/image` is configured for its host.

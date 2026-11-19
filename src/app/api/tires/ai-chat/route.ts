@@ -19,6 +19,7 @@ import {
 } from '@/app/api/_lib/aiChat/sets';
 import { getCachedBrands, parseBrands, unknownBrands } from '@/app/api/_lib/brandCatalogue';
 import { withLogging } from '@/app/api/_lib/withLogging';
+import { toCatalogFilters } from '@/app/api/tires/ai-chat/_lib/catalogFilters';
 import { buildStoreDirectory } from '@/app/api/tires/ai-chat/_lib/storeDirectory';
 import { pickChatSets } from '@/app/utils/chatSets';
 import type { SetSize } from '@/app/utils/tireSets';
@@ -69,7 +70,9 @@ Detect the customer's language automatically and always respond in that same lan
 - If Spanish → respond in Spanish
 - If unclear → ask: "English or Español?"
 
-Spanish tire terms: "llantas/cauchos/neumáticos" = tires, "aro" = rim diameter, "usadas" = used, "nuevas" = new, "parcheadas" = patched, "banda de rodamiento" = tread, "perfil" = aspect ratio
+Spanish tire terms: "llantas/cauchos/neumáticos" = tires, "aro" = rim diameter, "usadas" = used, "nuevas" = new, "parcheadas" = patched, "sin parche" = not patched, "banda de rodamiento" = tread, "perfil" = aspect ratio, "run flat / antipinchazo" = run-flat
+
+Used-tire filters: tread depth is in 32nds of an inch ("8/32 or more" → minTreadDepth=8), "no patches" → patched="no", run-flat → runFlat=true. Tread, remaining life and patched only describe used tires, so they search used tires.
 
 ## CONVERSATION FLOW
 1. Detect language
@@ -242,15 +245,16 @@ const APPLY_FILTERS_TOOL: Anthropic.Tool = {
       },
       minTreadDepth: {
         type: 'number',
-        description: 'Minimum tread depth in mm',
+        description:
+          'Minimum tread depth in 32nds of an inch, a whole number (used tires run 6–10; new tires are 10). "8/32 or more" → 8. Implies used tires.',
       },
       maxTreadDepth: {
         type: 'number',
-        description: 'Maximum tread depth in mm',
+        description: 'Maximum tread depth in 32nds of an inch, a whole number. Implies used tires.',
       },
       minRemainingLife: {
         type: 'number',
-        description: 'Minimum remaining life percentage (0-100)',
+        description: 'Minimum remaining life percentage (50-100). Implies used tires.',
       },
       maxRemainingLife: {
         type: 'number',
@@ -262,8 +266,14 @@ const APPLY_FILTERS_TOOL: Anthropic.Tool = {
         description: 'Tire condition: "new" or "used"',
       },
       patched: {
+        type: 'string',
+        enum: ['no', 'yes'],
+        description:
+          '"no" for tires without a patch ("no patches", "sin parche"), "yes" for patched ones. Implies used tires.',
+      },
+      runFlat: {
         type: 'boolean',
-        description: 'Whether the tire has been patched',
+        description: 'true for run-flat tires ("run flat", "RFT"), false to exclude them.',
       },
       brands: {
         type: 'string',
@@ -400,7 +410,9 @@ export const POST = withLogging('tires.aiChat.POST', async (req: NextRequest) =>
 
     if (toolUseBlock && toolUseBlock.type === 'tool_use') {
       const filters = toolUseBlock.input as Record<string, unknown>;
-      const { confirmationMessage, ...filterParams } = filters;
+      const { confirmationMessage, ...toolFilters } = filters;
+      // Written as the catalog reads it, used filters narrowing to used (052).
+      const filterParams = toCatalogFilters(toolFilters);
       const spanish = isSpanish(messages);
       const dimensions = dimensionsParam(filterParams);
 
