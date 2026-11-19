@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import {
   availableSetSizes,
+  cardSetOffer,
+  cheapestSetWith,
   cheapestSet,
   closestMatch,
   countJoinable,
@@ -367,5 +369,64 @@ describe('cheapestSet (044, D1)', () => {
       unit({ id: 'n2', condition: 'New', tread: null, price: 150 }),
     ];
     expect(ids(cheapestSet(units, 2))).toEqual(['n1', 'n2']);
+  });
+});
+
+describe('cheapestSetWith / cardSetOffer (054)', () => {
+  const anchor = unit({ id: 'A', tread: 8, price: 160 });
+
+  it('always contains the anchor once, even when the pool holds it', () => {
+    const pool = [
+      anchor,
+      unit({ id: 'b', tread: 8 }),
+      unit({ id: 'c', tread: 9 }),
+      unit({ id: 'd', tread: 7 }),
+    ];
+    const set = cheapestSetWith(anchor, pool, 4)!;
+    expect(ids(set)[0]).toBe('A');
+    expect(new Set(ids(set)).size).toBe(4);
+  });
+
+  it('takes the cheapest units in a 2/32" window that holds the anchor', () => {
+    const pool = [
+      unit({ id: 'far', tread: 5, price: 10 }), // 3/32" below: never
+      unit({ id: 'b', tread: 9, price: 120 }),
+      unit({ id: 'c', tread: 7, price: 80 }),
+      unit({ id: 'd', tread: 10, price: 90 }), // with 7 it would span 3/32"
+    ];
+    const set = cheapestSetWith(anchor, pool, 3)!;
+    expect(ids(set).sort()).toEqual(['A', 'b', 'c']);
+    expect(isWithinTolerance(set)).toBe(true);
+    expect(setTotal(set)).toBe(360);
+  });
+
+  it('prefers unpatched, then cheaper, then the anchor’s city', () => {
+    const pool = [
+      unit({ id: 'p', tread: 8, price: 50, patched: true }),
+      unit({ id: 'o', tread: 8, price: 90, city: 'Orlando' }),
+      unit({ id: 'm', tread: 8, price: 90 }),
+    ];
+    expect(ids(cheapestSetWith(anchor, pool, 2))).toEqual(['A', 'm']);
+  });
+
+  it('offers 4, else 2, else nothing (D1)', () => {
+    const four = [1, 2, 3].map(i => unit({ id: `f${i}`, tread: 8 }));
+    expect(cardSetOffer(anchor, four)).toEqual({
+      size: 4,
+      total: 460,
+      ids: ['A', 'f1', 'f2', 'f3'],
+    });
+    const two = [unit({ id: 't1', tread: 8 })];
+    expect(cardSetOffer(anchor, two)).toEqual({ size: 2, total: 260, ids: ['A', 't1'] });
+    expect(cardSetOffer(anchor, [unit({ tread: 4 })])).toBeNull();
+  });
+
+  it('works for new tires (full tread)', () => {
+    const nu = (id: string) => unit({ id, tread: null, condition: 'New', price: 200 });
+    expect(cardSetOffer(nu('N'), [nu('n1'), nu('n2'), nu('n3')])?.total).toBe(800);
+  });
+
+  it('never prices a set that breaks the 2/32" rule', () => {
+    expect(cheapestSetWith(anchor, [unit({ tread: 11 }), unit({ tread: 5 })], 2)).toBeNull();
   });
 });

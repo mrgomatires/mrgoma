@@ -337,3 +337,77 @@ export function cheapestSet(
   }
   return best ? best.units : null;
 }
+
+/**
+ * The cheapest set **that includes `anchor`** (feature 054): `cheapestSet`'s
+ * rule — fewest patched, then lowest total, then fewest tires outside the
+ * anchor's city, then id — over the 2/32" windows that contain the anchor.
+ *
+ * The anchor is the tire on a listing card. The card promises a set *with
+ * that tire*, because a tap opens that tire's page with exactly this set; the
+ * cheapest set of the model elsewhere would be a different tire's offer. The
+ * candidate pool may include the anchor itself (the builder's pool does);
+ * `eligible` drops it so it is counted once. `null` when no window holds
+ * `size` tires.
+ */
+export function cheapestSetWith(
+  anchor: SetUnit,
+  candidates: SetUnit[],
+  size: SetSize
+): SetUnit[] | null {
+  const anchorTread = effectiveTread(anchor);
+  if (anchorTread === null) return null;
+  const pool = eligible(anchor, candidates);
+  const city = anchor.city;
+  const byCheapest = (a: SetUnit, b: SetUnit) =>
+    Number(a.patched) - Number(b.patched) ||
+    a.price - b.price ||
+    awayFrom(a, city) - awayFrom(b, city) ||
+    a.id.localeCompare(b.id);
+
+  // Every window [low, low + 2] that contains the anchor starts at the anchor's
+  // tread or at a candidate's tread up to 2/32" below it.
+  const lows = new Set<number>([anchorTread]);
+  for (const c of pool) {
+    const t = effectiveTread(c) as number;
+    if (t <= anchorTread + EPSILON && anchorTread - t <= MAX_TREAD_SPREAD + EPSILON) lows.add(t);
+  }
+
+  let best: { units: SetUnit[]; patched: number; total: number; away: number } | null = null;
+  for (const low of lows) {
+    const high = low + MAX_TREAD_SPREAD + EPSILON;
+    const others = pool
+      .filter(c => {
+        const t = effectiveTread(c) as number;
+        return t >= low - EPSILON && t <= high;
+      })
+      .sort(byCheapest)
+      .slice(0, size - 1);
+    if (others.length < size - 1) continue;
+    const units = [anchor, ...others];
+    const patched = units.filter(u => u.patched).length;
+    const total = setTotal(units);
+    const away = others.reduce((n, u) => n + awayFrom(u, city), 0);
+    if (
+      !best ||
+      patched < best.patched ||
+      (patched === best.patched &&
+        (total < best.total - EPSILON ||
+          (Math.abs(total - best.total) <= EPSILON && away < best.away)))
+    ) {
+      best = { units, patched, total, away };
+    }
+  }
+  return best ? best.units : null;
+}
+
+/** What a listing card offers: a set of 4 with this tire, else of 2, else none (054, D1). */
+export type CardSetOffer = { size: SetSize; total: number; ids: string[] };
+
+export function cardSetOffer(anchor: SetUnit, candidates: SetUnit[]): CardSetOffer | null {
+  for (const size of [4, 2] as const) {
+    const set = cheapestSetWith(anchor, candidates, size);
+    if (set) return { size, total: setTotal(set), ids: set.map(u => u.id) };
+  }
+  return null;
+}

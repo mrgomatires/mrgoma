@@ -4,12 +4,14 @@ import Link from 'next/link';
 
 import { useCart } from '@/app/context/CartContext';
 import { useAddTireToCart } from '@/app/hooks/useAddTireToCart';
+import { useSetOffers } from '@/app/hooks/useSetOffers';
 import { TransformedTire } from '@/app/interfaces/tires';
 import { BrandImage, FreeShippingBadge, ProductImage, StockBadge } from '@/app/ui/components';
 import CompareToggle from '@/app/ui/components/CompareToggle/CompareToggle';
 import { useViewItemList } from '@/app/ui/components/ViewItemList/useViewItemList';
 import { trackEcommerce } from '@/app/utils/analytics';
 import { EVENTS } from '@/app/utils/analyticsEvents';
+import { setHref } from '@/app/utils/chatSets';
 import { selectPayload, type GaList } from '@/app/utils/ecommerce';
 import { brandName, modelName, parseTireName } from '@/app/utils/tireNaming';
 import { buildTireSlug, slugify } from '@/app/utils/tireSlug';
@@ -54,9 +56,27 @@ const CartIcon = () => (
   </svg>
 );
 
+/** Stacked tires: "a set". Decoration — the words carry the meaning. */
+const SetIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    className="h-4 w-4 shrink-0"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    aria-hidden="true"
+  >
+    <ellipse cx="9" cy="12" rx="5" ry="8" />
+    <path d="M14 4.5c2.9.6 5 3.7 5 7.5s-2.1 6.9-5 7.5" />
+  </svg>
+);
+
 const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
   const { isInCart } = useCart();
   useViewItemList(list, products, indexOffset);
+  // The set each card can offer, asked for after the cards are on screen (054).
+  const setOffers = useSetOffers(products.map(p => p.id));
 
   // Any link that opens the tire's page is a selection (046, D2). The card's
   // brand, size and condition links go elsewhere, and Add to Cart is its own event.
@@ -79,6 +99,7 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
           typeof product?.status === 'string' && product.status.trim().toLowerCase() === 'sold';
         const isNew = (product.condition || '').trim().toLowerCase() === 'new';
         const { size: tireSize, displayName } = parseTireName(product.name);
+        const setOffer = isSold ? undefined : setOffers[String(product.id)];
 
         const slug = product.id
           ? buildTireSlug(String(product.id), product.brand || '', tireSize)
@@ -135,7 +156,8 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
                 {/* Desktop: meta row + CTA */}
                 <div className="hidden sm:flex items-start justify-between gap-3">
                   <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider pt-0.5">
-                    Single · Free Shipping
+                    {/* With a set on offer the tire is not only sold singly (054). */}
+                    {setOffer ? 'Single or set · Free Shipping' : 'Single · Free Shipping'}
                   </span>
                   <div className="shrink-0">
                     <button
@@ -209,6 +231,42 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
                       className="flex h-8 overflow-hidden items-center opacity-70 ml-1 hover:opacity-100 transition-opacity"
                     >
                       <BrandImage product={{ brand: product.brand, brandId: product.brandId }} />
+                    </Link>
+                  )}
+                </div>
+
+                {/* The set this tire can be part of (054): "Set of 4 · $640 total",
+                    to the tire page with the builder open on exactly that set.
+                    The line's height is reserved, so it arriving after the cards
+                    moves nothing (D6). */}
+                <div className="flex h-7 items-center">
+                  {setOffer && (
+                    <Link
+                      href={setHref(
+                        String(product.id),
+                        product.brand || '',
+                        tireSize,
+                        setOffer.ids
+                      )}
+                      data-track="set_offer_select"
+                      data-track-category="sets"
+                      data-track-set-size={setOffer.size}
+                      data-track-list={list?.id}
+                      data-track-tire-id={String(product.id)}
+                      className="inline-flex min-h-6 items-center gap-1.5 rounded-sm text-sm font-semibold text-green-700 underline-offset-2 hover:text-green-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
+                    >
+                      <SetIcon />
+                      <span>Set of {setOffer.size}</span>{' '}
+                      <span
+                        aria-hidden="true"
+                        className="h-1 w-1 rounded-full bg-current opacity-60"
+                      />{' '}
+                      <span>
+                        ${setOffer.total.toLocaleString('en-US', { maximumFractionDigits: 2 })}{' '}
+                        total
+                      </span>{' '}
+                      <span className="sr-only">— build this set</span>
+                      <span aria-hidden="true">→</span>
                     </Link>
                   )}
                 </div>

@@ -133,6 +133,16 @@ function bestSets(units: SizeUnit[], quantity: SetSize, prefer: TireCity | null)
   return picked;
 }
 
+/**
+ * The link that opens a tire's page with its set builder holding exactly this
+ * set: `/tires/{slug}?set=a,b,c,d`. The page reads it with `parseSetParam` and
+ * `resolvePresetSet`. One writer for the chat's cards (044) and the listing
+ * cards (054), so the two can never disagree on the format.
+ */
+export function setHref(anchorId: string, brand: string, size: string, ids: string[]): string {
+  return `/tires/${buildTireSlug(anchorId, brand, size)}?set=${ids.join(',')}`;
+}
+
 /** The card for a set. Its link opens the page of the set's best-tread tire. */
 export function toChatSetCard(units: SizeUnit[], size: string): ChatSetCard {
   const ordered = [...units].sort(
@@ -142,7 +152,7 @@ export function toChatSetCard(units: SizeUnit[], size: string): ChatSetCard {
       a.id.localeCompare(b.id)
   );
   const anchor = ordered[0];
-  const ids = ordered.map(u => u.id).join(',');
+  const ids = ordered.map(u => u.id);
   return {
     brand: anchor.brand,
     model: anchor.model2,
@@ -151,7 +161,7 @@ export function toChatSetCard(units: SizeUnit[], size: string): ChatSetCard {
     count: units.length,
     total: setTotal(units),
     treadLabel: treadRange(units)?.label ?? '',
-    href: `/tires/${buildTireSlug(anchor.id, anchor.brand, size)}?set=${ids}`,
+    href: setHref(anchor.id, anchor.brand, size, ids),
     size,
     units: ordered.map(u => ({ id: u.id, price: u.price })),
   };
