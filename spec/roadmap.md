@@ -41,7 +41,7 @@ performance budget is in place (P1.8).
   no flashes; subset if applicable.
 - ⬜ **P1.4 — Structural CLS.** Reserve space for badges, carousels and media;
   avoid jumps on hydration.
-- ⬜ **P1.5 — JS / bundle.** Audit heavy imports; confirm that 3D (three.js) and
+- 🟡 **P1.5 — JS / bundle (`056-bundle-lcp-mobile`).** Audit heavy imports; confirm that 3D (three.js) and
   other non-critical chunks load deferred; trim the rest.
 - ⬜ **P1.6 — INP / interactivity.** Reduce main-thread work; confirm the 3D
   canvases only run when active.
@@ -159,11 +159,11 @@ To be resumed after the two tracks above; no fixed order yet.
   - ✅ **Set total on listing cards (`054-set-total-on-cards`).** "Set of 4 from $X" where a set
     can be built. _Merged (PR #215, 2026-11-19)._
 
-- 🟡 **Accessibility and performance pass (`055-a11y-performance-pass`).** The
+- ✅ **Accessibility and performance pass (`055-a11y-performance-pass`).** The
   052 site review's findings: contrast on dark pages, target sizes,
   label-in-name, duplicate id, heading order and 24 missing brand logos (WCAG
   2.1 AA); and, after a baseline (Track 1 P1.0), home TBT, late LCP images,
-  the streamed meta description and the checkout layout shift.
+  the streamed meta description and the checkout layout shift. _Merged (PR #216, 2026-11-19)._
 
 - ⬜ **Tailwind v4 config activation (bug).** `tailwind.config.ts` is ignored by
   Tailwind v4 (no `@config` directive), so its custom tokens are dormant **in

@@ -323,11 +323,27 @@ A change is done when:
   for build-time data fetches, which CI doesn't have — see feature
   `009-perf-budget`.) Next 16/Turbopack doesn't emit per-route First-Load JS, so
   the shared floor + total are the reliable proxy. Bump the limits deliberately in
-  a PR when a real increase is justified.
+  a PR when a real increase is justified. Since 056 it also budgets
+  **`shopperPageJs` ≤ 320 KB** — every chunk the prerendered `/about-us` and
+  `/contact` HTML links, root layout included — and **fails if zod,
+  react-hook-form or next-auth's client appear in any of them**.
+- **Seller-only client code stays out of the storefront's shared paths (056).**
+  Never export a sellers' component (login form, dashboard pieces) from the
+  `@/app/ui/components` barrel — nearly every client component imports it and a
+  client barrel is not tree-shaken, so the component's dependencies ship to
+  every shopper; import it by path. Providers only the dashboard needs
+  (`SessionProvider`) wrap `(sellers)/dashboard/layout.tsx`, not the root
+  layout. `src/bundle.guard.test.ts` and `perf:budget` enforce both.
+- **Below-the-fold heavy widgets** (three.js) mount when near the viewport
+  (`useNearViewport`) *and* idle (`useIdleReady`), not on idle alone — idle came
+  within ~2 s of load, inside the window a phone is still loading the page.
 - **Lab measurements:** `npm run perf:lab` (055, `scripts/perf-lab.mjs`) — 5
   Lighthouse runs per page and form factor on the local production build,
   medians of LCP/TBT/CLS/FCP/TTFB plus the LCP element, long-task scripts and
-  shift culprits (`--runs 3 --page home` for quick checks). Compare runs made
+  shift culprits (`--runs 3 --page home` for quick checks), and since 056 the
+  page weight (`jsKB`, `unusedJsKB`, `renderBlockingMs`, `htmlKB`). The
+  sitemap's first tire changes as stock sells: pin it with `--path` for a
+  before/after of the tire page. Compare runs made
   back to back on one machine; it is lab data, not field data.
 
 ### Working rules

@@ -96,4 +96,35 @@ describe('the performance lab', () => {
     expect(s).toMatchObject({ lcp: 5100, tbt: 120, score: 81, lcpElement: '<img alt="hero">' });
     expect(s.longTasks[0]).toEqual({ url: '/_next/a.js', ms: 300 });
   });
+
+  it('reports the page weight: JS, unused JS, render-blocking time and HTML (056)', () => {
+    const s = summarise({
+      categories: { performance: { score: 0.8 } },
+      audits: {
+        'network-requests': {
+          details: {
+            items: [
+              { resourceType: 'Script', transferSize: 100 * 1024 },
+              { resourceType: 'Script', transferSize: 50 * 1024 },
+              { resourceType: 'Stylesheet', transferSize: 20 * 1024 },
+              { resourceType: 'Document', transferSize: 30 * 1024 },
+            ],
+          },
+        },
+        'unused-javascript': { details: { overallSavingsBytes: 40 * 1024 } },
+        'render-blocking-insight': { metricSavings: { FCP: 452.6 } },
+      },
+    });
+    expect(s).toMatchObject({ jsKB: 150, unusedJsKB: 40, renderBlockingMs: 453, htmlKB: 30 });
+  });
+
+  it('adds up the per-file render-blocking time when there is no saving', () => {
+    const s = summarise({
+      categories: {},
+      audits: {
+        'render-blocking-insight': { details: { items: [{ wastedMs: 100 }, { wastedMs: 50 }] } },
+      },
+    });
+    expect(s).toMatchObject({ jsKB: 0, unusedJsKB: 0, renderBlockingMs: 150, htmlKB: 0 });
+  });
 });

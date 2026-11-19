@@ -1,0 +1,254 @@
+{
+  "date": "2026-11-19T17:31:11.494Z",
+  "runs": 5,
+  "pages": {
+    "home": {
+      "mobile": {
+        "path": "/",
+        "lcp": 3981.2377,
+        "tbt": 1,
+        "cls": 0,
+        "fcp": 1353.121,
+        "ttfb": 3,
+        "score": 87,
+        "jsKB": 268.1,
+        "unusedJsKB": 91.9,
+        "renderBlockingMs": 450,
+        "htmlKB": 47.5,
+        "lcpElement": "<div aria-hidden=\"true\" class=\"absolute inset-0 h-full w-full object-cover\" style=\"background-image: url(&quot;/assets/images/banner-hero.webp&quot;);\">",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [
+          {
+            "url": "/",
+            "ms": 57
+          },
+          {
+            "url": "/_next/static/chunks/3rw667ah2yx24.js",
+            "ms": 52
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/",
+        "lcp": 833.968525,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 363.10900000000004,
+        "ttfb": 4,
+        "score": 99,
+        "jsKB": 545.6,
+        "unusedJsKB": 215.6,
+        "renderBlockingMs": 100,
+        "htmlKB": 47.5,
+        "lcpElement": "<video class=\"absolute inset-0 h-full w-full object-cover pointer-events-none transition…\" data-hero-video=\"true\" src=\"/assets/images/banner-hero.mp4\" autoplay=",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    },
+    "tires": {
+      "mobile": {
+        "path": "/tires",
+        "lcp": 3555.6357000000007,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 1353.0408000000002,
+        "ttfb": 5,
+        "score": 90,
+        "jsKB": 269.9,
+        "unusedJsKB": 93.7,
+        "renderBlockingMs": 450,
+        "htmlKB": 54.7,
+        "lcpElement": "<img alt=\"\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-cover\" style=\"position: absolute; height: 100%; width: 100%; in",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [
+          {
+            "url": "Unattributable",
+            "ms": 51
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/tires",
+        "lcp": 1298.7205999999999,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 362.6206,
+        "ttfb": 4,
+        "score": 97,
+        "jsKB": 282.6,
+        "unusedJsKB": 93.7,
+        "renderBlockingMs": 100,
+        "htmlKB": 54.7,
+        "lcpElement": "<aside role=\"region\" aria-label=\"Promotion\" class=\"w-full overflow-hidden rounded-lg bg-zinc-900 text-white  relative\" style=\"\">",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": false,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    },
+    "tire": {
+      "mobile": {
+        "path": "/tires/514355-michelin-255-50-19",
+        "lcp": 4888.328699999999,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 1202.0692,
+        "ttfb": 4,
+        "score": 82,
+        "jsKB": 272.2,
+        "unusedJsKB": 100.8,
+        "renderBlockingMs": 450,
+        "htmlKB": 31.7,
+        "lcpElement": "<img alt=\"Michelin Primacy All Season MO XL 255/50/19\" aria-hidden=\"false\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [
+          {
+            "url": "/_next/static/chunks/3rw667ah2yx24.js",
+            "ms": 50
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/tires/514355-michelin-255-50-19",
+        "lcp": 1090.9037500000004,
+        "tbt": 0,
+        "cls": 0.04526477902547938,
+        "fcp": 321.9825,
+        "ttfb": 4,
+        "score": 98,
+        "jsKB": 283.8,
+        "unusedJsKB": 100.8,
+        "renderBlockingMs": 100,
+        "htmlKB": 31.7,
+        "lcpElement": "<img alt=\"Michelin Primacy All Season MO XL 255/50/19\" aria-hidden=\"false\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": [
+          {
+            "node": "<footer class=\"bg-black relative overflow-hidden \">",
+            "score": 0.0352
+          },
+          {
+            "node": "<section aria-labelledby=\"product-description-title\" class=\"relative\">",
+            "score": 0.0101
+          }
+        ]
+      }
+    },
+    "store": {
+      "mobile": {
+        "path": "/locations/cutler-bay",
+        "lcp": 3605.851725,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 1202.249,
+        "ttfb": 2,
+        "score": 90,
+        "jsKB": 266.1,
+        "unusedJsKB": 105.9,
+        "renderBlockingMs": 450,
+        "htmlKB": 20.8,
+        "lcpElement": "<img alt=\"\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-cover brightness-[0.25] lg:brightness-[0.35]\" style=\"position: ",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/locations/cutler-bay",
+        "lcp": 724.8675,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 321.947,
+        "ttfb": 2,
+        "score": 100,
+        "jsKB": 277.7,
+        "unusedJsKB": 105.9,
+        "renderBlockingMs": 100,
+        "htmlKB": 20.8,
+        "lcpElement": "<img alt=\"\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-cover brightness-[0.25] lg:brightness-[0.35]\" style=\"position: ",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    },
+    "checkout": {
+      "mobile": {
+        "path": "/checkout",
+        "lcp": 3254.1706000000004,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 1052.1154,
+        "ttfb": 1,
+        "score": 93,
+        "jsKB": 278.2,
+        "unusedJsKB": 104.6,
+        "renderBlockingMs": 450,
+        "htmlKB": 13.1,
+        "lcpElement": "<div class=\"absolute inset-0\" style=\"\">",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/checkout",
+        "lcp": 655.0094750000001,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 281.8749,
+        "ttfb": 1,
+        "score": 100,
+        "jsKB": 291.1,
+        "unusedJsKB": 104.6,
+        "renderBlockingMs": 100,
+        "htmlKB": 13.1,
+        "lcpElement": "<div class=\"absolute inset-0\" style=\"\">",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    }
+  }
+}

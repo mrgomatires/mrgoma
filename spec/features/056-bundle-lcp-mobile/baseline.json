@@ -1,0 +1,272 @@
+{
+  "date": "2026-11-19T17:20:49.810Z",
+  "runs": 5,
+  "pages": {
+    "home": {
+      "mobile": {
+        "path": "/",
+        "lcp": 4508.102175,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 1353.57565,
+        "ttfb": 4,
+        "score": 84,
+        "jsKB": 312.3,
+        "unusedJsKB": 128.2,
+        "renderBlockingMs": 450,
+        "htmlKB": 47.5,
+        "lcpElement": "<div aria-hidden=\"true\" class=\"absolute inset-0 h-full w-full object-cover\" style=\"background-image: url(&quot;/assets/images/banner-hero.webp&quot;);\">",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [
+          {
+            "url": "/",
+            "ms": 55
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/",
+        "lcp": 958.1075499999997,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 363.20050000000003,
+        "ttfb": 3,
+        "score": 99,
+        "jsKB": 586,
+        "unusedJsKB": 251.3,
+        "renderBlockingMs": 100,
+        "htmlKB": 47.5,
+        "lcpElement": "<video class=\"absolute inset-0 h-full w-full object-cover pointer-events-none transition…\" data-hero-video=\"true\" src=\"/assets/images/banner-hero.mp4\" autoplay=",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    },
+    "tires": {
+      "mobile": {
+        "path": "/tires",
+        "lcp": 3757.7436,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 1352.8484,
+        "ttfb": 5,
+        "score": 89,
+        "jsKB": 314.2,
+        "unusedJsKB": 129.7,
+        "renderBlockingMs": 450,
+        "htmlKB": 54.7,
+        "lcpElement": "<img alt=\"\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-cover\" style=\"position: absolute; height: 100%; width: 100%; in",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [
+          {
+            "url": "Unattributable",
+            "ms": 55
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/tires",
+        "lcp": 1331.0737000000013,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 362.61670000000004,
+        "ttfb": 4,
+        "score": 97,
+        "jsKB": 326.8,
+        "unusedJsKB": 129.7,
+        "renderBlockingMs": 100,
+        "htmlKB": 54.7,
+        "lcpElement": "<aside role=\"region\" aria-label=\"Promotion\" class=\"w-full overflow-hidden rounded-lg bg-zinc-900 text-white  relative\" style=\"\">",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": false,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    },
+    "tire": {
+      "mobile": {
+        "path": "/tires/514407-bridgestone-235-55-20",
+        "lcp": 4678.898499999999,
+        "tbt": 58.5,
+        "cls": 0,
+        "fcp": 1202.034,
+        "ttfb": 5,
+        "score": 83,
+        "jsKB": 577.6,
+        "unusedJsKB": 272.4,
+        "renderBlockingMs": 450,
+        "htmlKB": 34.5,
+        "lcpElement": "<img alt=\"Bridgestone Ecopia H/L 422 Plus 235/55/20\" aria-hidden=\"false\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-co",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [
+          {
+            "url": "/_next/static/chunks/3i6peuv68p2y0.js",
+            "ms": 114
+          },
+          {
+            "url": "/_next/static/chunks/3rw667ah2yx24.js",
+            "ms": 101
+          },
+          {
+            "url": "/_next/static/chunks/3i6peuv68p2y0.js",
+            "ms": 61
+          },
+          {
+            "url": "Unattributable",
+            "ms": 59
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/tires/514407-bridgestone-235-55-20",
+        "lcp": 1092.6252,
+        "tbt": 0,
+        "cls": 0.04157287365379564,
+        "fcp": 322.0909,
+        "ttfb": 4,
+        "score": 98,
+        "jsKB": 589.2,
+        "unusedJsKB": 272.4,
+        "renderBlockingMs": 100,
+        "htmlKB": 34.5,
+        "lcpElement": "<img alt=\"Bridgestone Ecopia H/L 422 Plus 235/55/20\" aria-hidden=\"false\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-co",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": [
+          {
+            "node": "<footer class=\"bg-black relative overflow-hidden \">",
+            "score": 0.0372
+          },
+          {
+            "node": "<section aria-labelledby=\"product-description-title\" class=\"relative\">",
+            "score": 0.0043
+          }
+        ]
+      }
+    },
+    "store": {
+      "mobile": {
+        "path": "/locations/cutler-bay",
+        "lcp": 3831.106925,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 1202.2207,
+        "ttfb": 2,
+        "score": 88,
+        "jsKB": 310.3,
+        "unusedJsKB": 142.7,
+        "renderBlockingMs": 450,
+        "htmlKB": 20.8,
+        "lcpElement": "<img alt=\"\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-cover brightness-[0.25] lg:brightness-[0.35]\" style=\"position: ",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/locations/cutler-bay",
+        "lcp": 765.2952500000001,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 322.1181,
+        "ttfb": 2,
+        "score": 100,
+        "jsKB": 321.9,
+        "unusedJsKB": 142.3,
+        "renderBlockingMs": 100,
+        "htmlKB": 20.8,
+        "lcpElement": "<img alt=\"\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-cover brightness-[0.25] lg:brightness-[0.35]\" style=\"position: ",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    },
+    "checkout": {
+      "mobile": {
+        "path": "/checkout",
+        "lcp": 3529.92275,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 1052.3471,
+        "ttfb": 1,
+        "score": 91,
+        "jsKB": 322.4,
+        "unusedJsKB": 140.9,
+        "renderBlockingMs": 450,
+        "htmlKB": 13.2,
+        "lcpElement": "<div class=\"absolute inset-0\" style=\"\">",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [
+          {
+            "url": "Unattributable",
+            "ms": 51
+          }
+        ],
+        "shifts": [
+          {
+            "node": "<p class=\"text-gray-600\">",
+            "score": 0.0004
+          }
+        ]
+      },
+      "desktop": {
+        "path": "/checkout",
+        "lcp": 684.8267500000002,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 281.9307,
+        "ttfb": 1,
+        "score": 100,
+        "jsKB": 335.4,
+        "unusedJsKB": 140.9,
+        "renderBlockingMs": 100,
+        "htmlKB": 13.2,
+        "lcpElement": "<div class=\"absolute inset-0\" style=\"\">",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    }
+  }
+}

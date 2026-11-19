@@ -1,0 +1,71 @@
+{
+  "note": "Same tire page, mobile, 5 runs each, built back to back from main (72867aa) and this branch. The sitemap first tire changed between baseline.json and after.json, so those two tire rows are different pages.",
+  "main": {
+    "date": "2026-11-19T17:37:46.768Z",
+    "runs": 5,
+    "pages": {
+      "tire": {
+        "mobile": {
+          "path": "/tires/514355-michelin-255-50-19",
+          "lcp": 5507.517275,
+          "tbt": 29.5,
+          "cls": 0,
+          "fcp": 1202.634,
+          "ttfb": 5,
+          "score": 80,
+          "jsKB": 577.6,
+          "unusedJsKB": 273.4,
+          "renderBlockingMs": 450,
+          "htmlKB": 31.7,
+          "lcpElement": "<img alt=\"Michelin Primacy All Season MO XL 255/50/19\" aria-hidden=\"false\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-",
+          "lcpChecks": {
+            "priorityHinted": true,
+            "requestDiscoverable": true,
+            "eagerlyLoaded": true
+          },
+          "longTasks": [
+            {
+              "url": "/_next/static/chunks/3i6peuv68p2y0.js",
+              "ms": 109
+            }
+          ],
+          "shifts": []
+        }
+      }
+    }
+  },
+  "branch": {
+    "date": "2026-11-19T17:38:25.088Z",
+    "runs": 5,
+    "pages": {
+      "tire": {
+        "mobile": {
+          "path": "/tires/514355-michelin-255-50-19",
+          "lcp": 4891.2570749999995,
+          "tbt": 0,
+          "cls": 0,
+          "fcp": 1202.6857,
+          "ttfb": 6,
+          "score": 82,
+          "jsKB": 272.2,
+          "unusedJsKB": 100.8,
+          "renderBlockingMs": 450,
+          "htmlKB": 31.7,
+          "lcpElement": "<img alt=\"Michelin Primacy All Season MO XL 255/50/19\" aria-hidden=\"false\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-",
+          "lcpChecks": {
+            "priorityHinted": true,
+            "requestDiscoverable": true,
+            "eagerlyLoaded": true
+          },
+          "longTasks": [
+            {
+              "url": "Unattributable",
+              "ms": 55
+            }
+          ],
+          "shifts": []
+        }
+      }
+    }
+  }
+}
