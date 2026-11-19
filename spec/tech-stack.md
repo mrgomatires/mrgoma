@@ -109,6 +109,14 @@ Versions taken from `package.json` (2026-06-30). Update here when they change.
   city is derived from `VaultName` on the server and the warehouse name never
   leaves. `GET /api/tires/compare?ids=` (1–3 numeric ids, Zod) answers only
   `id`, `available`, `price`, `no-store`.
+- **Set offers on listing cards** (054): `GET /api/tires/sets?ids=` (1–24
+  numeric ids, Zod) answers, per id, the cheapest set of 4 *that includes that
+  tire*, else of 2 — `{ size, total, ids }` only — from the tire page's own
+  mapper, set group and candidates cache (`getCachedSetCandidates`), so a card
+  never prices a set the builder cannot open. `public, s-maxage=60`. Asked for
+  after the cards paint (`useSetOffers`); the card links to the builder through
+  `setHref` (the chat's `?set=` writer). One set rule: `tireSets.ts`
+  (`cheapestSetWith`, `cardSetOffer`); `setOffer.guard.test.ts`.
 - **Google ratings** (053) are typed by hand into `locationsConfig.ts`
   (`google: { rating, reviews, readOn }` per store, from each store's Maps
   profile) — never pulled from the Business Profile API, whose content may not
@@ -187,6 +195,9 @@ Versions taken from `package.json` (2026-06-30). Update here when they change.
   `same_size`) via `trackEvent`; `compare_view_tire` as `data-track`; adding to
   the cart from the comparison sends the card's own `add_to_cart`
   (`useAddTireToCart`). See `spec/features/051-compare-tires/`.
+- **Set offers (feature 054).** `set_offer_select` (`data-track`, category
+  `sets`) with `set_size`, `list`, `tire_id`. See
+  `spec/features/054-set-total-on-cards/`.
 - **Google ratings (feature 053).** `google_rating_click` (the combined chip
   → `/locations`; `surface` home / tires / tire_page) and
   `google_reviews_open` (a store's Google profile, new tab; `surface`

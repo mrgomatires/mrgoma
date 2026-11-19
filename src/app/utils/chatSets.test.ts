@@ -6,10 +6,11 @@ import {
   parseSetParam,
   pickChatSets,
   resolvePresetSet,
+  setHref,
   toChatSetCard,
   type ChatSetRequest,
 } from './chatSets';
-import { isWithinTolerance, type SetUnit } from './tireSets';
+import { cardSetOffer, isWithinTolerance, setTotal, type SetUnit } from './tireSets';
 
 let n = 1000;
 const u = (over: Partial<SizeUnit> = {}): SizeUnit => ({
@@ -256,5 +257,32 @@ describe('resolvePresetSet (D6, AC4, AC5)', () => {
   it('ignores a link without this tire or without a valid value', () => {
     expect(resolvePresetSet(['2', '3'], anchor, cands)).toEqual({ status: 'ignored' });
     expect(resolvePresetSet(null, anchor, cands)).toEqual({ status: 'ignored' });
+  });
+});
+
+describe('setHref and the listing cards (054)', () => {
+  it('writes the same link the chat cards use', () => {
+    expect(setHref('101', 'Michelin', '225/45/17', ['101', '102'])).toBe(
+      '/tires/101-michelin-225-45-17?set=101,102'
+    );
+  });
+
+  it('a card offer opens in the builder as exactly that set, same total (AC2)', () => {
+    const anchor = u({ id: '500', tread: 8, price: 160 });
+    const pool = [
+      anchor,
+      u({ id: '501', tread: 9, price: 120 }),
+      u({ id: '502', tread: 7, price: 80 }),
+      u({ id: '503', tread: 8, price: 100 }),
+    ];
+    const offer = cardSetOffer(anchor, pool)!;
+    const href = setHref(anchor.id, anchor.brand, '225/45/17', offer.ids);
+    const resolved = resolvePresetSet(
+      parseSetParam(new URL(href, 'https://x').searchParams.get('set')),
+      anchor,
+      pool
+    );
+    expect(resolved.status).toBe('exact');
+    expect(resolved.status === 'exact' && setTotal(resolved.set)).toBe(offer.total);
   });
 });

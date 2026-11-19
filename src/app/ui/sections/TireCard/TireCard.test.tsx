@@ -175,3 +175,50 @@ describe('lists and selection (046)', () => {
     expect(track).not.toHaveBeenCalled();
   });
 });
+
+describe('TireCard — set offer (054)', () => {
+  const stubOffers = (offers: unknown) =>
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve({ offers }) }))
+    );
+
+  beforeEach(() => vi.unstubAllGlobals());
+
+  it('shows "Set of 4 · $X total" linking to the builder with that set (AC1, AC3, AC4, AC6)', async () => {
+    stubOffers({ '42': { size: 4, total: 640, ids: ['42', '43', '44', '45'] } });
+    render(
+      <CartProvider>
+        <TireCard products={[product]} list={{ id: 'catalog', name: 'Catalog' }} />
+      </CartProvider>
+    );
+    const link = await screen.findByRole('link', {
+      name: /^Set of 4 \$640 total — build this set/,
+    });
+    expect(link).toHaveAttribute('href', '/tires/42-michelin-225-40-18?set=42,43,44,45');
+    expect(link.textContent).not.toMatch(/from|each/i);
+    expect(link).toHaveAttribute('data-track', 'set_offer_select');
+    expect(link).toHaveAttribute('data-track-set-size', '4');
+    expect(link).toHaveAttribute('data-track-list', 'catalog');
+    expect(link).toHaveAttribute('data-track-tire-id', '42');
+    // The meta row no longer says "Single" alone when a set is on offer.
+    expect(screen.getByText('Single or set · Free Shipping')).toBeInTheDocument();
+  });
+
+  it('shows a set of 2 when that is what the tire can form', async () => {
+    stubOffers({ '42': { size: 2, total: 190, ids: ['42', '43'] } });
+    renderCard();
+    expect(await screen.findByRole('link', { name: /^Set of 2 \$190 total/ })).toBeInTheDocument();
+  });
+
+  it('shows nothing extra without an offer, or when the request fails (AC1, AC7)', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve({ ok: false, status: 500 }))
+    );
+    renderCard();
+    await new Promise(r => setTimeout(r, 0));
+    expect(screen.queryByRole('link', { name: /^Set of/ })).toBeNull();
+    expect(screen.getByText('Single · Free Shipping')).toBeInTheDocument();
+  });
+});
