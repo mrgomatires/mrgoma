@@ -6,12 +6,16 @@ import Link from 'next/link';
 
 import { TransformedTire } from '@/app/interfaces/tires';
 import { StockBadge } from '@/app/ui/components';
+import CompareToggle from '@/app/ui/components/CompareToggle/CompareToggle';
+import type { GaList } from '@/app/utils/ecommerce';
 import { brandName, modelName, parseTireName } from '@/app/utils/tireNaming';
 import { buildTireSlug } from '@/app/utils/tireSlug';
 import { patchedNote, treadDepthLabel } from '@/app/utils/tireSpecs';
 
 interface TireTableProps {
   products: TransformedTire[];
+  /** The listing, carried into the comparison (051). */
+  list?: GaList;
 }
 
 const SPEC_KEYS = ['Remaining life', 'Tread depth', 'Patched', 'Run Flat'] as const;
@@ -40,7 +44,7 @@ function specs(product: TransformedTire): Partial<Record<(typeof SPEC_KEYS)[numb
  * boundary is what keeps this out of the TireCard redesign, which is its own
  * roadmap item and owns the row's design.
  */
-const TireTable: FC<TireTableProps> = ({ products }) => {
+const TireTable: FC<TireTableProps> = ({ products, list }) => {
   if (products.length === 0) return null;
 
   return (
@@ -78,6 +82,9 @@ const TireTable: FC<TireTableProps> = ({ products }) => {
             </th>
             <th scope="col" className="px-4 py-2.5 font-bold">
               Stock
+            </th>
+            <th scope="col" className="px-3 py-2.5 font-bold">
+              <span className="sr-only">Compare</span>
             </th>
           </tr>
         </thead>
@@ -133,6 +140,9 @@ const TireTable: FC<TireTableProps> = ({ products }) => {
                 </td>
                 <td className="px-4 py-3">
                   <StockBadge />
+                </td>
+                <td className="px-3 py-1">
+                  <CompareToggle tire={product} list={list} />
                 </td>
               </tr>
             );

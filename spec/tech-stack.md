@@ -103,6 +103,12 @@ Versions taken from `package.json` (2026-06-30). Update here when they change.
 - **The size index `/tires/size`** (050) is static, regenerated every five
   minutes from `getCachedSizeCounts()` (same sellable rule as `fetchSizes()`),
   and its search box matches against the list the page passes in — no API.
+- **Listing tires carry `DOT`, `loadIndex`, `speedIndex`** (051) — public
+  facts printed on the tire and shown on every tire page. Every listing path
+  goes through `pickTireListFields` (the server pages too, since 051), so the
+  city is derived from `VaultName` on the server and the warehouse name never
+  leaves. `GET /api/tires/compare?ids=` (1–3 numeric ids, Zod) answers only
+  `id`, `available`, `price`, `no-store`.
 
 ### Analytics & tracking
 
@@ -155,6 +161,11 @@ Versions taken from `package.json` (2026-06-30). Update here when they change.
   `size_index_select` (`source` popular / list / closest,
   `label` size) and `see_all_sizes` (`surface` home / tires_form / rail). See
   `spec/features/050-size-index/`.
+- **Compare (feature 051).** `compare_add` / `compare_remove` (`tire_id`,
+  `count` after), `compare_limit` (a fourth refused), `compare_open` (`count`,
+  `same_size`) via `trackEvent`; `compare_view_tire` as `data-track`; adding to
+  the cart from the comparison sends the card's own `add_to_cart`
+  (`useAddTireToCart`). See `spec/features/051-compare-tires/`.
 - **Tire sets (feature 041).** The rules live in one pure module,
   `src/app/utils/tireSets.ts` (compatible = same brand, model, size, run-flat
   and condition class; tread Δ ≤ 2/32"; **any city** — the city only breaks

@@ -7,6 +7,7 @@ import type { Metadata } from 'next';
 import { SessionProvider } from 'next-auth/react';
 
 import { CartProvider } from '@/app/context/CartContext';
+import { CompareProvider } from '@/app/context/CompareContext';
 import { SelectedFiltersProvider } from '@/app/context/SelectedFilters';
 import { DetailModalProvider } from '@/app/context/ShowDetailModal';
 import { FiltersProvider } from '@/app/context/ShowFilterContext';
@@ -72,18 +73,20 @@ export default function RootLayout({
             <SelectedFiltersProvider>
               <MenuProvider>
                 <CartProvider>
-                  <VisitorCityProvider>
-                    <body className="font-sans" suppressHydrationWarning={true}>
-                      <React.Suspense fallback={null}>
-                        <GoogleAnalytics />
-                      </React.Suspense>
-                      <InteractionTracker />
-                      {children}
-                      <SiteAiChat />
-                      <CookieConsent />
-                      <Analytics />
-                    </body>
-                  </VisitorCityProvider>
+                  <CompareProvider>
+                    <VisitorCityProvider>
+                      <body className="font-sans" suppressHydrationWarning={true}>
+                        <React.Suspense fallback={null}>
+                          <GoogleAnalytics />
+                        </React.Suspense>
+                        <InteractionTracker />
+                        {children}
+                        <SiteAiChat />
+                        <CookieConsent />
+                        <Analytics />
+                      </body>
+                    </VisitorCityProvider>
+                  </CompareProvider>
                 </CartProvider>
               </MenuProvider>
             </SelectedFiltersProvider>

@@ -129,6 +129,10 @@ export interface TransformedTire {
   features: TireFeature[];
   /** Where the tire is, for the pickup-by-city rule (feature 041). */
   city?: 'Miami' | 'Orlando';
+  /** For the comparison (051): week/year of manufacture, load index, speed rating. */
+  dot?: string;
+  loadIndex?: string;
+  speedIndex?: string;
 }
 
 interface TireInformationProps {

@@ -3,13 +3,14 @@ import { FC, SyntheticEvent } from 'react';
 import Link from 'next/link';
 
 import { useCart } from '@/app/context/CartContext';
+import { useAddTireToCart } from '@/app/hooks/useAddTireToCart';
 import { TransformedTire } from '@/app/interfaces/tires';
 import { BrandImage, FreeShippingBadge, ProductImage, StockBadge } from '@/app/ui/components';
+import CompareToggle from '@/app/ui/components/CompareToggle/CompareToggle';
 import { useViewItemList } from '@/app/ui/components/ViewItemList/useViewItemList';
 import { trackEcommerce } from '@/app/utils/analytics';
 import { EVENTS } from '@/app/utils/analyticsEvents';
-import { factsFromCardTire } from '@/app/utils/cartFacts';
-import { cartPayload, selectPayload, type GaList } from '@/app/utils/ecommerce';
+import { selectPayload, type GaList } from '@/app/utils/ecommerce';
 import { brandName, modelName, parseTireName } from '@/app/utils/tireNaming';
 import { buildTireSlug, slugify } from '@/app/utils/tireSlug';
 import { patchedNote, treadDepthLabel } from '@/app/utils/tireSpecs';
@@ -54,7 +55,7 @@ const CartIcon = () => (
 );
 
 const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
-  const { addToCart, isInCart } = useCart();
+  const { isInCart } = useCart();
   useViewItemList(list, products, indexOffset);
 
   // Any link that opens the tire's page is a selection (046, D2). The card's
@@ -64,19 +65,10 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
     void trackEcommerce(EVENTS.SELECT_ITEM, selectPayload(list, [product], position));
   };
 
+  const addTireToCart = useAddTireToCart();
   const handleAddToCart = (event: SyntheticEvent, product: TransformedTire) => {
     event.preventDefault();
-    addToCart({
-      ...product,
-      model: product.model,
-      size: product.size,
-      city: product.city,
-      // What the cart shows to compare tires (047).
-      ...factsFromCardTire(product),
-    });
-    // Sent from here, not from `addToCart`: the seller dashboard calls that too,
-    // and staff activity must not read as shopper demand (feature 040).
-    void trackEcommerce(EVENTS.ADD_TO_CART, cartPayload([product]));
+    addTireToCart(product);
   };
 
   return (
@@ -178,7 +170,11 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
                       </Link>
                     )}
                   </div>
-                  {!isSold && <StockBadge />}
+                  <div className="flex items-center gap-1">
+                    {!isSold && <StockBadge />}
+                    {/* Side by side with up to two more (051). */}
+                    {!isSold && <CompareToggle tire={product} list={list} />}
+                  </div>
                 </div>
 
                 {/* Title */}

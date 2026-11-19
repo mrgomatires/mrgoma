@@ -6,7 +6,7 @@ import type { DocumentRecord } from '@/repositories/tiresRepository';
  * consumers — `getTires` and `SearchResults` — feed each record straight into
  * `transformTireData` (transformTireData.ts), which reads only these fields.
  * Trimming records to this shape drops internal-only DB columns (VaultName,
- * Local, Trash, Amount, DOT, ModificationDate, ConditionId, …) so they never
+ * Local, Trash, Amount, ModificationDate, ConditionId, …) so they never
  * reach the browser, with zero impact on the UI.
  *
  * Keep this in lockstep with `transformTireData`: if the transform starts
@@ -34,6 +34,13 @@ export type TireListRecord = {
    * warehouse name itself never leaves (feature 041: pickup by city).
    */
   City?: 'Miami' | 'Orlando';
+  /**
+   * Public facts for the tire comparison (051): printed on the tire and shown
+   * on every tire page. DOT is the week/year of manufacture — nothing internal.
+   */
+  DOT?: string;
+  loadIndex?: string;
+  speedIndex?: string;
 };
 
 /** Returns only the whitelisted fields; internal columns are dropped. */
@@ -56,5 +63,8 @@ export function pickTireListFields(record: DocumentRecord): TireListRecord {
     Tread: record.Tread,
     KindSaleId: record.KindSaleId,
     City: storeCity(record.VaultName),
+    DOT: record.DOT,
+    loadIndex: record.loadIndex,
+    speedIndex: record.speedIndex,
   };
 }

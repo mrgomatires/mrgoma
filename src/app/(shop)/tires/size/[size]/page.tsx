@@ -12,6 +12,7 @@ import { LISTS } from '@/app/utils/ecommerce';
 import { buildBreadcrumbJsonLd, buildItemListJsonLd, sizeMetadata } from '@/app/utils/seo';
 import { slugify } from '@/app/utils/tireSlug';
 import { transformTireData } from '@/app/utils/transformTireData';
+import { pickTireListFields } from '@/repositories/tireListFields';
 import { fetchTires } from '@/repositories/tiresRepository';
 
 export const revalidate = 3600;
@@ -79,7 +80,8 @@ export default async function SizeCategoryPage({ params }: { params: Promise<{ s
   const { originalSize, width, sidewall, diameter } = data;
 
   const result = await fetchTires(0, 24, { width, sidewall, diameter });
-  const tires = (result.records as TiresData[]).map(transformTireData);
+  // Through the same whitelist as `/api/tires`: public fields plus the city (051).
+  const tires = result.records.map(pickTireListFields).map(r => transformTireData(r as TiresData));
   const totalCount = result.totalCount;
 
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([

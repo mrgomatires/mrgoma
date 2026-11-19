@@ -2,6 +2,7 @@ import { TiresData, TransformedTire } from '@/app/interfaces/tires';
 import { buildTireFilters } from '@/app/utils/filterUtils';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, validatePageSize } from '@/app/utils/paginationUtils';
 import { createPaginatedResponse } from '@/app/utils/transformTireData';
+import { pickTireListFields } from '@/repositories/tireListFields';
 import { fetchTires } from '@/repositories/tiresRepository';
 
 export interface PaginatedTiresResponse {
@@ -37,7 +38,8 @@ export async function fetchTiresServer(
   try {
     const result = await fetchTires(offset, pageSize, filters);
     return createPaginatedResponse(
-      result.records as TiresData[],
+      // Same whitelist as `/api/tires`: public fields plus the city (051).
+      result.records.map(pickTireListFields) as TiresData[],
       page,
       pageSize,
       result.totalCount

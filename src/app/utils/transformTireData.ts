@@ -5,6 +5,11 @@ import { TiresData } from '@/app/interfaces/tires';
  * @param tire The raw tire data from the API
  * @returns Transformed tire data ready for UI rendering
  */
+const cleanFact = (v?: string | null) => {
+  const t = (v ?? '').trim();
+  return t && t !== '-' && t.toUpperCase() !== 'N/A' ? t : undefined;
+};
+
 export function transformTireData(tire: TiresData) {
   return {
     id: tire.TireId,
@@ -30,6 +35,10 @@ export function transformTireData(tire: TiresData) {
     brandId: tire.BrandId || 1,
     condition: tire.ProductTypeId === 1 ? 'New' : 'Used',
     city: tire.City,
+    // Public facts for the comparison (051); "N/A"-like values become absent.
+    dot: cleanFact(tire.DOT),
+    loadIndex: cleanFact(tire.loadIndex),
+    speedIndex: cleanFact(tire.speedIndex),
     features: [
       {
         name: 'Patched',
