@@ -68,6 +68,10 @@ const HTML_LIMITED_BOTS =
 
 const nextConfig = {
   htmlLimitedBots: HTML_LIMITED_BOTS,
+  // `experimental.inlineCss` was tried and reverted (056): it removed the
+  // ~450 ms render-blocking stylesheet, but every page's HTML grew by ~64 KB gz
+  // (the CSS goes in twice — in the <style> and in the RSC payload) and mobile
+  // LCP did not improve. Numbers in spec/features/056-bundle-lcp-mobile/results.md.
   async redirects() {
     return [
       /**

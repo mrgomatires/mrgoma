@@ -40,7 +40,9 @@ export { default as ErrorDisplay } from './ErrorDisplay/ErrorDisplay';
 export { default as StockBadge } from './StockBadge/StockBadge';
 export { default as CookieConsent } from './CookieConsent/CookieConsent';
 export { default as FreeShippingBadge } from './FreeShippingBadge/FreeShippingBadge';
-export { default as LoginForm } from './LoginForm/LoginForm';
+// LoginForm is deliberately not exported here: it brings zod and react-hook-form
+// (105 KB gz), and this barrel is imported by nearly every storefront client
+// component, so every shopper downloaded them (056). Import it by path.
 export { default as InputError } from './InputError/InputError';
 export { default as ButtonSpinner } from './ButtonSpinner/ButtonSpinner';
 export { default as Snackbar } from './Snackbar/Snackbar';

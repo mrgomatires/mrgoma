@@ -10,6 +10,9 @@
 //   node scripts/perf-lab.mjs                       # 5 runs, all pages, both form factors
 //   node scripts/perf-lab.mjs --runs 3 --page home  # quick check between changes
 //   node scripts/perf-lab.mjs --out spec/features/055-…/baseline.json
+//   node scripts/perf-lab.mjs --page tire --path /tires/123-…  # pin the page:
+//     the sitemap's first tire changes as stock sells, and two different tires
+//     are not a before/after (056)
 
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -45,7 +48,24 @@ export function summarise(lhr) {
     node: s.node?.snippet?.slice(0, 120) ?? '',
     score: Number((s.score ?? 0).toFixed(4)),
   }));
+  // Page weight (056): what the phone downloads before it can show the page.
+  const requests = a['network-requests']?.details?.items ?? [];
+  const kb = bytes => Math.round(bytes / 102.4) / 10;
+  const transfer = type =>
+    kb(
+      requests
+        .filter(r => r.resourceType === type)
+        .reduce((sum, r) => sum + (r.transferSize ?? 0), 0)
+    );
+  const blocking = a['render-blocking-insight'];
+  const renderBlockingMs =
+    blocking?.metricSavings?.FCP ??
+    (blocking?.details?.items ?? []).reduce((sum, i) => sum + (i.wastedMs ?? 0), 0);
   return {
+    jsKB: transfer('Script'),
+    unusedJsKB: kb(a['unused-javascript']?.details?.overallSavingsBytes ?? 0),
+    renderBlockingMs: Math.round(renderBlockingMs),
+    htmlKB: transfer('Document'),
     lcp: num('largest-contentful-paint'),
     tbt: num('total-blocking-time'),
     cls: num('cumulative-layout-shift'),
@@ -79,6 +99,8 @@ async function main() {
     const pages = Object.fromEntries(
       Object.entries(all).filter(([k]) => (only ? k === only : KEY_PAGES.includes(k)))
     );
+    const pinned = arg('path', null);
+    if (pinned) pages[only ?? 'page'] = pinned;
     // One warm-up per page: the first request after a start pays cold caches.
     for (const path of Object.values(pages)) await fetch(server.origin + path).catch(() => {});
     await withLighthouse(async run => {
@@ -102,6 +124,10 @@ async function main() {
             fcp: m('fcp'),
             ttfb: m('ttfb'),
             score: m('score'),
+            jsKB: m('jsKB'),
+            unusedJsKB: m('unusedJsKB'),
+            renderBlockingMs: m('renderBlockingMs'),
+            htmlKB: m('htmlKB'),
             lcpElement: last.lcpElement,
             lcpChecks: last.lcpChecks,
             longTasks: last.longTasks,
@@ -109,7 +135,7 @@ async function main() {
           };
           (report.pages[key] ??= {})[formFactor] = row;
           console.log(
-            `${key.padEnd(8)} ${formFactor.padEnd(7)} P${String(row.score).padStart(3)}  LCP ${(row.lcp / 1000).toFixed(2)}s  TBT ${Math.round(row.tbt)}ms  CLS ${row.cls.toFixed(3)}  FCP ${(row.fcp / 1000).toFixed(2)}s  TTFB ${Math.round(row.ttfb)}ms`
+            `${key.padEnd(8)} ${formFactor.padEnd(7)} P${String(row.score).padStart(3)}  LCP ${(row.lcp / 1000).toFixed(2)}s  TBT ${Math.round(row.tbt)}ms  CLS ${row.cls.toFixed(3)}  FCP ${(row.fcp / 1000).toFixed(2)}s  TTFB ${Math.round(row.ttfb)}ms  JS ${row.jsKB}KB (unused ${row.unusedJsKB})  blocking ${row.renderBlockingMs}ms  HTML ${row.htmlKB}KB`
           );
         }
       }

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { LoginForm } from '@/app/ui/components';
+import LoginForm from '@/app/ui/components/LoginForm/LoginForm';
 import { DocumentIcon, BoxIcon, DollyIcon } from '@/app/ui/icons';
 
 import { mrGomaLogoLight } from '#public/assets/images/Logo';

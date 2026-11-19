@@ -2,10 +2,14 @@
   "$comment": "Performance budget (feature 009-perf-budget / P1.8). Gzip KB limits on client JS weight, checked in CI by scripts/perf-budget.mjs. Set above today's real numbers so they guard growth, not fail on day one. Bump deliberately in a PR when a real increase is justified.",
   "sharedFirstLoadJs": {
     "limitKB": 180,
-    "note": "gzip of rootMainFiles + polyfillFiles from .next/build-manifest.json — the First Load JS shared by every page (current ~157 KB)"
+    "note": "gzip of rootMainFiles + polyfillFiles from .next/build-manifest.json — the First Load JS shared by every page (current ~166 KB, 056)"
   },
   "totalClientJs": {
     "limitKB": 680,
-    "note": "gzip of every .next/static/chunks/*.js incl. deferred chunks like three.js (current ~611 KB)"
+    "note": "gzip of every .next/static/chunks/*.js incl. deferred chunks like three.js (current ~658 KB, 056)"
+  },
+  "shopperPageJs": {
+    "limitKB": 320,
+    "note": "gzip of every chunk the prerendered /about-us and /contact HTML links, heaviest page — the root layout's JS included (current ~293 KB, 056: ~46 KB less than before, when the sellers' login and session code rode along). perf-budget.mjs also fails if zod, react-hook-form or next-auth's client appear in any of them."
   }
 }

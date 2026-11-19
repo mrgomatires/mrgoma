@@ -4,7 +4,6 @@ import { Inter } from 'next/font/google';
 
 import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from 'next';
-import { SessionProvider } from 'next-auth/react';
 
 import { CartProvider } from '@/app/context/CartContext';
 import { CompareProvider } from '@/app/context/CompareContext';
@@ -67,32 +66,34 @@ export default function RootLayout({
             on /locations and on each store's own page. */}
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
       </head>
-      <SessionProvider>
-        <DetailModalProvider>
-          <FiltersProvider>
-            <SelectedFiltersProvider>
-              <MenuProvider>
-                <CartProvider>
-                  <CompareProvider>
-                    <VisitorCityProvider>
-                      <body className="font-sans" suppressHydrationWarning={true}>
-                        <React.Suspense fallback={null}>
-                          <GoogleAnalytics />
-                        </React.Suspense>
-                        <InteractionTracker />
-                        {children}
-                        <SiteAiChat />
-                        <CookieConsent />
-                        <Analytics />
-                      </body>
-                    </VisitorCityProvider>
-                  </CompareProvider>
-                </CartProvider>
-              </MenuProvider>
-            </SelectedFiltersProvider>
-          </FiltersProvider>
-        </DetailModalProvider>
-      </SessionProvider>
+      {/* No SessionProvider here: only the seller dashboard reads the session,
+          and at the root it cost every shopper next-auth's client (39 KB gz)
+          plus a /api/auth/session request per visit (056). It wraps
+          (sellers)/dashboard/layout.tsx; `signIn` on /login needs none. */}
+      <DetailModalProvider>
+        <FiltersProvider>
+          <SelectedFiltersProvider>
+            <MenuProvider>
+              <CartProvider>
+                <CompareProvider>
+                  <VisitorCityProvider>
+                    <body className="font-sans" suppressHydrationWarning={true}>
+                      <React.Suspense fallback={null}>
+                        <GoogleAnalytics />
+                      </React.Suspense>
+                      <InteractionTracker />
+                      {children}
+                      <SiteAiChat />
+                      <CookieConsent />
+                      <Analytics />
+                    </body>
+                  </VisitorCityProvider>
+                </CompareProvider>
+              </CartProvider>
+            </MenuProvider>
+          </SelectedFiltersProvider>
+        </FiltersProvider>
+      </DetailModalProvider>
     </html>
   );
 }

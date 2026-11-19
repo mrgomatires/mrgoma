@@ -1,10 +1,11 @@
 'use client';
 
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
 
 import dynamic from 'next/dynamic';
 
 import { useIdleReady } from '../TirePreview3D/useIdleReady';
+import { useNearViewport } from '../TirePreview3D/useNearViewport';
 import { isWebglAvailable } from '../TirePreview3D/webgl';
 
 const clamp = (v: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, v));
@@ -24,7 +25,8 @@ const SceneSkeleton = () => (
   </div>
 );
 
-// three.js loads only when this component mounts on a capable device.
+// three.js loads only when the scene mounts: on a capable device, near the
+// viewport and with the browser idle (see below).
 const TreadScene = dynamic(() => import('./TreadScene'), {
   ssr: false,
   loading: () => <SceneSkeleton />,
@@ -66,7 +68,13 @@ const TreadWearExplorer: FC<TreadWearExplorerProps> = ({ singleTire }) => {
 
   const [enabled, setEnabled] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
-  // Defer mounting the three.js canvas until the browser is idle (shared hook).
+  // The scene (and three.js, 260 KB gz) waits until the shopper scrolls near
+  // it *and* the browser is idle. Idle alone came within ~2 s of load, so a
+  // phone spent the bandwidth while the page was still loading, for a viewer
+  // below the fold that most visitors never reach (056). The box is a fixed
+  // `h-64`, so the skeleton → canvas swap cannot shift the layout.
+  const sceneBox = useRef<HTMLDivElement>(null);
+  const near = useNearViewport(sceneBox);
   const idleReady = useIdleReady();
 
   useEffect(() => {
@@ -106,9 +114,12 @@ const TreadWearExplorer: FC<TreadWearExplorerProps> = ({ singleTire }) => {
 
       <div className="mt-4 grid gap-6 md:grid-cols-2">
         {/* 3D tread blocks */}
-        <div className="relative h-64 overflow-hidden rounded-xl bg-gradient-to-b from-gray-50 to-gray-100">
+        <div
+          ref={sceneBox}
+          className="relative h-64 overflow-hidden rounded-xl bg-gradient-to-b from-gray-50 to-gray-100"
+        >
           {enabled ? (
-            idleReady ? (
+            near && idleReady ? (
               <div className="absolute inset-0" aria-hidden="true">
                 <TreadScene
                   currentUnits={current}
