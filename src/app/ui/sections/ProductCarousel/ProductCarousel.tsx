@@ -3,8 +3,9 @@
 import React, { FC, useCallback, useMemo, useState } from 'react';
 
 import { TireInformationProps } from '@/app/interfaces/tires';
-import { ProductCarouselMiniature, StockBadge } from '@/app/ui/components';
+import ProductCarouselMiniature from '@/app/ui/components/ProductCarouselMiniature/ProductCarouselMiniature';
 import ProductImageZoom from '@/app/ui/components/ProductImageZoom/ProductImageZoom';
+import StockBadge from '@/app/ui/components/StockBadge/StockBadge';
 
 const FALLBACK_IMAGE = '/assets/images/generic-tire-image.webp';
 

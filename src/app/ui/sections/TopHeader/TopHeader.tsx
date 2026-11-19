@@ -2,7 +2,8 @@ import React from 'react';
 
 import Link from 'next/link';
 
-import { LocationIcon, EnvelopeIcon } from '@/app/ui/icons';
+import { EnvelopeIcon } from '@/app/ui/icons/EnvelopeIcon';
+import { LocationIcon } from '@/app/ui/icons/LocationIcon';
 
 /**
  * Thin top header bar displayed above the main Header.

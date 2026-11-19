@@ -1,5 +1,5 @@
-import { InfoCard } from '@/app/ui/components';
 import { InfoCardData } from '@/app/ui/components/InfoCard/info-card';
+import InfoCard from '@/app/ui/components/InfoCard/InfoCard';
 import { infoCardsData } from '@/app/ui/sections/InfoCardsSection/InfoCardsData';
 
 interface InfoCardsSectionProps {

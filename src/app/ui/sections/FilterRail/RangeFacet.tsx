@@ -5,7 +5,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { RangeSlider } from '@/app/ui/components';
+import RangeSlider from '@/app/ui/components/RangeSlider/RangeSlider';
 import { setRange } from '@/app/utils/filterHref';
 
 export type RangeOption = {

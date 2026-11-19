@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { signOut, useSession } from 'next-auth/react';
 
 import { useCart } from '@/app/context/CartContext';
-import { ShoppingCart } from '@/app/ui/icons';
+import { ShoppingCart } from '@/app/ui/icons/ShoppingCart';
 
 import { mrGomaLogoLight } from '#public/assets/images/Logo';
 

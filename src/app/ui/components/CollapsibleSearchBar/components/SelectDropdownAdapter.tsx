@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { SelectDropdown } from '@/app/ui/components';
+import SelectDropdown from '@/app/ui/components/SelectDropdown/SelectDropdown';
 
 import { DimensionOption } from '../hooks/useTireDynamicOptions';
 import { TireFilters } from '../hooks/useTireSearch';

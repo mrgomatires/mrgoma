@@ -1,0 +1,259 @@
+{
+  "date": "2026-11-19T19:03:59.197Z",
+  "runs": 5,
+  "pages": {
+    "home": {
+      "mobile": {
+        "path": "/",
+        "lcp": 3981.6442500000007,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 1352.9872,
+        "ttfb": 3,
+        "score": 87,
+        "jsKB": 268.1,
+        "unusedJsKB": 91.9,
+        "renderBlockingMs": 450,
+        "htmlKB": 47.5,
+        "lcpElement": "<div aria-hidden=\"true\" class=\"absolute inset-0 h-full w-full object-cover\" style=\"background-image: url(&quot;/assets/images/banner-hero.webp&quot;);\">",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [
+          {
+            "url": "/",
+            "ms": 56
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/",
+        "lcp": 832.1010000000001,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 363.14035,
+        "ttfb": 3,
+        "score": 99,
+        "jsKB": 545.6,
+        "unusedJsKB": 215.6,
+        "renderBlockingMs": 100,
+        "htmlKB": 47.5,
+        "lcpElement": "<video class=\"absolute inset-0 h-full w-full object-cover pointer-events-none transition…\" data-hero-video=\"true\" src=\"/assets/images/banner-hero.mp4\" autoplay=",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    },
+    "tires": {
+      "mobile": {
+        "path": "/tires",
+        "lcp": 3552.703875,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 1352.9822,
+        "ttfb": 5,
+        "score": 90,
+        "jsKB": 269.9,
+        "unusedJsKB": 93.7,
+        "renderBlockingMs": 450,
+        "htmlKB": 54.4,
+        "lcpElement": "<img alt=\"\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-cover\" style=\"position: absolute; height: 100%; width: 100%; in",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/tires",
+        "lcp": 1273.4940000000006,
+        "tbt": 0,
+        "cls": 0.000007972156553716836,
+        "fcp": 362.8066,
+        "ttfb": 5,
+        "score": 97,
+        "jsKB": 282.6,
+        "unusedJsKB": 93.7,
+        "renderBlockingMs": 100,
+        "htmlKB": 54.4,
+        "lcpElement": "<aside role=\"region\" aria-label=\"Promotion\" class=\"w-full overflow-hidden rounded-lg bg-zinc-900 text-white  relative\" style=\"\">",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": false,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": [
+          {
+            "node": "<span class=\"text-[11px] font-semibold text-gray-500 uppercase tracking-wider\">",
+            "score": 0
+          }
+        ]
+      }
+    },
+    "tire": {
+      "mobile": {
+        "path": "/tires/499326-kumho-235-55-18",
+        "lcp": 4362.95525,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 1202.3821,
+        "ttfb": 4,
+        "score": 85,
+        "jsKB": 272.2,
+        "unusedJsKB": 100,
+        "renderBlockingMs": 450,
+        "htmlKB": 31.3,
+        "lcpElement": "<img alt=\"Kumho Crugen HP71 EV SUV TO 235/55/18\" aria-hidden=\"false\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-contai",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [
+          {
+            "url": "Unattributable",
+            "ms": 51
+          },
+          {
+            "url": "/_next/static/chunks/3rw667ah2yx24.js",
+            "ms": 51
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/tires/499326-kumho-235-55-18",
+        "lcp": 1055.4826000000007,
+        "tbt": 0,
+        "cls": 0.041355463017686715,
+        "fcp": 322.2154,
+        "ttfb": 4,
+        "score": 98,
+        "jsKB": 545,
+        "unusedJsKB": 236.4,
+        "renderBlockingMs": 100,
+        "htmlKB": 31.3,
+        "lcpElement": "<img alt=\"Kumho Crugen HP71 EV SUV TO 235/55/18\" aria-hidden=\"false\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-contai",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": [
+          {
+            "node": "<footer class=\"bg-black relative overflow-hidden \">",
+            "score": 0.0327
+          },
+          {
+            "node": "<div aria-label=\"Key specifications\" class=\"mt-4 grid grid-cols-2 sm:grid-cols-5 divide-x divide-y sm:divide-y-0 divid…\"",
+            "score": 0.0086
+          }
+        ]
+      }
+    },
+    "store": {
+      "mobile": {
+        "path": "/locations/cutler-bay",
+        "lcp": 3681.5474750000003,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 1202.3809,
+        "ttfb": 2,
+        "score": 89,
+        "jsKB": 266.1,
+        "unusedJsKB": 105.9,
+        "renderBlockingMs": 450,
+        "htmlKB": 20.8,
+        "lcpElement": "<img alt=\"\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-cover brightness-[0.25] lg:brightness-[0.35]\" style=\"position: ",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [
+          {
+            "url": "Unattributable",
+            "ms": 50
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/locations/cutler-bay",
+        "lcp": 726.2385,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 322.4954,
+        "ttfb": 2,
+        "score": 100,
+        "jsKB": 277.7,
+        "unusedJsKB": 105.9,
+        "renderBlockingMs": 100,
+        "htmlKB": 20.8,
+        "lcpElement": "<img alt=\"\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-cover brightness-[0.25] lg:brightness-[0.35]\" style=\"position: ",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    },
+    "checkout": {
+      "mobile": {
+        "path": "/checkout",
+        "lcp": 3203.34605,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 1052.3476,
+        "ttfb": 2,
+        "score": 93,
+        "jsKB": 278.2,
+        "unusedJsKB": 104.6,
+        "renderBlockingMs": 450,
+        "htmlKB": 13.1,
+        "lcpElement": "<div class=\"absolute inset-0\" style=\"\">",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/checkout",
+        "lcp": 654.1204499999999,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 282.0773,
+        "ttfb": 2,
+        "score": 100,
+        "jsKB": 291.1,
+        "unusedJsKB": 104.6,
+        "renderBlockingMs": 100,
+        "htmlKB": 13.1,
+        "lcpElement": "<div class=\"absolute inset-0\" style=\"\">",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    }
+  }
+}

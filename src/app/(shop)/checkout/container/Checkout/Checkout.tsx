@@ -8,8 +8,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useCart } from '@/app/context/CartContext';
 import { useVisitorCity } from '@/app/context/VisitorCityContext';
-import { GoogleRating, LoadingScreen } from '@/app/ui/components';
 import CityTag from '@/app/ui/components/CityTag/CityTag';
+import GoogleRating from '@/app/ui/components/GoogleRating/GoogleRating';
+import LoadingScreen from '@/app/ui/components/LoadingScreen/LoadingScreen';
 import ProductMeta from '@/app/ui/components/ProductMeta/ProductMeta';
 import ShippingStateGate from '@/app/ui/components/ShippingStateGate/ShippingStateGate';
 import { locationsData } from '@/app/ui/sections/LocationsSlider/locationsData';

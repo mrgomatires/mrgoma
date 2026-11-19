@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 
 import ServiceDetail from '@/app/(shop)/services/[service]/container/ServiceDetail/ServiceDetail';
 import { servicesConfig, getServiceBySlug } from '@/app/(shop)/services/servicesConfig';
-import { JsonLd } from '@/app/ui/components';
+import JsonLd from '@/app/ui/components/JsonLd/JsonLd';
 import { buildBreadcrumbJsonLd, buildServiceJsonLd, serviceMetadata } from '@/app/utils/seo';
 
 export function generateStaticParams() {

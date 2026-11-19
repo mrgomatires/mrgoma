@@ -2,7 +2,8 @@
 
 import { FC } from 'react';
 
-import { SearchBySize, SearchByText } from '@/app/ui/components';
+import SearchBySize from '@/app/ui/components/SearchBySize/SearchBySize';
+import SearchByText from '@/app/ui/components/SearchByText/SearchByText';
 
 interface SearchSectionProps {
   type: 'size' | 'text';

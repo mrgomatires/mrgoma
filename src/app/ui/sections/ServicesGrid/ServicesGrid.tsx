@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { ServiceCard } from '@/app/ui/components';
 import { ServiceCardData } from '@/app/ui/components/ServiceCard/service';
-import { PromoBanner } from '@/app/ui/sections';
+import ServiceCard from '@/app/ui/components/ServiceCard/ServiceCard';
 import { promoBannerConfig } from '@/app/ui/sections/PromoBanner/config/promoBanner';
+import PromoBanner from '@/app/ui/sections/PromoBanner/PromoBanner';
 
 import { servicesData } from './servicesData';
 

@@ -7,15 +7,16 @@ import { useRouter } from 'next/navigation';
 import { SelectedFiltersContext } from '@/app/context/SelectedFilters';
 import { useStockedSizes } from '@/app/hooks/useStockedSizes';
 import { useTireSizeWithContext } from '@/app/hooks/useTireSizeWithContext';
-import { ButtonSearch, SizeSelector } from '@/app/ui/components';
+import ButtonSearch from '@/app/ui/components/ButtonSearch/ButtonSearch';
 import HomeMoreFilters, {
   HomeExtraFilters,
 } from '@/app/ui/components/HomeMoreFilters/HomeMoreFilters';
 import SeeAllSizesLink from '@/app/ui/components/SeeAllSizesLink/SeeAllSizesLink';
 import SizePicker, { type SizePick } from '@/app/ui/components/SizePicker/SizePicker';
+import SizeSelector from '@/app/ui/components/SizeSelector/SizeSelector';
 import TirePreview3D from '@/app/ui/components/TirePreview3D/TirePreview3D';
 import TirePreview3DMobile from '@/app/ui/components/TirePreview3D/TirePreview3DMobile';
-import { CarFront } from '@/app/ui/icons';
+import { CarFront } from '@/app/ui/icons/CarFront';
 import { TireSize } from '@/app/ui/interfaces/tireSize';
 import { reconcile } from '@/app/utils/sizeTree';
 

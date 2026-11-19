@@ -3,7 +3,8 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 import { locationsConfig } from '@/app/(shop)/locations/locationsConfig';
-import { GoogleRating, JsonLd } from '@/app/ui/components';
+import GoogleRating from '@/app/ui/components/GoogleRating/GoogleRating';
+import JsonLd from '@/app/ui/components/JsonLd/JsonLd';
 import { HOME_TRUST_CLAIMS } from '@/app/utils/brandClaims';
 import { combinedRating } from '@/app/utils/googleRatings';
 import {

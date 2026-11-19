@@ -41,7 +41,7 @@ performance budget is in place (P1.8).
   no flashes; subset if applicable.
 - ⬜ **P1.4 — Structural CLS.** Reserve space for badges, carousels and media;
   avoid jumps on hydration.
-- 🟡 **P1.5 — JS / bundle (`056-bundle-lcp-mobile`).** Audit heavy imports; confirm that 3D (three.js) and
+- 🟡 **P1.5 — JS / bundle (`056-bundle-lcp-mobile` ✅ PR #217, 2026-11-19: tire page JS 578 → 272 KB; `057-split-barrels` 🟡).** Audit heavy imports; confirm that 3D (three.js) and
   other non-critical chunks load deferred; trim the rest.
 - ⬜ **P1.6 — INP / interactivity.** Reduce main-thread work; confirm the 3D
   canvases only run when active.

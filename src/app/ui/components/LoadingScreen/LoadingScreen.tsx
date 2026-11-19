@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { ArrowsToRight } from '@/app/ui/icons';
+import { ArrowsToRight } from '@/app/ui/icons/ArrowsToRight';
 
 interface LoadingScreenProps {
   message?: string;

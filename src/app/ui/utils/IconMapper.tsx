@@ -1,6 +1,9 @@
 import { ReactNode } from 'react';
 
-import { PatchedIcon, RemainingIcon, RunFlatIcon, TreadIcon } from '@/app/ui/icons';
+import { PatchedIcon } from '@/app/ui/icons/PatchedIcon';
+import { RemainingIcon } from '@/app/ui/icons/RemainingIcon';
+import { RunFlatIcon } from '@/app/ui/icons/RunFlatIcon';
+import { TreadIcon } from '@/app/ui/icons/TreadIcon';
 
 export type FeatureName =
   | 'Patched'

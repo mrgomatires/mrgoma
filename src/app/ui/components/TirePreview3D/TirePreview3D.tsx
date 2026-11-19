@@ -5,7 +5,7 @@ import { FC, useContext, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 
 import { SelectedFiltersContext } from '@/app/context/SelectedFilters';
-import { ArrowsToRight } from '@/app/ui/icons';
+import { ArrowsToRight } from '@/app/ui/icons/ArrowsToRight';
 
 import { TIRE_3D_HINT_KEY, useDiscoveryHint } from './useDiscoveryHint';
 import { useIdleReady } from './useIdleReady';

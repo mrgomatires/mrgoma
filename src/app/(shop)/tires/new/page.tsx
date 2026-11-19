@@ -7,7 +7,7 @@ import type { Metadata } from 'next';
 import { BrowseFilters } from '@/app/(shop)/tires/container/BrowseFilters/BrowseFilters';
 import { TireGrid } from '@/app/(shop)/tires/container/TireGrid/TireGrid';
 import { TiresData } from '@/app/interfaces/tires';
-import { JsonLd } from '@/app/ui/components';
+import JsonLd from '@/app/ui/components/JsonLd/JsonLd';
 import { onlineInventoryLabel } from '@/app/utils/brandClaims';
 import { LISTS } from '@/app/utils/ecommerce';
 import { buildBreadcrumbJsonLd, buildItemListJsonLd, newTiresMetadata } from '@/app/utils/seo';

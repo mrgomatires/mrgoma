@@ -3,14 +3,18 @@ import React, { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-
 import { guides } from '@/app/(shop)/guides/guidesConfig';
 import { locationsConfig } from '@/app/(shop)/locations/locationsConfig';
 import { servicesConfig } from '@/app/(shop)/services/servicesConfig';
-import { GoogleRating, HeroVideo, JsonLd, TrustStrip } from '@/app/ui/components';
-import { InfoCardsSection, PromoBanner, SearchContainer } from '@/app/ui/sections';
+import GoogleRating from '@/app/ui/components/GoogleRating/GoogleRating';
+import HeroVideo from '@/app/ui/components/HeroVideo/HeroVideo';
+import JsonLd from '@/app/ui/components/JsonLd/JsonLd';
+import TrustStrip from '@/app/ui/components/TrustStrip/TrustStrip';
+import InfoCardsSection from '@/app/ui/sections/InfoCardsSection/InfoCardsSection';
 import { LocationsSlider } from '@/app/ui/sections/LocationsSlider/LocationsSlider';
 import { promoBannerConfig } from '@/app/ui/sections/PromoBanner/config/promoBanner';
+import PromoBanner from '@/app/ui/sections/PromoBanner/PromoBanner';
+import SearchContainer from '@/app/ui/sections/SearchContainer/SearchContainer';
 import {
   FAMILY_OWNED,
   FOUNDED_YEAR,

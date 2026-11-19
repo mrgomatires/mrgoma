@@ -1,4 +1,4 @@
-import { ArrowsToRight } from '@/app/ui/icons';
+import { ArrowsToRight } from '@/app/ui/icons/ArrowsToRight';
 
 export interface SectionHeaderProps {
   title: string;

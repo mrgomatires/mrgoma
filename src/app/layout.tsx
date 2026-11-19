@@ -12,10 +12,11 @@ import { DetailModalProvider } from '@/app/context/ShowDetailModal';
 import { FiltersProvider } from '@/app/context/ShowFilterContext';
 import { MenuProvider } from '@/app/context/ShowMenuContext';
 import { VisitorCityProvider } from '@/app/context/VisitorCityContext';
-import { CookieConsent, JsonLd } from '@/app/ui/components';
 import SiteAiChat from '@/app/ui/components/AiChat/SiteAiChat';
+import CookieConsent from '@/app/ui/components/CookieConsent/CookieConsent';
 import GoogleAnalytics from '@/app/ui/components/GoogleAnalytics/GoogleAnalytics';
 import InteractionTracker from '@/app/ui/components/InteractionTracker/InteractionTracker';
+import JsonLd from '@/app/ui/components/JsonLd/JsonLd';
 import { buildDefaultMetadata, organizationJsonLd, websiteJsonLd } from '@/app/utils/seo';
 
 import './globals.css';

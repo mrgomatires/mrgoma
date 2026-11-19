@@ -1,16 +1,14 @@
 import { FC } from 'react';
 
 import { TireInformationProps } from '@/app/interfaces/tires';
-import {
-  ProductName,
-  ProductPrice,
-  ProductDescription,
-  BrandImage,
-  FreeShippingBadge,
-} from '@/app/ui/components';
 import AddToCartButton from '@/app/ui/components/AddToCartButton/AddToCartButton';
+import BrandImage from '@/app/ui/components/BrandImage/BrandImage';
+import FreeShippingBadge from '@/app/ui/components/FreeShippingBadge/FreeShippingBadge';
 import GoogleRating from '@/app/ui/components/GoogleRating/GoogleRating';
 import OtherCityMatch from '@/app/ui/components/OtherCityMatch/OtherCityMatch';
+import ProductDescription from '@/app/ui/components/ProductDescription/ProductDescription';
+import ProductName from '@/app/ui/components/ProductName/ProductName';
+import ProductPrice from '@/app/ui/components/ProductPrice/ProductPrice';
 import ViewItemTracker from '@/app/ui/components/ViewItemTracker/ViewItemTracker';
 import { WhatsAppEnquiryButton } from '@/app/ui/components/WhatsAppEnquiryButton/WhatsAppEnquiryButton';
 import { combinedRating } from '@/app/utils/googleRatings';

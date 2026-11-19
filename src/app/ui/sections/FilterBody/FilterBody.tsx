@@ -1,4 +1,4 @@
-import { RangeSlider } from '@/app/ui/components';
+import RangeSlider from '@/app/ui/components/RangeSlider/RangeSlider';
 import { filtersItems } from '@/app/ui/sections/FiltersMobile/FiltersItems';
 import { brandName } from '@/app/utils/tireNaming';
 

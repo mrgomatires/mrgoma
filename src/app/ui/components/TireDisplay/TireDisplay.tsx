@@ -5,7 +5,7 @@ import React, { FC, useContext, useEffect, useRef } from 'react';
 import Image from 'next/image';
 
 import { SelectedFiltersContext } from '@/app/context/SelectedFilters';
-import { ArrowsToRight } from '@/app/ui/icons';
+import { ArrowsToRight } from '@/app/ui/icons/ArrowsToRight';
 
 import shadow from '#public/assets/images/shadow.webp';
 import tireImage from '#public/assets/images/tireSize.webp';

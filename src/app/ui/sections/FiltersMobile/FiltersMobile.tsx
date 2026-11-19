@@ -3,8 +3,9 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
 
 import { ShowFilterContext } from '@/app/context/ShowFilterContext';
-import { Dialog, DialogBackdrop, DialogPanel, XMarkIcon } from '@/app/ui/components';
-import { FilterMobileContent } from '@/app/ui/sections';
+import { Dialog, DialogBackdrop, DialogPanel } from '@/app/ui/components/Dialog/Dialog';
+import { XMarkIcon } from '@/app/ui/components/Icons/Icons';
+import FilterMobileContent from '@/app/ui/sections/FilterMobileContent/FilterMobileContent';
 import { useFilters } from '@/app/ui/sections/FiltersMobile/hooks/useFilters';
 
 const FiltersMobile: FC<{

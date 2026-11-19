@@ -1,7 +1,7 @@
 'use client';
 
 import { DEFAULT_HOURS, locationsConfig } from '@/app/(shop)/locations/locationsConfig';
-import { WhatsAppIcon } from '@/app/ui/icons';
+import { WhatsAppIcon } from '@/app/ui/icons/WhatsAppIcon';
 import { weeklyHours } from '@/app/utils/storeHours';
 import { WHATSAPP_DISPLAY, whatsAppLink } from '@/app/utils/whatsapp';
 

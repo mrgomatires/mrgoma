@@ -1,0 +1,268 @@
+{
+  "date": "2026-11-19T19:14:06.613Z",
+  "runs": 5,
+  "pages": {
+    "home": {
+      "mobile": {
+        "path": "/",
+        "lcp": 3658.8017,
+        "tbt": 1.5000000000002274,
+        "cls": 0,
+        "fcp": 1353.11305,
+        "ttfb": 3,
+        "score": 90,
+        "jsKB": 220.1,
+        "unusedJsKB": 21.3,
+        "renderBlockingMs": 450,
+        "htmlKB": 47.6,
+        "lcpElement": "<div aria-hidden=\"true\" class=\"absolute inset-0 h-full w-full object-cover\" style=\"background-image: url(&quot;/assets/images/banner-hero.webp&quot;);\">",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [
+          {
+            "url": "/",
+            "ms": 57
+          },
+          {
+            "url": "/_next/static/chunks/3rw667ah2yx24.js",
+            "ms": 52
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/",
+        "lcp": 862.6129999999997,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 363.20665,
+        "ttfb": 3,
+        "score": 99,
+        "jsKB": 499.3,
+        "unusedJsKB": 144.8,
+        "renderBlockingMs": 100,
+        "htmlKB": 47.6,
+        "lcpElement": "<video class=\"absolute inset-0 h-full w-full object-cover pointer-events-none transition…\" data-hero-video=\"true\" src=\"/assets/images/banner-hero.mp4\" autoplay=",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    },
+    "tires": {
+      "mobile": {
+        "path": "/tires",
+        "lcp": 3358.1112249999996,
+        "tbt": 1.5,
+        "cls": 0,
+        "fcp": 1352.9599000000003,
+        "ttfb": 5,
+        "score": 92,
+        "jsKB": 242.3,
+        "unusedJsKB": 21,
+        "renderBlockingMs": 450,
+        "htmlKB": 54.7,
+        "lcpElement": "<img alt=\"\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-cover\" style=\"position: absolute; height: 100%; width: 100%; in",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [
+          {
+            "url": "/_next/static/chunks/3rw667ah2yx24.js",
+            "ms": 53
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/tires",
+        "lcp": 1316.4988999999996,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 362.5369,
+        "ttfb": 4,
+        "score": 97,
+        "jsKB": 266.8,
+        "unusedJsKB": 21,
+        "renderBlockingMs": 100,
+        "htmlKB": 54.7,
+        "lcpElement": "<aside role=\"region\" aria-label=\"Promotion\" class=\"w-full overflow-hidden rounded-lg bg-zinc-900 text-white  relative\" style=\"\">",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": false,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    },
+    "tire": {
+      "mobile": {
+        "path": "/tires/499471-pirelli-275-50-20",
+        "lcp": 4281.4768,
+        "tbt": 1.0000000000004547,
+        "cls": 0,
+        "fcp": 1202.2627,
+        "ttfb": 4,
+        "score": 85,
+        "jsKB": 229.2,
+        "unusedJsKB": 21.3,
+        "renderBlockingMs": 450,
+        "htmlKB": 34.1,
+        "lcpElement": "<img alt=\"Pirelli Scorpion TM Zero All Season MO 275/50/20\" aria-hidden=\"false\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"ob",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [
+          {
+            "url": "/_next/static/chunks/3rw667ah2yx24.js",
+            "ms": 51
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/tires/499471-pirelli-275-50-20",
+        "lcp": 1011.9693999999998,
+        "tbt": 0,
+        "cls": 0.04588417607915243,
+        "fcp": 322.0776,
+        "ttfb": 4,
+        "score": 98,
+        "jsKB": 247.7,
+        "unusedJsKB": 21.3,
+        "renderBlockingMs": 100,
+        "htmlKB": 34.1,
+        "lcpElement": "<img alt=\"Pirelli Scorpion TM Zero All Season MO 275/50/20\" aria-hidden=\"false\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"ob",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": [
+          {
+            "node": "<footer class=\"bg-black relative overflow-hidden \">",
+            "score": 0.0372
+          },
+          {
+            "node": "<section aria-labelledby=\"product-description-title\" class=\"relative\">",
+            "score": 0.0087
+          }
+        ]
+      }
+    },
+    "store": {
+      "mobile": {
+        "path": "/locations/cutler-bay",
+        "lcp": 3280.2376000000004,
+        "tbt": 0.5,
+        "cls": 0,
+        "fcp": 1202.2494,
+        "ttfb": 2,
+        "score": 92,
+        "jsKB": 216.7,
+        "unusedJsKB": 22.3,
+        "renderBlockingMs": 450,
+        "htmlKB": 20.7,
+        "lcpElement": "<img alt=\"\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-cover brightness-[0.25] lg:brightness-[0.35]\" style=\"position: ",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [
+          {
+            "url": "/_next/static/chunks/3rw667ah2yx24.js",
+            "ms": 50
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/locations/cutler-bay",
+        "lcp": 656.4699,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 321.9828,
+        "ttfb": 2,
+        "score": 100,
+        "jsKB": 235.2,
+        "unusedJsKB": 22,
+        "renderBlockingMs": 100,
+        "htmlKB": 20.7,
+        "lcpElement": "<img alt=\"\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-cover brightness-[0.25] lg:brightness-[0.35]\" style=\"position: ",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    },
+    "checkout": {
+      "mobile": {
+        "path": "/checkout",
+        "lcp": 2908.82175,
+        "tbt": 2,
+        "cls": 0,
+        "fcp": 1053.0332,
+        "ttfb": 2,
+        "score": 95,
+        "jsKB": 230.6,
+        "unusedJsKB": 22.4,
+        "renderBlockingMs": 450,
+        "htmlKB": 13.1,
+        "lcpElement": "<div class=\"absolute inset-0\" style=\"\">",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [
+          {
+            "url": "Unattributable",
+            "ms": 60
+          },
+          {
+            "url": "/_next/static/chunks/3rw667ah2yx24.js",
+            "ms": 53
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/checkout",
+        "lcp": 596.9586499999999,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 282.2078,
+        "ttfb": 2,
+        "score": 100,
+        "jsKB": 254.1,
+        "unusedJsKB": 22.4,
+        "renderBlockingMs": 100,
+        "htmlKB": 13.1,
+        "lcpElement": "<div class=\"absolute inset-0\" style=\"\">",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
-import { GoogleRating, TrustStrip } from '@/app/ui/components';
+import GoogleRating from '@/app/ui/components/GoogleRating/GoogleRating';
+import TrustStrip from '@/app/ui/components/TrustStrip/TrustStrip';
 import { LOCATIONS_LABEL, SHIPPING, WARRANTY, onlineInventoryLabel } from '@/app/utils/brandClaims';
 import { combinedRating } from '@/app/utils/googleRatings';
 

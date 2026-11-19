@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import type { SingleTire } from '@/app/interfaces/tires';
-import { WhatsAppIcon } from '@/app/ui/icons';
+import { WhatsAppIcon } from '@/app/ui/icons/WhatsAppIcon';
 import { buildTireEnquiry, isSoldTire } from '@/app/utils/tireEnquiry';
 import { whatsAppLink } from '@/app/utils/whatsapp';
 

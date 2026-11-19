@@ -322,3 +322,50 @@ describe('CookieConsent — what the copy promises', () => {
     }
   });
 });
+
+/**
+ * 057: the banner is a full-width bar with the top z-index, and it covered the
+ * AI chat button and the floating search button — tapping them on a first
+ * visit did nothing. It now publishes its height so those controls can sit
+ * above it (they add `--cookie-banner-h` to their `bottom`).
+ */
+describe('CookieConsent — leaves room for the controls below it', () => {
+  const height = () => document.documentElement.style.getPropertyValue('--cookie-banner-h');
+  const original = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetHeight');
+
+  beforeEach(() => {
+    // jsdom has no layout and no ResizeObserver.
+    Object.defineProperty(HTMLElement.prototype, 'offsetHeight', {
+      configurable: true,
+      get: () => 96,
+    });
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        observe() {}
+        disconnect() {}
+      }
+    );
+  });
+  afterEach(() => {
+    if (original) Object.defineProperty(HTMLElement.prototype, 'offsetHeight', original);
+    vi.unstubAllGlobals();
+  });
+
+  it('publishes its height while it shows, and 0px once the visitor decides', async () => {
+    render(<CookieConsent />);
+    expect(banner()).toBeInTheDocument();
+    expect(height()).toBe('96px');
+
+    await userEvent.click(screen.getByRole('button', { name: /decline non-essential cookies/i }));
+    expect(banner()).not.toBeInTheDocument();
+    expect(height()).toBe('0px');
+  });
+
+  it('resets it when the banner unmounts', () => {
+    const { unmount } = render(<CookieConsent />);
+    expect(height()).toBe('96px');
+    unmount();
+    expect(height()).toBe('0px');
+  });
+});

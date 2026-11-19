@@ -46,7 +46,7 @@ export const CompactForm: React.FC<CompactFormProps> = ({
 
   return (
     <div
-      className="fixed bottom-[calc(5rem+var(--compare-tray-h,0px))] left-4 z-50 sm:z-40 md:z-40 lg:z-40 xl:z-40 bg-white rounded-lg shadow-lg border border-gray-200 p-3 w-80 max-w-[90vw] max-h-[calc(100dvh-7rem-var(--compare-tray-h,0px))] overflow-y-auto overscroll-contain"
+      className="fixed bottom-[calc(5rem+max(var(--compare-tray-h,0px),var(--cookie-banner-h,0px)))] left-4 z-50 sm:z-40 md:z-40 lg:z-40 xl:z-40 bg-white rounded-lg shadow-lg border border-gray-200 p-3 w-80 max-w-[90vw] max-h-[calc(100dvh-7rem-var(--compare-tray-h,0px))] overflow-y-auto overscroll-contain"
       style={{ position: 'fixed' }}
     >
       <div className="flex justify-between items-center mb-2">

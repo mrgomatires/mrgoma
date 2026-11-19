@@ -6,7 +6,8 @@ import Image from 'next/image';
 
 import { createPortal } from 'react-dom';
 
-import { Dialog, XMarkIcon } from '@/app/ui/components';
+import { Dialog } from '@/app/ui/components/Dialog/Dialog';
+import { XMarkIcon } from '@/app/ui/components/Icons/Icons';
 import { isOptimisableImage } from '@/app/utils/imageHosts';
 
 export type ZoomImage = { id: number | string; src: string; alt: string };

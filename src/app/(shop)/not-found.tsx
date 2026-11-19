@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { ArrowsToRight } from '@/app/ui/icons';
+import { ArrowsToRight } from '@/app/ui/icons/ArrowsToRight';
 
 export default function NotFound() {
   return (

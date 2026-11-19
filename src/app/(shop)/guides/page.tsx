@@ -3,7 +3,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 import { guides } from '@/app/(shop)/guides/guidesConfig';
-import { JsonLd } from '@/app/ui/components';
+import JsonLd from '@/app/ui/components/JsonLd/JsonLd';
 import { INVENTORY_NETWORK } from '@/app/utils/brandClaims';
 import { buildBreadcrumbJsonLd, buildPageTypeJsonLd, guidesMetadata } from '@/app/utils/seo';
 
