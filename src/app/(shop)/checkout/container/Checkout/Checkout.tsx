@@ -8,7 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useCart } from '@/app/context/CartContext';
 import { useVisitorCity } from '@/app/context/VisitorCityContext';
-import { LoadingScreen } from '@/app/ui/components';
+import { GoogleRating, LoadingScreen } from '@/app/ui/components';
 import CityTag from '@/app/ui/components/CityTag/CityTag';
 import ProductMeta from '@/app/ui/components/ProductMeta/ProductMeta';
 import ShippingStateGate from '@/app/ui/components/ShippingStateGate/ShippingStateGate';
@@ -21,6 +21,7 @@ import { trackRemoval } from '@/app/utils/cartTracking';
 import { hasConsent } from '@/app/utils/consent';
 import { cartPayload, purchasePayload, type StripeLine } from '@/app/utils/ecommerce';
 import { GENERIC_TIRE_IMAGE } from '@/app/utils/genericTireImage';
+import { combinedRating } from '@/app/utils/googleRatings';
 import type { SetUnit } from '@/app/utils/tireSets';
 import { tireDetailHref } from '@/app/utils/tireSlug';
 
@@ -1125,6 +1126,11 @@ export default function Checkout() {
 
               <p className="mt-2 text-xs text-gray-500">
                 Taxes are estimates and may vary at checkout.
+              </p>
+              {/* The stores' Google rating by the order summary (053, D3). Text,
+                  not a link: no reason to send a paying buyer elsewhere. */}
+              <p className="mt-3">
+                <GoogleRating figures={combinedRating()} variant="inline" />
               </p>
             </aside>
           </div>

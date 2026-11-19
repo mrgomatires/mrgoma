@@ -61,6 +61,22 @@ export interface LocationConfig {
   neighborhoods: string[];
   city: 'Miami' | 'Orlando';
   description: string;
+  /**
+   * The store's Google rating, **copied by hand** from its Maps profile (053) —
+   * never pulled from the Business Profile API, whose content may not be stored
+   * over 30 days. `readOn` is the day it was read; a test fails 90 days later
+   * as a reminder to re-read all seven (D7). Update the three together.
+   */
+  google: GoogleFigures;
+}
+
+export interface GoogleFigures {
+  /** Stars out of 5, one decimal, as Maps shows it. */
+  rating: number;
+  /** Number of Google reviews. */
+  reviews: number;
+  /** `YYYY-MM-DD`, the day it was read on Maps. */
+  readOn: string;
 }
 
 export const locationsConfig: LocationConfig[] = [
@@ -80,6 +96,7 @@ export const locationsConfig: LocationConfig[] = [
     city: 'Miami',
     description:
       'Our South Dixie Highway location serves the communities of Cutler Bay, Palmetto Bay, South Miami, Kendall, and Pinecrest. Stop in for new or used tires, wheel alignment, oil changes, brake service, and more — no appointment needed.',
+    google: { rating: 4.8, reviews: 2083, readOn: '2026-11-18' },
   },
   {
     slug: 'miami-airport',
@@ -97,6 +114,7 @@ export const locationsConfig: LocationConfig[] = [
     city: 'Miami',
     description:
       'Conveniently located near Miami International Airport on NW 27th Ave, this location serves Allapattah, Midtown Miami, and Wynwood. We carry new and used tires for all makes and models, plus a full menu of automotive services.',
+    google: { rating: 4.8, reviews: 1499, readOn: '2026-11-18' },
   },
   {
     slug: 'miami-gardens',
@@ -114,6 +132,7 @@ export const locationsConfig: LocationConfig[] = [
     city: 'Miami',
     description:
       'Our North Miami location on NW 2nd Ave serves Miami Gardens, Hollywood, Aventura, and North Miami. With 15,000+ tires across our 7 locations, we can quickly find the right tire for your vehicle.',
+    google: { rating: 4.6, reviews: 1111, readOn: '2026-11-18' },
   },
   {
     slug: 'coral-gables',
@@ -136,6 +155,7 @@ export const locationsConfig: LocationConfig[] = [
     city: 'Miami',
     description:
       'Located on South Le Jeune Road, our Coral Gables shop serves the upscale communities of Coral Gables, Westchester, and West Miami. Quality tire service from ASE-certified technicians.',
+    google: { rating: 4.7, reviews: 394, readOn: '2026-11-18' },
   },
   {
     slug: 'hialeah',
@@ -153,6 +173,7 @@ export const locationsConfig: LocationConfig[] = [
     city: 'Miami',
     description:
       'Our Hialeah location on E 10th Court serves Hialeah, Miami Springs, and East Hialeah. We offer the same full menu of tire and automotive services as all our locations — with the same ASE-certified technicians and 30-day warranty on used tires.',
+    google: { rating: 4.7, reviews: 161, readOn: '2026-11-18' },
   },
   {
     slug: 'orlando-west-colonial',
@@ -170,6 +191,7 @@ export const locationsConfig: LocationConfig[] = [
     city: 'Orlando',
     description:
       'Our West Colonial Drive location serves Winter Garden, Metrowest, and West Orlando. Same quality tires and services as our Miami locations — now serving Central Florida drivers.',
+    google: { rating: 4.7, reviews: 635, readOn: '2026-11-18' },
   },
   {
     slug: 'east-orlando',
@@ -203,6 +225,7 @@ export const locationsConfig: LocationConfig[] = [
        * Executive is named behind it for accuracy.
        */
       'Located on N Semoran Blvd, minutes from Orlando Executive Airport, our East Orlando location serves Azalea Park, Winter Park, and surrounding communities. Walk in for new or used tires, mounting, balancing, alignment, and more.',
+    google: { rating: 4.5, reviews: 69, readOn: '2026-11-18' },
   },
 ];
 

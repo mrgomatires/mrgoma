@@ -43,3 +43,15 @@ describe('TrustStrip', () => {
     expect(item.className).toContain('text-white');
   });
 });
+
+describe('TrustStrip lead (053)', () => {
+  it('renders a lead node as the first item, without the claim marker', () => {
+    const { container } = render(
+      <TrustStrip items={['Free shipping nationwide']} lead={<a href="/locations">Rating</a>} />
+    );
+    const items = container.querySelectorAll('li');
+    expect(items).toHaveLength(2);
+    expect(items[0]).toHaveTextContent('Rating');
+    expect(items[0].querySelector('[aria-hidden="true"]')).toBeNull();
+  });
+});

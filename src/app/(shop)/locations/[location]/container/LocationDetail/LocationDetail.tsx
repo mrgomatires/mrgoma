@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { LocationConfig } from '@/app/(shop)/locations/locationsConfig';
+import GoogleRating from '@/app/ui/components/GoogleRating/GoogleRating';
 import { formatHours } from '@/app/utils/storeHours';
 import { whatsAppLink } from '@/app/utils/whatsapp';
 
@@ -166,6 +167,17 @@ export default function LocationDetail({ location }: Props) {
           <p className="text-gray-300 text-lg max-w-2xl leading-relaxed drop-shadow-md">
             {location.description}
           </p>
+          {/* This store's own Google rating (053, D4–D6): to its reviews on
+              Google, with the day the figures were read. */}
+          <GoogleRating
+            figures={location.google}
+            variant="store"
+            href={location.mapLink}
+            external
+            showDate
+            track={{ event: 'google_reviews_open', surface: 'store_page', store: location.slug }}
+            className="mt-6"
+          />
         </div>
       </section>
 

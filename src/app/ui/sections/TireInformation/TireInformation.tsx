@@ -9,9 +9,11 @@ import {
   FreeShippingBadge,
 } from '@/app/ui/components';
 import AddToCartButton from '@/app/ui/components/AddToCartButton/AddToCartButton';
+import GoogleRating from '@/app/ui/components/GoogleRating/GoogleRating';
 import OtherCityMatch from '@/app/ui/components/OtherCityMatch/OtherCityMatch';
 import ViewItemTracker from '@/app/ui/components/ViewItemTracker/ViewItemTracker';
 import { WhatsAppEnquiryButton } from '@/app/ui/components/WhatsAppEnquiryButton/WhatsAppEnquiryButton';
+import { combinedRating } from '@/app/utils/googleRatings';
 import { generateTireDescription } from '@/app/utils/tireDescription';
 import { brandName, modelName, tireTitle } from '@/app/utils/tireNaming';
 import { patchedNote, treadDepthLabel } from '@/app/utils/tireSpecs';
@@ -114,6 +116,17 @@ const TireInformation: FC<TireInformationProps> = ({ singleTire, setSlot, soldSl
             {/* Sold: "Not available" took the price's place, on the left. */}
             {isSold ? null : <AddToCartButton product={singleTire} />}
           </div>
+          {/* The stores' Google rating by the price and the buy button (053, D3),
+              where a first-time buyer decides whether to trust the shop. */}
+          {!isSold && (
+            <GoogleRating
+              figures={combinedRating()}
+              variant="inline"
+              href="/locations"
+              track={{ event: 'google_rating_click', surface: 'tire_page' }}
+              className="mt-2 block"
+            />
+          )}
           {/* Beneath the primary action, never beside it: Add to cart already
               renders as an outlined green button, so a second outlined button on
               the same row would read as an equal choice rather than a quieter

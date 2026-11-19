@@ -3,8 +3,9 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 import { locationsConfig } from '@/app/(shop)/locations/locationsConfig';
-import { JsonLd } from '@/app/ui/components';
+import { GoogleRating, JsonLd } from '@/app/ui/components';
 import { HOME_TRUST_CLAIMS } from '@/app/utils/brandClaims';
+import { combinedRating } from '@/app/utils/googleRatings';
 import {
   buildBreadcrumbJsonLd,
   buildLocationsJsonLd,
@@ -93,6 +94,10 @@ export default function LocationsPage() {
               7 tire shops across South Florida and Central Florida. Walk in at any location — no
               appointment needed.
             </p>
+            {/* All seven on Google, and the day it was read (053, D5–D6). The
+                combined figure leads here, so this page is where it is explained;
+                each card below links to its own reviews. */}
+            <GoogleRating figures={combinedRating()} variant="store" showDate className="mt-6" />
           </div>
         </section>
 
@@ -152,6 +157,15 @@ function LocationCard({ loc }: { loc: (typeof locationsConfig)[0] }) {
       </div>
 
       <p className="text-gray-300 text-sm leading-relaxed">{loc.address}</p>
+
+      {/* This store's Google rating, to its reviews on Google (053, D4–D5). */}
+      <GoogleRating
+        figures={loc.google}
+        variant="card"
+        href={loc.mapLink}
+        external
+        track={{ event: 'google_reviews_open', surface: 'locations', store: loc.slug }}
+      />
 
       <div className="flex flex-wrap gap-1.5">
         {loc.neighborhoods.slice(0, 3).map(n => (
