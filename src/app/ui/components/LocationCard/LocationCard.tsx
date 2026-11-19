@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 
+import GoogleRating from '@/app/ui/components/GoogleRating/GoogleRating';
 import { LocationIcon, PhoneIcon } from '@/app/ui/icons';
 
 import { LocationCardProps } from './location-card';
@@ -13,6 +14,7 @@ export const LocationCard = ({
   phone,
   backgroundImage,
   link,
+  google,
   className = '',
 }: LocationCardProps) => {
   const getPhoneUrl = () => {
@@ -51,6 +53,9 @@ export const LocationCard = ({
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
       </div>
       <div className="absolute bottom-0 left-0 right-0 p-4">
+        {/* The store's Google rating (053, D4). Text: the address button below
+            already opens the store's profile, where the reviews are. */}
+        {google && <GoogleRating figures={google} variant="card" className="mb-3 block" />}
         <div className="flex flex-wrap justify-between items-start gap-4">
           <button
             type="button"

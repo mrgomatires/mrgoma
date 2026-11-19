@@ -124,6 +124,31 @@ describe('CartModal', () => {
   });
 });
 
+describe('CartModal — Google rating (053)', () => {
+  it('shows the stores’ rating under Checkout only with something in the cart (AC4)', () => {
+    const { unmount } = render(<CartModal />);
+    expect(screen.queryByText(/Google reviews/)).toBeNull();
+    unmount();
+    cart.value.cartItems = [
+      {
+        id: '1',
+        name: 'Michelin Pilot',
+        price: 99,
+        quantity: 1,
+        brand: 'Michelin',
+        condition: 'New',
+      },
+    ];
+    cart.value.cartTotal = 99;
+    render(<CartModal />);
+    expect(screen.getByText(/^Rated$/).parentElement).toHaveTextContent(
+      'Rated 4.7 out of 5 from 5,952 Google reviews'
+    );
+    // Text, not a link: nothing sends the buyer away before paying.
+    expect(screen.queryByRole('link', { name: /Google reviews/ })).toBeNull();
+  });
+});
+
 describe('CartModal with sets (feature 041)', () => {
   const member = (id: string, tread: number): CartItem => ({
     id,

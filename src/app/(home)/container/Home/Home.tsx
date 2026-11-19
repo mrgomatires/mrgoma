@@ -8,7 +8,7 @@ import { preload } from 'react-dom';
 import { guides } from '@/app/(shop)/guides/guidesConfig';
 import { locationsConfig } from '@/app/(shop)/locations/locationsConfig';
 import { servicesConfig } from '@/app/(shop)/services/servicesConfig';
-import { HeroVideo, JsonLd, TrustStrip } from '@/app/ui/components';
+import { GoogleRating, HeroVideo, JsonLd, TrustStrip } from '@/app/ui/components';
 import { InfoCardsSection, PromoBanner, SearchContainer } from '@/app/ui/sections';
 import { LocationsSlider } from '@/app/ui/sections/LocationsSlider/LocationsSlider';
 import { promoBannerConfig } from '@/app/ui/sections/PromoBanner/config/promoBanner';
@@ -24,6 +24,7 @@ import {
   SHIPPING,
   WARRANTY,
 } from '@/app/utils/brandClaims';
+import { combinedRating } from '@/app/utils/googleRatings';
 import { buildItemListJsonLd } from '@/app/utils/seo';
 
 const SERVICE_IMAGES: Record<string, string> = {
@@ -225,6 +226,16 @@ const Home: FC = () => {
               items={HOME_TRUST_CLAIMS}
               variant="onMedia"
               className="justify-center mt-5 sm:mt-6"
+              // The stores' Google rating first (053, D2), computed from each
+              // store's figures; it leads to the stores and their reviews.
+              lead={
+                <GoogleRating
+                  figures={combinedRating()}
+                  variant="chipOnMedia"
+                  href="/locations"
+                  track={{ event: 'google_rating_click', surface: 'home' }}
+                />
+              }
             />
 
             <SearchContainer />

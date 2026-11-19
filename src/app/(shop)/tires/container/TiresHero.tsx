@@ -1,7 +1,8 @@
 import { FC } from 'react';
 
-import { TrustStrip } from '@/app/ui/components';
+import { GoogleRating, TrustStrip } from '@/app/ui/components';
 import { LOCATIONS_LABEL, SHIPPING, WARRANTY, onlineInventoryLabel } from '@/app/utils/brandClaims';
+import { combinedRating } from '@/app/utils/googleRatings';
 
 interface TiresHeroProps {
   /** `225/50/19` when all three parts are filtered, otherwise empty. */
@@ -62,6 +63,15 @@ const TiresHero: FC<TiresHeroProps> = ({ size, totalCount }) => (
       </h1>
       <TrustStrip
         className="mt-6"
+        // The stores' Google rating first (053, D2).
+        lead={
+          <GoogleRating
+            figures={combinedRating()}
+            variant="chip"
+            href="/locations"
+            track={{ event: 'google_rating_click', surface: 'tires' }}
+          />
+        }
         items={[
           // The live catalogue count, labelled for what it is. The "15,000+"
           // network claim describes physical stock across the stores and must

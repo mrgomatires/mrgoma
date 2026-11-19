@@ -77,3 +77,18 @@ describe('locationsConfig — addresses and pins', () => {
     }
   });
 });
+
+describe('Google figures (053)', () => {
+  it.each(locationsConfig.map(l => [l.slug, l.google] as const))(
+    '%s has a rating, a count and the day it was read',
+    (_slug, g) => {
+      expect(g.rating).toBeGreaterThanOrEqual(1);
+      expect(g.rating).toBeLessThanOrEqual(5);
+      expect(Math.round(g.rating * 10)).toBe(g.rating * 10); // one decimal, as Maps shows
+      expect(Number.isInteger(g.reviews) && g.reviews > 0).toBe(true);
+      expect(g.readOn).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(Number.isNaN(Date.parse(`${g.readOn}T00:00:00Z`))).toBe(false);
+      expect(Date.parse(`${g.readOn}T00:00:00Z`)).toBeLessThanOrEqual(Date.now());
+    }
+  );
+});

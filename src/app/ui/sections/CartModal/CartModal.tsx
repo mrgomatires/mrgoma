@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { useCart, type CartItem } from '@/app/context/CartContext';
-import { XMarkIcon } from '@/app/ui/components';
+import { GoogleRating, XMarkIcon } from '@/app/ui/components';
 import CityTag from '@/app/ui/components/CityTag/CityTag';
 import { Dialog, DialogBackdrop, DialogPanel } from '@/app/ui/components/Dialog/Dialog';
 import { factsParts } from '@/app/utils/cartFacts';
@@ -14,6 +14,7 @@ import { cartLine } from '@/app/utils/cartLine';
 import { citiesLabel, groupCartLines } from '@/app/utils/cartSets';
 import { trackRemoval, trackViewCart } from '@/app/utils/cartTracking';
 import { GENERIC_TIRE_IMAGE } from '@/app/utils/genericTireImage';
+import { combinedRating } from '@/app/utils/googleRatings';
 import { tireDetailHref } from '@/app/utils/tireSlug';
 
 import { useCartTireHovercard } from './CartTireHovercard';
@@ -270,6 +271,14 @@ const CartModal: FC<{ footer?: React.ReactNode }> = ({ footer }) => {
                 >
                   Checkout
                 </Link>
+                {/* The stores' Google rating under Checkout (053, D3), only with
+                    something to pay for. Text, not a link: the moment before
+                    paying is no time to send the buyer elsewhere. */}
+                {cartItems.length > 0 && (
+                  <p className="mt-2 flex justify-center">
+                    <GoogleRating figures={combinedRating()} variant="inline" />
+                  </p>
+                )}
                 <div className="mt-3 flex justify-center">
                   <button
                     type="button"

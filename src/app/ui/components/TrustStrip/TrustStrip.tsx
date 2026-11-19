@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 type TrustStripVariant = 'solid' | 'onMedia';
 
@@ -14,6 +14,12 @@ interface TrustStripProps {
   className?: string;
   /** Accessible name for the list region. */
   label?: string;
+  /**
+   * A first item that is not a plain claim — the Google rating chip (053),
+   * which carries stars and a link. Rendered as the list's first `<li>`, with
+   * no ✦ marker of its own.
+   */
+  lead?: ReactNode;
 }
 
 /**
@@ -41,6 +47,7 @@ const TrustStrip: FC<TrustStripProps> = ({
   variant = 'solid',
   className,
   label = 'Why buy from MrGoma Tires',
+  lead,
 }) => {
   const itemClass =
     variant === 'onMedia'
@@ -52,6 +59,7 @@ const TrustStrip: FC<TrustStripProps> = ({
       aria-label={label}
       className={`flex flex-wrap gap-2 sm:gap-3${className ? ` ${className}` : ''}`}
     >
+      {lead && <li className="flex items-center">{lead}</li>}
       {items.map(item => (
         <li key={item} className={itemClass}>
           <span className="text-[#9dfb40] text-[10px]" aria-hidden="true">

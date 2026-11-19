@@ -47,5 +47,6 @@ export { default as Snackbar } from './Snackbar/Snackbar';
 export { default as HeroVideo } from './HeroVideo/HeroVideo';
 export { default as JsonLd } from './JsonLd/JsonLd';
 export { default as TrustStrip } from './TrustStrip/TrustStrip';
+export { default as GoogleRating } from './GoogleRating/GoogleRating';
 export { default as TireTable } from './TireTable/TireTable';
 export { default as ViewToggle } from './ViewToggle/ViewToggle';

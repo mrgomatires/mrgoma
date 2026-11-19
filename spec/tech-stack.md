@@ -109,6 +109,16 @@ Versions taken from `package.json` (2026-06-30). Update here when they change.
   city is derived from `VaultName` on the server and the warehouse name never
   leaves. `GET /api/tires/compare?ids=` (1–3 numeric ids, Zod) answers only
   `id`, `available`, `price`, `no-store`.
+- **Google ratings** (053) are typed by hand into `locationsConfig.ts`
+  (`google: { rating, reviews, readOn }` per store, from each store's Maps
+  profile) — never pulled from the Business Profile API, whose content may not
+  be stored over 30 days. Everything shown is derived in `googleRatings.ts`
+  (weighted mean, total, "Rated 4.7 out of 5 from …", the read month in UTC).
+  `GoogleRating` renders it; **no rating structured data** anywhere (Google's
+  self-serving rule; `googleRatings.guard.test.ts`). **To update:** re-read the
+  seven profiles on Maps, edit the figures and set `readOn` to that day. The
+  same guard **fails `npm test` 90 days after the newest `readOn`** (D7) — a
+  reminder, not a bug; the site keeps showing the figures meanwhile.
 - **Used filters mean used tires** (052): tread (`minTreadDepth`, steps
   6–9/32"+), remaining life and patched. Links that apply one also write
   `condition=used`; a condition change keeps them only if the next set is
@@ -177,6 +187,12 @@ Versions taken from `package.json` (2026-06-30). Update here when they change.
   `same_size`) via `trackEvent`; `compare_view_tire` as `data-track`; adding to
   the cart from the comparison sends the card's own `add_to_cart`
   (`useAddTireToCart`). See `spec/features/051-compare-tires/`.
+- **Google ratings (feature 053).** `google_rating_click` (the combined chip
+  → `/locations`; `surface` home / tires / tire_page) and
+  `google_reviews_open` (a store's Google profile, new tab; `surface`
+  store_page / locations, `store` slug), both as `data-track`, category
+  `reviews`. The cart and checkout show the rating as text: no event. See
+  `spec/features/053-google-ratings/`.
 - **Used-tire filters (feature 052).** No new events: the tread steps report
   `filter_apply` with `filter_group` `tread` and `filter_value` the step; the
   quick chips ("Not patched", "Run-flat", "8/32"+") send the same

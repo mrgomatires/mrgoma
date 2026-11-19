@@ -147,10 +147,11 @@ To be resumed after the two tracks above; no fixed order yet.
     2026-11-18)._
   - ✅ **Compare up to 3 tires (`051-compare-tires`).** From the listing: tread, life,
     patch, DOT, price side by side. _Merged (PR #212, 2026-11-18)._
-  - 🟡 **Used-tire filters (`052-used-tire-filters`).** Minimum tread in 32nds, no
+  - ✅ **Used-tire filters (`052-used-tire-filters`).** Minimum tread in 32nds, no
     patch, run-flat; used filters on `/tires/used`; out of the way for new tires.
-    Also the dashboard size selects' text `> '70%'` rule.
-  - ⬜ **Google ratings (`053`).** Figures copied by hand from the 7 Business
+    Also the dashboard size selects' text `> '70%'` rule. _Merged (PR #213,
+    2026-11-18)._
+  - 🟡 **Google ratings (`053-google-ratings`).** Figures copied by hand from the 7 Business
     Profiles with their date (≈4.7 from 5,952 reviews on 2026-11-18): under
     the search on home and `/tires`, on the tire page and cart, and on each
     store page. No review stars in search results (Google's self-serving rule).
