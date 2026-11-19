@@ -3,6 +3,8 @@ import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
 import { afterEach } from 'vitest';
 
+import { clearSharedJson } from '@/app/utils/sharedFetch';
+
 // jsdom doesn't implement scrollIntoView; stub it so components that call it
 // (focus/feedback banners) don't throw during tests.
 if (!Element.prototype.scrollIntoView) {
@@ -31,4 +33,7 @@ if (!window.matchMedia) {
 // Unmount React trees after every test so the DOM doesn't leak between cases.
 afterEach(() => {
   cleanup();
+  // 058: filter options are shared per URL for the page's lifetime; a test
+  // must not inherit another test's (mocked) answers.
+  clearSharedJson();
 });

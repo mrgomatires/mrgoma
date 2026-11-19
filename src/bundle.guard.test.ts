@@ -42,7 +42,10 @@ describe('the session client lives with the dashboard', () => {
     const root = read('src/app/layout.tsx');
     expect(root).not.toMatch(/from 'next-auth/);
     expect(root).not.toContain('<SessionProvider>');
-    expect(read('src/app/(sellers)/dashboard/layout.tsx')).toContain('<SessionProvider>');
+    // 058: it starts from the server's session, so the browser reads none on load.
+    expect(read('src/app/(sellers)/dashboard/layout.tsx')).toContain(
+      '<SessionProvider session={session}>'
+    );
   });
 
   it("and only seller code imports next-auth's client", () => {
@@ -81,5 +84,22 @@ describe('no barrel files in src/app/ui', () => {
     const bare = /from '@\/app\/ui\/(components|icons|sections)\/?(index)?'/;
     const offenders = filesUnder('src').filter(f => bare.test(read(f)));
     expect(offenders).toEqual([]);
+  });
+});
+
+/**
+ * 058: signing in failed on a local `next start` ("UntrustedHost"). The fix is
+ * an environment variable for local runs only — not `trustHost` in the auth
+ * configuration, which would trust the request's Host header everywhere.
+ */
+describe('local sign-in is configured, not coded', () => {
+  it('the auth configuration does not trust every host', () => {
+    expect(read('src/app/utils/authOptions.ts')).not.toMatch(/trustHost/);
+  });
+
+  it('the template documents AUTH_TRUST_HOST as local-only', () => {
+    const template = read('.env.template');
+    expect(template).toMatch(/^AUTH_TRUST_HOST=true$/m);
+    expect(template).toMatch(/Never set it in Vercel/);
   });
 });

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useSearchParams } from 'next/navigation';
 
@@ -205,14 +205,21 @@ const DashboardTable = () => {
     }
   }, []);
 
+  // One effect for the search and the page (058). There were two — one on
+  // the search params, one on the page — and both fetched page 1 on mount, so
+  // every visit asked for the tire list twice. A new search goes back to page
+  // 1 first and fetches once that has happened.
+  const searchKey = searchParams.toString();
+  const lastSearch = useRef<string | null>(null);
   useEffect(() => {
-    setPage(1);
-    fetchData(1);
-  }, [searchParams, fetchData]);
-
-  useEffect(() => {
-    fetchData(page);
-  }, [page, fetchData]);
+    const searchChanged = lastSearch.current !== null && lastSearch.current !== searchKey;
+    lastSearch.current = searchKey;
+    if (searchChanged && page !== 1) {
+      setPage(1);
+      return;
+    }
+    void fetchData(page);
+  }, [searchKey, page, fetchData]);
 
   const table = useReactTable({
     data,

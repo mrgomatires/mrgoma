@@ -5,9 +5,7 @@ import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { parseLocationPairs } from '@/app/utils/filterUtils';
-
-// Global cache to avoid duplicate simultaneous requests from different hook instances
-const brandsRequestCache: Record<string, Promise<string[]> | undefined> = {};
+import { sharedJson } from '@/app/utils/sharedFetch';
 
 interface RangeInputs {
   price: [number, number];
@@ -56,9 +54,9 @@ export const useFilters = (
 
   const [availableBrands, setAvailableBrands] = useState<string[]>([]);
   const [availableStores, setAvailableStores] = useState<string[]>([]);
-  const [availableLocations, setAvailableLocations] = useState<
-    { store: string; code: string }[]
-  >([]);
+  const [availableLocations, setAvailableLocations] = useState<{ store: string; code: string }[]>(
+    []
+  );
   const [isLoadingRanges, setIsLoadingRanges] = useState(true);
   const [isLoadingBrands, setIsLoadingBrands] = useState(true);
   const [isLoadingStores, setIsLoadingStores] = useState(options?.enableStoreFilter ?? false);
@@ -136,33 +134,10 @@ export const useFilters = (
       if (sidewall) params.set('s', sidewall);
       if (diameter) params.set('d', diameter);
 
-      const cacheKey = `${apiBasePath}/brands?${params.toString()}`;
-
-      // Check if there is an ongoing request for the same parameters
-      if (brandsRequestCache[cacheKey]) {
-        const cachedData = await brandsRequestCache[cacheKey];
-        setAvailableBrands(cachedData);
-        return;
-      }
-
-      // Create a new request and store promise in a cache
-      const fetchPromise = fetch(`${apiBasePath}/brands?${params.toString()}`).then(async res => {
-        if (!res.ok) throw new Error('Failed to fetch brands');
-        return (await res.json()) as string[];
-      });
-
-      brandsRequestCache[cacheKey] = fetchPromise;
-
-      try {
-        const data = await fetchPromise;
-        setAvailableBrands(data as string[]);
-      } finally {
-        // Remove from the cache after a short delay to allow fresh requests later
-        // but avoid immediate duplicates
-        setTimeout(() => {
-          delete brandsRequestCache[cacheKey];
-        }, 1000);
-      }
+      // Shared across hook instances (058): the desktop and phone panels both
+      // run this hook, and each used to ask for the same brands.
+      const data = await sharedJson<string[]>(`${apiBasePath}/brands?${params.toString()}`);
+      setAvailableBrands(data);
     } catch (err) {
       console.error('Failed to fetch brands with filters', err);
       // En caso de error, mantener las marcas actuales
@@ -192,9 +167,15 @@ export const useFilters = (
     const fetchBounds = async () => {
       try {
         setIsLoadingRanges(true);
-        const res = await fetch(`${apiBasePath}/ranges`);
-        if (!res.ok) return;
-        const data = await res.json();
+        // One request for every panel on the page (058).
+        const data = await sharedJson<{
+          minPrice: number;
+          maxPrice: number;
+          minTreadDepth: number;
+          maxTreadDepth: number;
+          minRemainingLife: number;
+          maxRemainingLife: number;
+        }>(`${apiBasePath}/ranges`);
         const bounds: RangeBounds = {
           price: [data.minPrice, data.maxPrice],
           treadDepth: [data.minTreadDepth, data.maxTreadDepth],
@@ -218,10 +199,7 @@ export const useFilters = (
     const fetchStores = async () => {
       try {
         setIsLoadingStores(true);
-        const res = await fetch(`${apiBasePath}/stores`);
-        if (!res.ok) return;
-        const data = await res.json();
-        const stores = data as string[];
+        const stores = await sharedJson<string[]>(`${apiBasePath}/stores`);
         setAvailableStores(stores);
         // Normalize URL store values to exact VaultName casing (e.g. "orlando" → "Orlando")
         setCheckboxInputs(prev => {
@@ -428,8 +406,12 @@ export const useFilters = (
       params.set('page', '1');
     }
 
-    // Preserve existing search parameters that aren't related to filters
-    if (redirectBasePath) {
+    // Preserve existing search parameters that aren't related to filters.
+    // Only navigate when something changed (058): when the ranges arrive, each
+    // instance of this hook (the dashboard mounts two) re-derives its inputs
+    // and landed here with the same URL, so every visit made extra page-data
+    // round trips for nothing.
+    if (redirectBasePath && filterChanged) {
       const newUrl = `/${redirectBasePath}?${params.toString()}`;
       router.push(newUrl, { scroll: false });
     }

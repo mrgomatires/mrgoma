@@ -285,6 +285,21 @@ A change is done when:
    so after step 4; local pre-deploy gates, not CI — see below).
 6. Manual behavior check when it's UI (ideally on mobile).
 
+**Checking the seller dashboard on a production build (058).** Start it with
+`AUTH_TRUST_HOST=true npm run start` after `npm run build`: Auth.js refuses to
+sign in on a host it doesn't trust ("UntrustedHost" in the server log), and a
+local `next start` is not one (`next dev` and Vercel are trusted
+automatically). `scripts/lab.mjs` sets it for the servers `perf:lab` and
+`npm run a11y` start. Never put it in Vercel's environment variables, and never
+`trustHost: true` in `authOptions.ts` (it would trust the request's Host header
+everywhere; `bundle.guard.test.ts` fails if it appears). Sign-in itself is done
+by a person — agents never type a seller's password.
+
+**Shared requests (058).** Data several components on a page need — filter
+options, size lists — goes through `sharedJson` (`src/app/utils/sharedFetch.ts`):
+one request per URL, kept 60 s. The dashboard's request counts on load are
+pinned by `Dashboard.requests.test.tsx`.
+
 ### Accessibility
 
 - Target **WCAG 2.1 AA** on key flows: semantic HTML, labelled controls, keyboard

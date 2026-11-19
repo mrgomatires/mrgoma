@@ -1,9 +1,11 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+
+const nav = vi.hoisted(() => ({ search: '' }));
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn() }),
-  useSearchParams: () => new URLSearchParams(),
+  useSearchParams: () => new URLSearchParams(nav.search),
 }));
 
 /**
@@ -39,6 +41,7 @@ function mockRows(records: unknown[]) {
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  nav.search = '';
 });
 
 describe('the dashboard table tells a store from a shelf', () => {
@@ -83,5 +86,54 @@ describe('the dashboard table tells a store from a shelf', () => {
     });
     expect(screen.queryByText('undefined')).not.toBeInTheDocument();
     expect(screen.queryByText('+703C+')).not.toBeInTheDocument();
+  });
+});
+
+/**
+ * 058: the table fetched page 1 from two effects on mount — every dashboard
+ * visit asked for the tire list twice.
+ */
+describe('the dashboard table asks once', () => {
+  const pages = () =>
+    (vi.mocked(fetch).mock.calls as unknown[][]).map(c =>
+      new URL(String(c[0]), 'http://x').searchParams.get('page')
+    );
+
+  function mockMany(total: number) {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ records: [ROW], totalCount: total }),
+      })
+    );
+  }
+
+  it('on mount: one request, page 1', async () => {
+    mockMany(1);
+    const { default: DashboardTable } = await import('./DashboardTable');
+    render(<DashboardTable />);
+    await waitFor(() => expect(screen.getByText('Hialeah')).toBeInTheDocument());
+    expect(pages()).toEqual(['1']);
+  });
+
+  it('a new search from page 3: one request, back on page 1', async () => {
+    mockMany(100);
+    const { default: DashboardTable } = await import('./DashboardTable');
+    const { rerender } = render(<DashboardTable />);
+    await waitFor(() => expect(screen.getByText('Hialeah')).toBeInTheDocument());
+
+    const next = screen.getAllByRole('button').find(b => b.textContent?.trim() === '›');
+    expect(next).toBeDefined();
+    await act(async () => next!.click());
+    await act(async () => next!.click());
+    await waitFor(() => expect(pages()).toEqual(['1', '2', '3']));
+
+    nav.search = 'w=225';
+    rerender(<DashboardTable />);
+    await waitFor(() => expect(pages()).toEqual(['1', '2', '3', '1']));
+    // Settle: no second request for the same search.
+    await act(async () => new Promise(r => setTimeout(r, 50)));
+    expect(pages()).toEqual(['1', '2', '3', '1']);
   });
 });

@@ -24,7 +24,9 @@ export function freePort() {
 export async function startServer(port) {
   const child = spawn('npx', ['next', 'start', '-p', String(port)], {
     stdio: ['ignore', 'pipe', 'pipe'],
-    env: { ...process.env, NODE_ENV: 'production' },
+    // AUTH_TRUST_HOST: a local `next start` is not a host Auth.js trusts by
+    // itself, so signing in to the dashboard failed (058). Local only.
+    env: { ...process.env, NODE_ENV: 'production', AUTH_TRUST_HOST: 'true' },
   });
   let log = '';
   child.stdout.on('data', d => (log += d));
