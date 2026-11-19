@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { TireSelector } from '@/app/ui/components/CollapsibleSearchBar/components/TireSelector';
 import { useTireSearch } from '@/app/ui/components/CollapsibleSearchBar/hooks/useTireSearch';
-import { FilterBody } from '@/app/ui/sections/';
+import FilterBody from '@/app/ui/sections/FilterBody/FilterBody';
 import { filtersItems } from '@/app/ui/sections/FiltersMobile/FiltersItems';
 import { useFilters } from '@/app/ui/sections/FiltersMobile/hooks/useFilters';
 import { StoreLocationFilter } from '@/app/ui/sections/TopFilters/StoreLocationFilter';

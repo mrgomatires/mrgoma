@@ -327,13 +327,18 @@ A change is done when:
   **`shopperPageJs` ≤ 320 KB** — every chunk the prerendered `/about-us` and
   `/contact` HTML links, root layout included — and **fails if zod,
   react-hook-form or next-auth's client appear in any of them**.
+- **No barrel files in `src/app/ui` — import by path (057).** There is no
+  `index.ts` in `components/`, `icons/` or `sections/`: write
+  `import TireCard from '@/app/ui/sections/TireCard/TireCard'`, never
+  `from '@/app/ui/sections'`. A client barrel is not tree-shaken, so a page
+  that used three icons downloaded all forty and nearly every widget (056–057:
+  ~70–80 KB gz unused per page, and once the sellers' login form with zod).
+  `src/bundle.guard.test.ts` fails if an index file or a whole-folder import
+  comes back.
 - **Seller-only client code stays out of the storefront's shared paths (056).**
-  Never export a sellers' component (login form, dashboard pieces) from the
-  `@/app/ui/components` barrel — nearly every client component imports it and a
-  client barrel is not tree-shaken, so the component's dependencies ship to
-  every shopper; import it by path. Providers only the dashboard needs
-  (`SessionProvider`) wrap `(sellers)/dashboard/layout.tsx`, not the root
-  layout. `src/bundle.guard.test.ts` and `perf:budget` enforce both.
+  Providers only the dashboard needs (`SessionProvider`) wrap
+  `(sellers)/dashboard/layout.tsx`, not the root layout; `perf:budget` fails
+  if zod, react-hook-form or next-auth's client reach a shopper page.
 - **Below-the-fold heavy widgets** (three.js) mount when near the viewport
   (`useNearViewport`) *and* idle (`useIdleReady`), not on idle alone — idle came
   within ~2 s of load, inside the window a phone is still loading the page.

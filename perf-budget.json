@@ -5,11 +5,11 @@
     "note": "gzip of rootMainFiles + polyfillFiles from .next/build-manifest.json — the First Load JS shared by every page (current ~166 KB, 056)"
   },
   "totalClientJs": {
-    "limitKB": 680,
-    "note": "gzip of every .next/static/chunks/*.js incl. deferred chunks like three.js (current ~658 KB, 056)"
+    "limitKB": 740,
+    "note": "gzip of every .next/static/chunks/*.js incl. deferred chunks like three.js (current ~702 KB, 057). Raised from 680 deliberately: without the ui barrels (057) a module shared by several pages can be copied into more than one chunk, so the build's sum grew ~44 KB while what each page downloads fell 28–49 KB (shopperPageJs, perf:lab). This sum counts chunks no single visitor loads together."
   },
   "shopperPageJs": {
-    "limitKB": 320,
-    "note": "gzip of every chunk the prerendered /about-us and /contact HTML links, heaviest page — the root layout's JS included (current ~293 KB, 056: ~46 KB less than before, when the sellers' login and session code rode along). perf-budget.mjs also fails if zod, react-hook-form or next-auth's client appear in any of them."
+    "limitKB": 240,
+    "note": "gzip of every chunk the prerendered /about-us and /contact HTML links, heaviest page — the root layout's JS included (current ~215 KB, 057; 293 KB in 056 before the ui barrels went, ~339 KB before 056). perf-budget.mjs also fails if zod, react-hook-form or next-auth's client appear in any of them."
   }
 }

@@ -117,6 +117,31 @@ export const CookieConsent: React.FC = () => {
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [visible, decline]);
 
+  /**
+   * Publish the banner's height as `--cookie-banner-h` on `<html>` while it
+   * shows (057), as the compare tray does with `--compare-tray-h`. The banner
+   * is a full-width bar at the bottom with the top z-index, so it sat over the
+   * AI chat button and the floating search button: a first-time visitor
+   * tapped them and nothing happened. Those controls add the larger of the two
+   * heights to their `bottom`; the banner itself does not move.
+   */
+  useEffect(() => {
+    const root = document.documentElement;
+    const el = regionRef.current;
+    if (!visible || !el) {
+      root.style.setProperty('--cookie-banner-h', '0px');
+      return;
+    }
+    const set = () => root.style.setProperty('--cookie-banner-h', `${el.offsetHeight}px`);
+    set();
+    const ro = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(set);
+    ro?.observe(el);
+    return () => {
+      ro?.disconnect();
+      root.style.setProperty('--cookie-banner-h', '0px');
+    };
+  }, [visible]);
+
   if (!visible) return null;
 
   const accepted = decision === 'accepted';

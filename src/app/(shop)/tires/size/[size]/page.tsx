@@ -6,7 +6,7 @@ import type { Metadata } from 'next';
 import { TireGrid } from '@/app/(shop)/tires/container/TireGrid/TireGrid';
 import { getStockedSizes, resolveSizeSlug } from '@/app/(shop)/tires/utils/sizeCatalog';
 import { TiresData } from '@/app/interfaces/tires';
-import { JsonLd } from '@/app/ui/components';
+import JsonLd from '@/app/ui/components/JsonLd/JsonLd';
 import { LOCATIONS_LABEL, SHIPPING, WARRANTY, onlineInventoryLabel } from '@/app/utils/brandClaims';
 import { LISTS } from '@/app/utils/ecommerce';
 import { buildBreadcrumbJsonLd, buildItemListJsonLd, sizeMetadata } from '@/app/utils/seo';

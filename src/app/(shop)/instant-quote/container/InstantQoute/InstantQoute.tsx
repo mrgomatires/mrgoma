@@ -3,7 +3,7 @@
 import React, { FormEvent, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import { SelectedFiltersContext } from '@/app/context/SelectedFilters';
-import { SearchByText } from '@/app/ui/components';
+import SearchByText from '@/app/ui/components/SearchByText/SearchByText';
 import { locationsData } from '@/app/ui/sections/LocationsSlider/locationsData';
 import { trackEvent } from '@/app/utils/analytics';
 import { EVENTS } from '@/app/utils/analyticsEvents';

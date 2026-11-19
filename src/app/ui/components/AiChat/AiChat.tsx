@@ -417,8 +417,10 @@ export default function AiChat({
         </div>
       )}
 
-      {/* Floating Toggle Button */}
-      <div className="fixed bottom-[calc(1.5rem+var(--compare-tray-h,0px))] right-6 z-50">
+      {/* Floating Toggle Button. Sits above the compare tray or the cookie
+          banner, whichever is taller (057: the banner covered it, so a
+          first-time visitor's tap did nothing). */}
+      <div className="fixed bottom-[calc(1.5rem+max(var(--compare-tray-h,0px),var(--cookie-banner-h,0px)))] right-6 z-50">
         {isOpen ? (
           <button
             type="button"

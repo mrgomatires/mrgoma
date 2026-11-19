@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { CarFront } from '@/app/ui/icons';
+import { CarFront } from '@/app/ui/icons/CarFront';
 
 import { SelectDropdownAdapter } from './SelectDropdownAdapter';
 import { useTireDynamicOptions } from '../hooks/useTireDynamicOptions';

@@ -4,7 +4,7 @@ import { FC, SyntheticEvent } from 'react';
 
 import { useCart } from '@/app/context/CartContext';
 import { SingleTire } from '@/app/interfaces/tires';
-import { CtaButton } from '@/app/ui/components';
+import CtaButton from '@/app/ui/components/CtaButton/CtaButton';
 import { trackEcommerce } from '@/app/utils/analytics';
 import { EVENTS } from '@/app/utils/analyticsEvents';
 import { factsFromSingleTire } from '@/app/utils/cartFacts';

@@ -3,7 +3,7 @@
 import React, { FC } from 'react';
 
 import { useCart } from '@/app/context/CartContext';
-import { WhatsAppIcon } from '@/app/ui/icons';
+import { WhatsAppIcon } from '@/app/ui/icons/WhatsAppIcon';
 import CartModal from '@/app/ui/sections/CartModal/CartModal';
 
 const DashboardCartFooter: FC = () => {

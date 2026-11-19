@@ -7,9 +7,11 @@ import dynamic from 'next/dynamic';
 import { createPortal } from 'react-dom';
 
 import { SelectedFiltersContext } from '@/app/context/SelectedFilters';
-import { ButtonSearch, XMarkIcon } from '@/app/ui/components';
+import ButtonSearch from '@/app/ui/components/ButtonSearch/ButtonSearch';
+import { XMarkIcon } from '@/app/ui/components/Icons/Icons';
 import SizePicker from '@/app/ui/components/SizePicker/SizePicker';
-import { ArrowsToRight, CarFront } from '@/app/ui/icons';
+import { ArrowsToRight } from '@/app/ui/icons/ArrowsToRight';
+import { CarFront } from '@/app/ui/icons/CarFront';
 
 import { TIRE_3D_HINT_KEY, useDiscoveryHint } from './useDiscoveryHint';
 import { isWebglAvailable } from './webgl';

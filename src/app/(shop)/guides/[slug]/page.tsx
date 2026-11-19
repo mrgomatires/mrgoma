@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 
 import { getGuideBySlug, guides, type GuideSection } from '@/app/(shop)/guides/guidesConfig';
-import { JsonLd } from '@/app/ui/components';
+import JsonLd from '@/app/ui/components/JsonLd/JsonLd';
 import { INVENTORY_NETWORK } from '@/app/utils/brandClaims';
 import { buildArticleJsonLd, buildBreadcrumbJsonLd, guideMetadata } from '@/app/utils/seo';
 import { whatsAppLink } from '@/app/utils/whatsapp';

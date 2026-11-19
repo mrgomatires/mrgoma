@@ -1,7 +1,9 @@
 import Link from 'next/link';
 
-import { ArrowsToRight } from '@/app/ui/icons';
-import { Footer, Header, TopHeader } from '@/app/ui/sections';
+import { ArrowsToRight } from '@/app/ui/icons/ArrowsToRight';
+import Footer from '@/app/ui/sections/Footer/Footer';
+import Header from '@/app/ui/sections/Header/Header';
+import TopHeader from '@/app/ui/sections/TopHeader/TopHeader';
 
 export default function NotFound() {
   return (

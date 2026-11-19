@@ -7,10 +7,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { useCart } from '@/app/context/CartContext';
-import { HamburgerMenu } from '@/app/ui/components';
-import { ShoppingCart } from '@/app/ui/icons';
-import { CartModal, MenuMobile } from '@/app/ui/sections';
+import HamburgerMenu from '@/app/ui/components/HamburgerMenu/HamburgerMenu';
+import { ShoppingCart } from '@/app/ui/icons/ShoppingCart';
+import CartModal from '@/app/ui/sections/CartModal/CartModal';
 import { groupChildren, menuItems } from '@/app/ui/sections/Header/MenuItems';
+import MenuMobile from '@/app/ui/sections/MenuMobile/MenuMobile';
 
 import { mrGomaLogoLight } from '#public/assets/images/Logo';
 /**

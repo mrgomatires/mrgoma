@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { terminology } from '@/app/(shop)/detail/data/terminology';
-import { TerminologyItem } from '@/app/ui/components';
+import TerminologyItem from '@/app/ui/components/TerminologyItem/TerminologyItem';
 
 const Terminology = () => {
   return (

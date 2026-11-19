@@ -9,9 +9,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
-import { BrandHeadline, ButtonSpinner, InputError, Snackbar } from '@/app/ui/components';
+import BrandHeadline from '@/app/ui/components/BrandHeadline/BrandHeadline';
+import ButtonSpinner from '@/app/ui/components/ButtonSpinner/ButtonSpinner';
+import InputError from '@/app/ui/components/InputError/InputError';
 import { LoginSchema, Inputs } from '@/app/ui/components/LoginForm/schema/loginSchema';
-import { UserIcon, LockIcon, ArrowLeftIcon, EyeIcon, EyeOffIcon } from '@/app/ui/icons';
+import Snackbar from '@/app/ui/components/Snackbar/Snackbar';
+import { ArrowLeftIcon } from '@/app/ui/icons/ArrowLeftIcon';
+import { EyeIcon } from '@/app/ui/icons/EyeIcon';
+import { EyeOffIcon } from '@/app/ui/icons/EyeOffIcon';
+import { LockIcon } from '@/app/ui/icons/LockIcon';
+import { UserIcon } from '@/app/ui/icons/UserIcon';
 
 import { mrGomaLogoLight } from '#public/assets/images/Logo';
 

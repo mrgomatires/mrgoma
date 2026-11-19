@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 
 import LocationDetail from '@/app/(shop)/locations/[location]/container/LocationDetail/LocationDetail';
 import { locationsConfig, getLocationBySlug } from '@/app/(shop)/locations/locationsConfig';
-import { JsonLd } from '@/app/ui/components';
+import JsonLd from '@/app/ui/components/JsonLd/JsonLd';
 import { buildBreadcrumbJsonLd, buildLocationsJsonLd, locationMetadata } from '@/app/utils/seo';
 
 export function generateStaticParams() {

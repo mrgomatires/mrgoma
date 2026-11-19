@@ -3,9 +3,10 @@
 import { FC, useContext, useEffect, useState } from 'react';
 
 import { SelectedFiltersContext } from '@/app/context/SelectedFilters';
-import { BrandHeadline } from '@/app/ui/components';
-import { SizeIcon, TextIcon } from '@/app/ui/icons';
-import { SearchSection } from '@/app/ui/sections';
+import BrandHeadline from '@/app/ui/components/BrandHeadline/BrandHeadline';
+import { SizeIcon } from '@/app/ui/icons/SizeIcon';
+import { TextIcon } from '@/app/ui/icons/TextIcon';
+import SearchSection from '@/app/ui/sections/SearchSection/SearchSection';
 
 const SearchContainer: FC = () => {
   const [activeTab, setActiveTab] = useState<'size' | 'text'>('size');

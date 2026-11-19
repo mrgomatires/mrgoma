@@ -6,20 +6,18 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useGenerateFixedPagination } from '@/app/hooks/useGeneratePagination';
 import { TiresData } from '@/app/interfaces/tires';
-import {
-  CollapsibleSearchBar,
-  ErrorDisplay,
-  LoadingScreen,
-  NoResultsFound,
-  ResultsHeader,
-  ResultsSkeleton,
-  TireResults,
-  TireTable,
-} from '@/app/ui/components';
+import CollapsibleSearchBar from '@/app/ui/components/CollapsibleSearchBar/CollapsibleSearchBar';
+import ErrorDisplay from '@/app/ui/components/ErrorDisplay/ErrorDisplay';
+import LoadingScreen from '@/app/ui/components/LoadingScreen/LoadingScreen';
+import NoResultsFound from '@/app/ui/components/NotResultsFound/NoResultsFound';
 import type { LooseningSuggestion } from '@/app/ui/components/NotResultsFound/NoResultsFound';
+import ResultsHeader from '@/app/ui/components/ResultsHeader/ResultsHeader';
 import { useSearchEvent } from '@/app/ui/components/SearchEvent/useSearchEvent';
-import { PromoBanner } from '@/app/ui/sections';
+import ResultsSkeleton from '@/app/ui/components/TireCardSkeleton/TireCardSkeleton';
+import TireResults from '@/app/ui/components/TireResults/TireResults';
+import TireTable from '@/app/ui/components/TireTable/TireTable';
 import { promoBannerConfig } from '@/app/ui/sections/PromoBanner/config/promoBanner';
+import PromoBanner from '@/app/ui/sections/PromoBanner/PromoBanner';
 import { LISTS } from '@/app/utils/ecommerce';
 import type { TireView } from '@/app/utils/filterUtils';
 import {

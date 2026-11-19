@@ -1,0 +1,64 @@
+{
+  "date": "2026-11-19T19:19:13.893Z",
+  "runs": 5,
+  "pages": {
+    "tire": {
+      "mobile": {
+        "path": "/tires/499326-kumho-235-55-18",
+        "lcp": 4038.1630000000005,
+        "tbt": 2,
+        "cls": 0,
+        "fcp": 1202.4449,
+        "ttfb": 5,
+        "score": 87,
+        "jsKB": 229.2,
+        "unusedJsKB": 21.3,
+        "renderBlockingMs": 450,
+        "htmlKB": 31.3,
+        "lcpElement": "<img alt=\"Kumho Crugen HP71 EV SUV TO 235/55/18\" aria-hidden=\"false\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-contai",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [
+          {
+            "url": "/_next/static/chunks/3rw667ah2yx24.js",
+            "ms": 53
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/tires/499326-kumho-235-55-18",
+        "lcp": 1016.4814000000001,
+        "tbt": 0,
+        "cls": 0.041355463017686715,
+        "fcp": 322.4492,
+        "ttfb": 5,
+        "score": 98,
+        "jsKB": 509,
+        "unusedJsKB": 157.7,
+        "renderBlockingMs": 100,
+        "htmlKB": 31.3,
+        "lcpElement": "<img alt=\"Kumho Crugen HP71 EV SUV TO 235/55/18\" aria-hidden=\"false\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-contai",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": [
+          {
+            "node": "<footer class=\"bg-black relative overflow-hidden \">",
+            "score": 0.0327
+          },
+          {
+            "node": "<div aria-label=\"Key specifications\" class=\"mt-4 grid grid-cols-2 sm:grid-cols-5 divide-x divide-y sm:divide-y-0 divid…\"",
+            "score": 0.0086
+          }
+        ]
+      }
+    }
+  }
+}

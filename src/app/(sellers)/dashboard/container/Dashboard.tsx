@@ -7,9 +7,10 @@ import { ShowFilterContext } from '@/app/context/ShowFilterContext';
 import { TireSelector } from '@/app/ui/components/CollapsibleSearchBar/components/TireSelector';
 import { useTireSearch } from '@/app/ui/components/CollapsibleSearchBar/hooks/useTireSearch';
 import { AdjustmentsHorizontalIcon } from '@/app/ui/components/Icons/Icons';
-import { FiltersMobile, TopFilters } from '@/app/ui/sections';
 import DashboardCartModal from '@/app/ui/sections/DashboardCartModal/DashboardCartModal';
 import DashboardTableContainer from '@/app/ui/sections/DashboardTableContainer/DashboardTableContainer';
+import FiltersMobile from '@/app/ui/sections/FiltersMobile/FiltersMobile';
+import TopFilters from '@/app/ui/sections/TopFilters/TopFilters';
 import { CodeFilterInput } from '@/app/ui/sections/TopFilters/TopFilters';
 
 // Lazy-loaded: keeps the AI chat bundle out of the initial dashboard payload.

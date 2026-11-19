@@ -3,7 +3,7 @@ import React, { Suspense } from 'react';
 import type { Metadata, NextPage } from 'next';
 
 import Checkout from '@/app/(shop)/checkout/container/Checkout/Checkout';
-import { LoadingScreen } from '@/app/ui/components';
+import LoadingScreen from '@/app/ui/components/LoadingScreen/LoadingScreen';
 import { checkoutMetadata } from '@/app/utils/seo';
 
 export const metadata: Metadata = checkoutMetadata();

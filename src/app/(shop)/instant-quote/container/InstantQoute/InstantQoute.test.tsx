@@ -7,8 +7,8 @@ import { trackEvent } from '@/app/utils/analytics';
 
 // SearchByText pulls next/navigation's router; stub it via the barrel.
 // `vi.mock` is hoisted, so these apply despite sitting below the imports.
-vi.mock('@/app/ui/components', () => ({
-  SearchByText: () => <div data-testid="search-by-text" />,
+vi.mock('@/app/ui/components/SearchByText/SearchByText', () => ({
+  default: () => <div data-testid="search-by-text" />,
 }));
 
 vi.mock('@/app/utils/analytics', () => ({ trackEvent: vi.fn() }));

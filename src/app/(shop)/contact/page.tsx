@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import Contact from '@/app/(shop)/contact/container/Contact/Contact';
-import { JsonLd } from '@/app/ui/components';
+import JsonLd from '@/app/ui/components/JsonLd/JsonLd';
 import { contactMetadata, buildBreadcrumbJsonLd, buildPageTypeJsonLd } from '@/app/utils/seo';
 
 export const metadata: Metadata = contactMetadata();

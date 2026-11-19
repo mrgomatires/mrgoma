@@ -2,7 +2,7 @@
 
 import { FC, useId } from 'react';
 
-import { CarFront } from '@/app/ui/icons';
+import { CarFront } from '@/app/ui/icons/CarFront';
 import { cleanInput } from '@/app/utils/cleanInput';
 import { formatTireSize } from '@/app/utils/formatTireSize';
 import { handleKeyPress } from '@/app/utils/handleKeyPress';

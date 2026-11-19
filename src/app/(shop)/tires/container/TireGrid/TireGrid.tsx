@@ -3,7 +3,7 @@
 import Link from 'next/link';
 
 import { TransformedTire } from '@/app/interfaces/tires';
-import { TireCard } from '@/app/ui/sections';
+import TireCard from '@/app/ui/sections/TireCard/TireCard';
 import type { GaList } from '@/app/utils/ecommerce';
 
 interface TireGridProps {

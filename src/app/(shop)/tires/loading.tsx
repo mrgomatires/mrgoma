@@ -1,4 +1,4 @@
-import { ResultsSkeleton } from '@/app/ui/components';
+import ResultsSkeleton from '@/app/ui/components/TireCardSkeleton/TireCardSkeleton';
 
 /**
  * What a buyer sees the instant they change page, apply or clear a filter.

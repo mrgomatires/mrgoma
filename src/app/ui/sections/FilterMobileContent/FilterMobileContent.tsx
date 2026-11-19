@@ -8,8 +8,13 @@
 
 import React, { FC, useState } from 'react';
 
-import { Disclosure, DisclosureButton, DisclosureIcon, DisclosurePanel } from '@/app/ui/components';
-import { FilterBody } from '@/app/ui/sections';
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosureIcon,
+  DisclosurePanel,
+} from '@/app/ui/components/Disclosure/Disclosure';
+import FilterBody from '@/app/ui/sections/FilterBody/FilterBody';
 import { filtersItems } from '@/app/ui/sections/FiltersMobile/FiltersItems';
 import { useFilters } from '@/app/ui/sections/FiltersMobile/hooks/useFilters';
 import { StoreLocationFilter } from '@/app/ui/sections/TopFilters/StoreLocationFilter';

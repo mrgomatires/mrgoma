@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import type { Metadata } from 'next';
 
-import { JsonLd } from '@/app/ui/components';
+import JsonLd from '@/app/ui/components/JsonLd/JsonLd';
 import SizeSearch from '@/app/ui/components/SizeSearch/SizeSearch';
 import { SHIPPING, WARRANTY } from '@/app/utils/brandClaims';
 import { buildBreadcrumbJsonLd, buildItemListJsonLd, sizeIndexMetadata } from '@/app/utils/seo';

@@ -5,8 +5,8 @@ import { FC } from 'react';
 import Link from 'next/link';
 
 import { TransformedTire } from '@/app/interfaces/tires';
-import { StockBadge } from '@/app/ui/components';
 import CompareToggle from '@/app/ui/components/CompareToggle/CompareToggle';
+import StockBadge from '@/app/ui/components/StockBadge/StockBadge';
 import type { GaList } from '@/app/utils/ecommerce';
 import { brandName, modelName, parseTireName } from '@/app/utils/tireNaming';
 import { buildTireSlug } from '@/app/utils/tireSlug';

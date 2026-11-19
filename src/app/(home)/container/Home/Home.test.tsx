@@ -14,14 +14,15 @@ vi.mock('react-dom', async importOriginal => ({
   ...(await importOriginal<typeof import('react-dom')>()),
   preload: () => {},
 }));
-vi.mock('@/app/ui/sections', () => ({
-  InfoCardsSection: () => <div data-testid="info-cards" />,
-  PromoBanner: () => null,
-  SearchContainer: () => (
-    // Mirrors the real component: it renders the slogan at h2 now that the
-    // page's h1 lives in the server component above it.
-    <h2>{SLOGAN}</h2>
-  ),
+// One mock per module: the sections barrel is gone (057).
+vi.mock('@/app/ui/sections/InfoCardsSection/InfoCardsSection', () => ({
+  default: () => <div data-testid="info-cards" />,
+}));
+vi.mock('@/app/ui/sections/PromoBanner/PromoBanner', () => ({ default: () => null }));
+vi.mock('@/app/ui/sections/SearchContainer/SearchContainer', () => ({
+  // Mirrors the real component: it renders the slogan at h2 now that the
+  // page's h1 lives in the server component above it.
+  default: () => <h2>{SLOGAN}</h2>,
 }));
 vi.mock('@/app/ui/sections/LocationsSlider/LocationsSlider', () => ({
   LocationsSlider: () => <div data-testid="locations-slider" />,

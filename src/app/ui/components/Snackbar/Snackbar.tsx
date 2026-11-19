@@ -1,4 +1,4 @@
-import { WarningIcon } from '@/app/ui/icons';
+import { WarningIcon } from '@/app/ui/icons/WarningIcon';
 
 type SnackOptions = 'warning' | 'success' | 'info';
 

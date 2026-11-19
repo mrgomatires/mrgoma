@@ -6,9 +6,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { useCart, type CartItem } from '@/app/context/CartContext';
-import { GoogleRating, XMarkIcon } from '@/app/ui/components';
 import CityTag from '@/app/ui/components/CityTag/CityTag';
 import { Dialog, DialogBackdrop, DialogPanel } from '@/app/ui/components/Dialog/Dialog';
+import GoogleRating from '@/app/ui/components/GoogleRating/GoogleRating';
+import { XMarkIcon } from '@/app/ui/components/Icons/Icons';
 import { factsParts } from '@/app/utils/cartFacts';
 import { cartLine } from '@/app/utils/cartLine';
 import { citiesLabel, groupCartLines } from '@/app/utils/cartSets';

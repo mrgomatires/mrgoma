@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 
 import Dashboard from '@/app/(sellers)/dashboard/container/Dashboard';
-import { LoadingScreen } from '@/app/ui/components';
+import LoadingScreen from '@/app/ui/components/LoadingScreen/LoadingScreen';
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },

@@ -5,7 +5,8 @@ import { FC, FormEvent, useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { SelectedFiltersContext } from '@/app/context/SelectedFilters';
-import { ButtonSearch, TireDisplay } from '@/app/ui/components';
+import ButtonSearch from '@/app/ui/components/ButtonSearch/ButtonSearch';
+import TireDisplay from '@/app/ui/components/TireDisplay/TireDisplay';
 import TireSizeTextField, {
   isCompleteTireSize,
 } from '@/app/ui/components/TireSizeTextField/TireSizeTextField';

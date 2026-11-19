@@ -6,7 +6,7 @@ import type { Metadata } from 'next';
 
 import DetailView from '@/app/(shop)/detail/container/DetailView/DetailView';
 import type { SingleTire } from '@/app/interfaces/tires';
-import { JsonLd } from '@/app/ui/components';
+import JsonLd from '@/app/ui/components/JsonLd/JsonLd';
 import {
   buildBreadcrumbJsonLd,
   buildProductJsonLd,

@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 
-import { LocationCard } from '@/app/ui/components';
 import type { LocationData } from '@/app/ui/components/LocationCard/location-card';
+import LocationCard from '@/app/ui/components/LocationCard/LocationCard';
 import { locationsData } from '@/app/ui/sections/LocationsSlider/locationsData';
 
 interface LocationsSliderProps {

@@ -3,7 +3,8 @@
 import Image from 'next/image';
 
 import GoogleRating from '@/app/ui/components/GoogleRating/GoogleRating';
-import { LocationIcon, PhoneIcon } from '@/app/ui/icons';
+import { LocationIcon } from '@/app/ui/icons/LocationIcon';
+import { PhoneIcon } from '@/app/ui/icons/PhoneIcon';
 
 import { LocationCardProps } from './location-card';
 

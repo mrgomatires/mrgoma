@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
@@ -20,11 +20,11 @@ function filesUnder(dir: string): string[] {
   });
 }
 
-describe("the sellers' login form is not in the shared components barrel", () => {
+describe("the sellers' login form is imported by path", () => {
   it('so its zod and react-hook-form do not ride along with every page', () => {
-    // 105 KB gz on every page: the barrel is imported by nearly every client
-    // component, and a client barrel is not tree-shaken.
-    expect(read('src/app/ui/components/index.ts')).not.toMatch(/export[^\n]*LoginForm/);
+    // 056: it sat in the components barrel, which nearly every client
+    // component imported, so every shopper downloaded it. The barrel is gone
+    // since 057 (see the guard below); /login imports the form by its path.
     expect(read('src/app/(sellers)/login/container/Login.tsx')).toContain(
       "from '@/app/ui/components/LoginForm/LoginForm'"
     );
@@ -57,5 +57,29 @@ describe("the tire page's 3D viewer downloads on the way, not at load", () => {
     const src = read('src/app/ui/components/TreadWearExplorer/TreadWearExplorer.tsx');
     expect(src).toContain('useNearViewport');
     expect(src).toMatch(/near && idleReady/);
+  });
+});
+
+/**
+ * 057: the components, icons and sections index files bundled everything they
+ * listed together, so every page downloaded all ~40 icons and nearly every
+ * widget — 70–80 KB gz it never ran. There are no index files in `src/app/ui`:
+ * every import names the file it uses.
+ */
+describe('no barrel files in src/app/ui', () => {
+  const BARRELS = [
+    'src/app/ui/components/index.ts',
+    'src/app/ui/icons/index.tsx',
+    'src/app/ui/sections/index.ts',
+  ];
+
+  it('the index files do not exist', () => {
+    expect(BARRELS.filter(p => existsSync(p))).toEqual([]);
+  });
+
+  it('and nothing imports a ui folder as a whole', () => {
+    const bare = /from '@\/app\/ui\/(components|icons|sections)\/?(index)?'/;
+    const offenders = filesUnder('src').filter(f => bare.test(read(f)));
+    expect(offenders).toEqual([]);
   });
 });
