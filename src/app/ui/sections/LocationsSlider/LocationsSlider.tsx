@@ -182,19 +182,28 @@ export const LocationsSlider = ({
               Slide <span className="font-semibold text-gray-700">{currentSlide + 1}</span> of{' '}
               <span className="font-semibold text-gray-700">{totalSlides}</span>
             </span>
-            <div className="flex justify-center gap-2">
+            {/* Each dot sits in a 24 × 24 px button (WCAG 2.5.8, 055): the dot keeps
+                its 8 px look, the target is what a finger can hit. No gap — the
+                buttons' own width spaces the dots. */}
+            <div className="flex justify-center">
               {Array.from({ length: totalSlides }).map((_, index) => (
                 <button
                   type="button"
                   key={index}
                   onClick={() => goToSlide(index)}
-                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                    index === currentSlide
-                      ? 'bg-[#9dfb40] w-6'
-                      : 'bg-gray-300 hover:bg-gray-400 w-2'
-                  }`}
                   aria-label={`Go to slide ${index + 1}`}
-                />
+                  aria-current={index === currentSlide ? 'true' : undefined}
+                  className="group grid h-6 min-w-6 cursor-pointer place-items-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      index === currentSlide
+                        ? 'bg-[#9dfb40] w-6'
+                        : 'bg-gray-300 group-hover:bg-gray-400 w-2'
+                    }`}
+                  />
+                </button>
               ))}
             </div>
           </div>

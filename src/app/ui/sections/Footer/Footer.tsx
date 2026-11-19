@@ -100,7 +100,7 @@ export const Footer = ({
               <FooterSection key={section.title} section={section} />
             ))}
             <div className="lg:col-span-1">
-              <h3 className="text-white text-lg font-semibold mb-4 flex items-center gap-2">
+              <h2 className="text-white text-lg font-semibold mb-4 flex items-center gap-2">
                 Follow us
                 <svg
                   width="20"
@@ -118,7 +118,7 @@ export const Footer = ({
                     strokeLinejoin="round"
                   />
                 </svg>
-              </h3>
+              </h2>
               <div className="flex gap-4">
                 {socialLinks.map(social => (
                   <a

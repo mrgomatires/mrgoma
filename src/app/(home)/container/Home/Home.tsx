@@ -3,7 +3,6 @@ import React, { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { preload } from 'react-dom';
 
 import { guides } from '@/app/(shop)/guides/guidesConfig';
 import { locationsConfig } from '@/app/(shop)/locations/locationsConfig';
@@ -175,10 +174,7 @@ const SERVICE_ICONS: Record<string, React.ReactNode> = {
 };
 
 const Home: FC = () => {
-  // Prioritize the hero LCP: the <video> poster has no native fetchpriority, so
-  // preload it as a high-priority image so it paints sooner (Baseline 2024).
-  // See spec/features/002-lcp-fetchpriority.
-  preload('/assets/images/banner-hero.webp', { as: 'image', fetchPriority: 'high' });
+  // The hero poster's high-priority preload now lives in `HeroVideo` (055).
 
   return (
     <>

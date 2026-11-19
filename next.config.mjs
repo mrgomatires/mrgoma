@@ -55,7 +55,19 @@ const LEGACY_LOCATION_SLUGS = {
 };
 
 /** @type {import('next').NextConfig} */
+/**
+ * Bots that get blocking metadata (in `<head>`) instead of streamed metadata
+ * (055). Next 16's own list (`html-bots.js`, copied verbatim below — re-check
+ * it when upgrading Next) plus **Googlebot**: Next streams to Googlebot on
+ * the grounds that it runs JavaScript, so the tire page's meta description
+ * reached it after `</head>`. People keep streaming (faster first byte); only
+ * these crawlers wait for the metadata.
+ */
+const HTML_LIMITED_BOTS =
+  /[\w-]+-Google|Google-[\w-]+|Googlebot|Chrome-Lighthouse|Slurp|DuckDuckBot|baiduspider|yandex|sogou|bitlybot|tumblr|vkShare|quora link preview|redditbot|ia_archiver|Bingbot|BingPreview|applebot|facebookexternalhit|facebookcatalog|Twitterbot|LinkedInBot|Slackbot|Discordbot|WhatsApp|SkypeUriPreview|Yeti|googleweblight/i;
+
 const nextConfig = {
+  htmlLimitedBots: HTML_LIMITED_BOTS,
   async redirects() {
     return [
       /**

@@ -4,6 +4,7 @@ import { FC, useState } from 'react';
 
 import Image from 'next/image';
 
+import { brandLogoSrc, hasBrandLogo } from '@/app/utils/brandLogos';
 import { isOptimisableImage } from '@/app/utils/imageHosts';
 
 const GENERIC = '/assets/images/generic-tire-image.webp';
@@ -37,11 +38,13 @@ export const CompareBrand: FC<{ brand: string; brandId?: number; label: string }
   brandId,
   label,
 }) => {
-  const [failed, setFailed] = useState(!brandId);
-  if (failed) return <span className="text-sm font-bold text-gray-900">{label}</span>;
+  // No request for a logo that does not exist (055).
+  const [failed, setFailed] = useState(!hasBrandLogo(brandId));
+  if (failed || !hasBrandLogo(brandId))
+    return <span className="text-sm font-bold text-gray-900">{label}</span>;
   return (
     <Image
-      src={`/assets/images/TireBrand/${brandId}-logo.webp`}
+      src={brandLogoSrc(brandId)}
       alt={label}
       width={120}
       height={24}

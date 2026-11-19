@@ -156,8 +156,14 @@ To be resumed after the two tracks above; no fixed order yet.
     the search on home and `/tires`, on the tire page and cart, and on each
     store page. No review stars in search results (Google's self-serving rule). _Merged (PR #214,
     2026-11-19)._
-  - 🟡 **Set total on listing cards (`054-set-total-on-cards`).** "Set of 4 from $X" where a set
-    can be built.
+  - ✅ **Set total on listing cards (`054-set-total-on-cards`).** "Set of 4 from $X" where a set
+    can be built. _Merged (PR #215, 2026-11-19)._
+
+- 🟡 **Accessibility and performance pass (`055-a11y-performance-pass`).** The
+  052 site review's findings: contrast on dark pages, target sizes,
+  label-in-name, duplicate id, heading order and 24 missing brand logos (WCAG
+  2.1 AA); and, after a baseline (Track 1 P1.0), home TBT, late LCP images,
+  the streamed meta description and the checkout layout shift.
 
 - ⬜ **Tailwind v4 config activation (bug).** `tailwind.config.ts` is ignored by
   Tailwind v4 (no `@config` directive), so its custom tokens are dormant **in

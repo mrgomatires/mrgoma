@@ -192,7 +192,8 @@ describe('TireCard — set offer (054)', () => {
         <TireCard products={[product]} list={{ id: 'catalog', name: 'Catalog' }} />
       </CartProvider>
     );
-    const link = await screen.findByRole('link', {
+    // One per breakpoint (top row on wide cards, own line on phones); CSS shows one.
+    const [link] = await screen.findAllByRole('link', {
       name: /^Set of 4 \$640 total — build this set/,
     });
     expect(link).toHaveAttribute('href', '/tires/42-michelin-225-40-18?set=42,43,44,45');
@@ -208,7 +209,7 @@ describe('TireCard — set offer (054)', () => {
   it('shows a set of 2 when that is what the tire can form', async () => {
     stubOffers({ '42': { size: 2, total: 190, ids: ['42', '43'] } });
     renderCard();
-    expect(await screen.findByRole('link', { name: /^Set of 2 \$190 total/ })).toBeInTheDocument();
+    expect(await screen.findAllByRole('link', { name: /^Set of 2 \$190 total/ })).toHaveLength(2);
   });
 
   it('shows nothing extra without an offer, or when the request fails (AC1, AC7)', async () => {

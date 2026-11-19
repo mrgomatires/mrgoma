@@ -16,7 +16,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "clean": "powershell -Command \"Remove-Item -Recurse -Force node_modules, .next, package-lock.json -ErrorAction SilentlyContinue\"",
-    "reinstall": "npm run clean && npm install"
+    "reinstall": "npm run clean && npm install",
+    "a11y": "node scripts/a11y-check.mjs",
+    "perf:lab": "node scripts/perf-lab.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
@@ -59,6 +61,7 @@
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.5.0",
     "jsdom": "^29.1.1",
+    "lighthouse": "13.6.0",
     "postcss": "^8.5.25",
     "prettier": "3.7.4",
     "tailwindcss": "4.1.17",

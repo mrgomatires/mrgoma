@@ -15,7 +15,9 @@ interface FooterSectionProps {
 export const FooterSection = ({ section }: FooterSectionProps) => {
   return (
     <div>
-      <h3 className="text-white text-lg font-semibold mb-4">{section.title}</h3>
+      {/* <h2>, not <h3>: the footer follows every page's own <h1> and may follow
+          no <h2> at all (checkout), so <h3> skipped a level (055). */}
+      <h2 className="text-white text-lg font-semibold mb-4">{section.title}</h2>
       <ul className="space-y-3">
         {section.links.map(link => (
           <li key={link.href}>

@@ -151,8 +151,11 @@ export default async function BrandCategoryPage({
           <BrowseFilters brands={allBrands} activeBrand={brandName} />
         </Suspense>
 
-        {/* Tire grid */}
-        <section className="py-10">
+        {/* Tire grid — under its own <h2>, so the cards' <h3> do not skip a level (055). */}
+        <section className="py-10" aria-labelledby="brand-tires-heading">
+          <h2 id="brand-tires-heading" className="sr-only">
+            {`${displayBrand(brandName)} tires in stock`}
+          </h2>
           <TireGrid
             tires={tires}
             totalCount={totalCount}

@@ -1,0 +1,213 @@
+{
+  "date": "2026-11-19T15:03:13.947Z",
+  "runs": 5,
+  "pages": {
+    "home": {
+      "mobile": {
+        "path": "/",
+        "lcp": 4508.1613499999985,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 1353.5090499999997,
+        "ttfb": 3,
+        "score": 84,
+        "lcpElement": "<div aria-hidden=\"true\" class=\"absolute inset-0 h-full w-full object-cover\" style=\"background-image: url(&quot;/assets/images/banner-hero.webp&quot;);\">",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [
+          {
+            "url": "/",
+            "ms": 58
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/",
+        "lcp": 918.8425500000001,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 363.1022,
+        "ttfb": 4,
+        "score": 99,
+        "lcpElement": "<video class=\"absolute inset-0 h-full w-full object-cover pointer-events-none transition…\" data-hero-video=\"true\" src=\"/assets/images/banner-hero.mp4\" autoplay=",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    },
+    "tires": {
+      "mobile": {
+        "path": "/tires",
+        "lcp": 3758.3947,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 1353.2325999999998,
+        "ttfb": 5,
+        "score": 89,
+        "lcpElement": "<img alt=\"\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-cover\" style=\"position: absolute; height: 100%; width: 100%; in",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/tires",
+        "lcp": 1362.121000000001,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 362.7972,
+        "ttfb": 4,
+        "score": 96,
+        "lcpElement": "<aside role=\"region\" aria-label=\"Promotion\" class=\"w-full overflow-hidden rounded-lg bg-zinc-900 text-white  relative\" style=\"\">",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": false,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    },
+    "tire": {
+      "mobile": {
+        "path": "/tires/513542-continental-275-35-19",
+        "lcp": 5579.24685,
+        "tbt": 55.500000000000455,
+        "cls": 0,
+        "fcp": 1202.0853,
+        "ttfb": 4,
+        "score": 79,
+        "lcpElement": "<img alt=\"Continental ProContact GX SSR RFT MOE XL 275/35/19\" aria-hidden=\"false\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [
+          {
+            "url": "/_next/static/chunks/3i6peuv68p2y0.js",
+            "ms": 113
+          },
+          {
+            "url": "/_next/static/chunks/3rw667ah2yx24.js",
+            "ms": 99
+          },
+          {
+            "url": "/_next/static/chunks/3i6peuv68p2y0.js",
+            "ms": 62
+          }
+        ],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/tires/513542-continental-275-35-19",
+        "lcp": 1178.1610000000005,
+        "tbt": 0,
+        "cls": 0.043248899806277906,
+        "fcp": 322.456,
+        "ttfb": 5,
+        "score": 97,
+        "lcpElement": "<img alt=\"Continental ProContact GX SSR RFT MOE XL 275/35/19\" aria-hidden=\"false\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": [
+          {
+            "node": "<footer class=\"bg-black relative overflow-hidden \">",
+            "score": 0.0372
+          },
+          {
+            "node": "<section aria-labelledby=\"product-description-title\" class=\"relative\">",
+            "score": 0.006
+          }
+        ]
+      }
+    },
+    "store": {
+      "mobile": {
+        "path": "/locations/cutler-bay",
+        "lcp": 3830.8940749999992,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 1202.4199,
+        "ttfb": 2,
+        "score": 88,
+        "lcpElement": "<img alt=\"\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-cover brightness-[0.25] lg:brightness-[0.35]\" style=\"position: ",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/locations/cutler-bay",
+        "lcp": 765.66,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 322.264,
+        "ttfb": 2,
+        "score": 100,
+        "lcpElement": "<img alt=\"\" fetchpriority=\"high\" loading=\"eager\" decoding=\"async\" data-nimg=\"fill\" class=\"object-cover brightness-[0.25] lg:brightness-[0.35]\" style=\"position: ",
+        "lcpChecks": {
+          "priorityHinted": true,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    },
+    "checkout": {
+      "mobile": {
+        "path": "/checkout",
+        "lcp": 3530.7769999999996,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 1052.3394,
+        "ttfb": 2,
+        "score": 91,
+        "lcpElement": "<div class=\"absolute inset-0\" style=\"\">",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      },
+      "desktop": {
+        "path": "/checkout",
+        "lcp": 684.7697499999999,
+        "tbt": 0,
+        "cls": 0,
+        "fcp": 281.9079,
+        "ttfb": 2,
+        "score": 100,
+        "lcpElement": "<div class=\"absolute inset-0\" style=\"\">",
+        "lcpChecks": {
+          "priorityHinted": false,
+          "requestDiscoverable": true,
+          "eagerlyLoaded": true
+        },
+        "longTasks": [],
+        "shifts": []
+      }
+    }
+  }
+}

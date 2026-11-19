@@ -32,8 +32,11 @@ describe('every photo is mounted, not swapped in', () => {
   it('and the ones behind are fetched rather than deferred', () => {
     // Left to `lazy` they stayed unrequested — measured 1 of 4 loaded — so a
     // click still waited on the network even with them mounted.
-    expect(ZOOM).toContain("loading={isActive ? undefined : 'eager'}");
-    expect(ZOOM).toContain("fetchPriority={isActive ? undefined : 'low'}");
+    // Every photo is eager; the ones behind at `low` priority, and the one on
+    // screen at `high` when it is the page's LCP (055: Next 16's `priority`
+    // only preloads, without the hint).
+    expect(ZOOM).toContain('loading="eager"');
+    expect(ZOOM).toContain("fetchPriority={isActive ? (priority ? 'high' : undefined) : 'low'}");
   });
 });
 

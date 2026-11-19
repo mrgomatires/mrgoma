@@ -156,7 +156,6 @@ const PromoBanner: FC<PromoBannerProps> = ({ content, className = '', storageKey
                 width={80}
                 height={80}
                 className="w-auto object-contain drop-shadow"
-                priority
                 unoptimized
               />
             </div>

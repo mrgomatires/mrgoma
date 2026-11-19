@@ -22,12 +22,6 @@ export const LocationCard = ({
     return `tel:${cleanPhone}`;
   };
 
-  const handleLocationClick = () => {
-    if (link) {
-      window.open(link, '_blank', 'noopener,noreferrer');
-    }
-  };
-
   const handlePhoneClick = () => {
     window.open(getPhoneUrl(), '_blank', 'noopener,noreferrer');
   };
@@ -57,22 +51,26 @@ export const LocationCard = ({
             already opens the store's profile, where the reviews are. */}
         {google && <GoogleRating figures={google} variant="card" className="mb-3 block" />}
         <div className="flex flex-wrap justify-between items-start gap-4">
-          <button
-            type="button"
-            onClick={handleLocationClick}
-            className="flex gap-2 transition-colors cursor-pointer group"
-            aria-label={`Open address link`}
+          {/* Navigation, so a real link (055): its name is what it shows — the
+              address and the area — so a voice user can say it (WCAG 2.5.3), and
+              it gains copy-link and middle-click. Was a button with window.open. */}
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex gap-2 transition-colors cursor-pointer group rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9dfb40]"
           >
             <LocationIcon className="group-hover:scale-110 transition-transform" />
-            <div className="flex flex-col gap-1" aria-label={`Address and Store`} role="group">
-              <span className="text-sm text-left text-white font-medium hover:underline hover:underline-offset-8">
+            <span className="flex flex-col gap-1">
+              <span className="text-sm text-left text-white font-medium group-hover:underline group-hover:underline-offset-8">
                 {address}
-              </span>
-              <span className="text-sm text-left text-white font-medium hover:underline hover:underline-offset-8">
+              </span>{' '}
+              <span className="text-sm text-left text-white font-medium group-hover:underline group-hover:underline-offset-8">
                 {locationStore}
-              </span>
-            </div>
-          </button>
+              </span>{' '}
+              <span className="sr-only">(opens Google Maps in a new tab)</span>
+            </span>
+          </a>
           <button
             type="button"
             onClick={handlePhoneClick}
