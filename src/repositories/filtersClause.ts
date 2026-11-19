@@ -150,11 +150,13 @@ export function buildFiltersClause(filters: TireFilters): { clause: string; para
     params.push({ name: 'maxPrice', type: Int, value: filters.maxPrice });
   }
   if (typeof filters.minTreadDepth === 'number') {
-    clause += ' AND Tread >= @minTreadDepth';
+    // `Tread` is text ('7.6'): compared bare, one malformed value anywhere in the
+    // view would make SQL Server raise a conversion error (052).
+    clause += ' AND TRY_CAST(Tread AS float) >= @minTreadDepth';
     params.push({ name: 'minTreadDepth', type: Float, value: filters.minTreadDepth });
   }
   if (typeof filters.maxTreadDepth === 'number') {
-    clause += ' AND Tread <= @maxTreadDepth';
+    clause += ' AND TRY_CAST(Tread AS float) <= @maxTreadDepth';
     params.push({ name: 'maxTreadDepth', type: Float, value: filters.maxTreadDepth });
   }
   if (typeof filters.minRemainingLife === 'number') {

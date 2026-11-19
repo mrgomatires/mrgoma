@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import SeeAllSizesLink from '@/app/ui/components/SeeAllSizesLink/SeeAllSizesLink';
 import { clearAll } from '@/app/utils/filterHref';
+import { isNewOnly, withUsed } from '@/app/utils/usedFilters';
 import type { TireFacets } from '@/repositories/facetQuery';
 import type { TireFilters } from '@/repositories/filtersClause';
 import type { TireRangeResult } from '@/repositories/tiresRepository';
@@ -36,6 +37,11 @@ export interface FilterRailProps {
    * summary read as one section and its own contents as another.
    */
   bare?: boolean;
+  /**
+   * `/tires/used` (052, D4): the page *is* the condition, so the rail offers no
+   * Condition group and no Condition chip to remove.
+   */
+  hideCondition?: boolean;
 }
 
 /**
@@ -57,9 +63,13 @@ export const RAIL_ORDER = [
   'rim',
   'price',
   'life',
+  'tread',
   'patched',
   'runFlat',
 ] as const;
+
+/** What only used tires have; not offered while browsing new tires (052, D3). */
+const USED_ONLY = new Set<(typeof RAIL_ORDER)[number]>(['life', 'tread', 'patched']);
 
 /**
  * Groups long enough that a flat list is worse than a search box.
@@ -87,6 +97,7 @@ const TITLES: Record<(typeof RAIL_ORDER)[number], string> = {
   brand: 'Brand',
   price: 'Price',
   life: 'Tread life',
+  tread: 'Tread depth',
   patched: 'Patched',
   runFlat: 'Run-flat',
 };
@@ -108,9 +119,11 @@ const FilterRail: FC<FilterRailProps> = ({
   ranges,
   showTitle = true,
   bare = false,
+  hideCondition = false,
 }) => {
   const groups = buildRailGroups(facets, filters, search, basePath);
-  const chips = appliedChips(filters, search, basePath);
+  const chips = appliedChips(filters, search, basePath, { hideCondition });
+  const newOnly = isNewOnly(filters);
 
   return (
     <div className={bare ? '' : 'rounded-xl border border-gray-200 bg-white p-4'}>
@@ -136,6 +149,8 @@ const FilterRail: FC<FilterRailProps> = ({
 
       <div className="flex flex-col gap-4">
         {RAIL_ORDER.map(group => {
+          if (group === 'condition' && hideCondition) return null;
+          if (newOnly && USED_ONLY.has(group)) return null;
           if (group === 'price' || group === 'life') {
             const options = groups[group];
             if (options.length < 2) return null;
@@ -159,7 +174,8 @@ const FilterRail: FC<FilterRailProps> = ({
                 minParam={isPrice ? 'minPrice' : 'minRemainingLife'}
                 maxParam={isPrice ? 'maxPrice' : 'maxRemainingLife'}
                 basePath={basePath}
-                search={search}
+                // A life range is a used filter: the slider narrows to used too (052).
+                search={isPrice ? search : withUsed(search)}
                 unit={isPrice ? 'currency' : 'percent'}
               />
             );

@@ -30,6 +30,7 @@ const empty = (): TireFacets => ({
   sidewall: {},
   price: {},
   life: {},
+  tread: {},
   total: 0,
 });
 

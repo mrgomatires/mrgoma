@@ -64,6 +64,17 @@ describe('buildFacetQuery', () => {
     }
   });
 
+  it('counts tread, life and patched over used tires only (052)', () => {
+    const { query } = buildFacetQuery({});
+    expect(query).toContain(
+      'CASE WHEN ISNULL(ProductTypeId, 0) <> 1 THEN CAST(FLOOR(TRY_CAST(Tread AS float)) AS int) END AS fTread'
+    );
+    expect(query).toMatch(/CASE WHEN ISNULL\(ProductTypeId, 0\) <> 1 THEN CASE WHEN Patched = '0'/);
+    expect(query).toMatch(
+      /CASE WHEN ISNULL\(ProductTypeId, 0\) <> 1 THEN CASE WHEN TRY_CAST\(REPLACE\(RemainingLife/
+    );
+  });
+
   /**
    * `RealSize` is computed in the view and can be malformed. Such a row must
    * still reach the brand and price counts, or the facet totals stop matching
@@ -88,6 +99,7 @@ describe('mapFacetRows', () => {
       'fSidewall',
       'fPrice',
       'fLife',
+      'fTread',
     ];
     const out: Record<string, string | number | null> = { n };
     for (const a of aliases) {
@@ -123,6 +135,7 @@ describe('mapFacetRows', () => {
       'fSidewall',
       'fPrice',
       'fLife',
+      'fTread',
     ]) {
       total[`g${a}`] = 1;
       total[a] = null;

@@ -30,6 +30,7 @@ const COMBINATIONS: [name: string, filters: TireFilters][] = [
   ['a price band', { minPrice: 100, maxPrice: 149 }],
   ['remaining life', { minRemainingLife: 90 }],
   ['patched and run-flat', { patched: ['no'], kindSale: ['yes'] }],
+  ['minimum tread (052)', { condition: ['used'], minTreadDepth: 8 }],
   [
     'everything at once',
     {

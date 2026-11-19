@@ -17,6 +17,7 @@ const FACETS: TireFacets = {
   brand: { PIRELLI: 964, MICHELIN: 303 },
   price: { p1: 417, p2: 1342, p3: 1021 },
   life: { l1: 2045, l2: 1018 },
+  tread: { '6': 1500, '7': 1200, '8': 900, '9': 500, '10': 200 },
   patched: { no: 3000, yes: 1127 },
   runFlat: { yes: 494, no: 3633 },
   total: 4127,
@@ -59,6 +60,7 @@ describe('FilterRail', () => {
       'Rim size',
       'Price',
       'Tread life',
+      'Tread depth',
       'Patched',
       'Run-flat',
     ]);
@@ -314,5 +316,43 @@ describe('the way to every size (050)', () => {
     const price = screen.getByRole('heading', { name: 'Price' });
     expect(rim.compareDocumentPosition(link) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(link.compareDocumentPosition(price) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+});
+
+describe('FilterRail — used filters (052)', () => {
+  const headings = () => screen.getAllByRole('heading', { level: 3 }).map(h => h.textContent);
+
+  it('names each tread step in full and marks the applied one (AC12)', () => {
+    renderRail({ condition: ['used'], minTreadDepth: 8 }, '?condition=used&minTreadDepth=8');
+    const step = screen.getByRole('link', { name: /^8\/32"\+ minimum tread/ });
+    expect(step).toHaveAttribute('aria-current', 'true');
+    expect(screen.getByRole('link', { name: /^9\/32"\+ minimum tread/ })).toHaveAttribute(
+      'href',
+      '/tires?condition=used&minTreadDepth=9'
+    );
+  });
+
+  it('offers no tread, life or patched while browsing new tires; run-flat stays (AC4)', () => {
+    renderRail({ condition: ['new'] }, '?condition=new');
+    expect(headings()).not.toContain('Tread depth');
+    expect(headings()).not.toContain('Tread life');
+    expect(headings()).not.toContain('Patched');
+    expect(headings()).toContain('Run-flat');
+  });
+
+  it('has no Condition group or chip on /tires/used (AC6)', () => {
+    render(
+      <FilterRail
+        facets={FACETS}
+        filters={{ condition: ['used'] }}
+        search=""
+        basePath="/tires/used"
+        ranges={RANGES}
+        hideCondition
+      />
+    );
+    expect(headings()).not.toContain('Condition');
+    expect(screen.queryByRole('link', { name: /Used/ })).toBeNull();
+    expect(headings()).toContain('Tread depth');
   });
 });

@@ -145,9 +145,11 @@ To be resumed after the two tracks above; no fixed order yet.
   - ✅ **Size index page (`050-size-index`).** A `/tires/size` hub: text search, popular
     sizes, sizes grouped by rim, linking to each size page. _Merged (PR #211,
     2026-11-18)._
-  - 🟡 **Compare up to 3 tires (`051-compare-tires`).** From the listing: tread, life,
-    patch, DOT, price side by side.
-  - ⬜ **Used-tire filters (`052`).** Minimum tread or life, no patch, run flat.
+  - ✅ **Compare up to 3 tires (`051-compare-tires`).** From the listing: tread, life,
+    patch, DOT, price side by side. _Merged (PR #212, 2026-11-18)._
+  - 🟡 **Used-tire filters (`052-used-tire-filters`).** Minimum tread in 32nds, no
+    patch, run-flat; used filters on `/tires/used`; out of the way for new tires.
+    Also the dashboard size selects' text `> '70%'` rule.
   - ⬜ **Google ratings (`053`).** Figures copied by hand from the 7 Business
     Profiles with their date (≈4.7 from 5,952 reviews on 2026-11-18): under
     the search on home and `/tires`, on the tire page and cart, and on each

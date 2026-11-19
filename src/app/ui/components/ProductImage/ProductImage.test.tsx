@@ -53,17 +53,17 @@ describe('ProductImage', () => {
         }}
       />
     );
-    expect(screen.getByRole('img')).toHaveAttribute('src', '/images/default-tire.png');
+    expect(screen.getByRole('img')).toHaveAttribute('src', '/assets/images/generic-tire-image.webp');
   });
 
   it('falls back to the default image for the N/A sentinel', () => {
     render(<ProductImage product={{ imageSrc: 'N/A', imageAlt: 'x', brand: 'Toyo' }} />);
-    expect(screen.getByRole('img')).toHaveAttribute('src', '/images/default-tire.png');
+    expect(screen.getByRole('img')).toHaveAttribute('src', '/assets/images/generic-tire-image.webp');
   });
 
   it('falls back to the default image for a malformed URL', () => {
     render(<ProductImage product={{ imageSrc: 'not a url', imageAlt: 'x', brand: 'Toyo' }} />);
-    expect(screen.getByRole('img')).toHaveAttribute('src', '/images/default-tire.png');
+    expect(screen.getByRole('img')).toHaveAttribute('src', '/assets/images/generic-tire-image.webp');
   });
 
   it('falls back to the brand name when alt text is empty', () => {
@@ -76,6 +76,6 @@ describe('ProductImage', () => {
     const img = screen.getByRole('img');
     expect(img).toHaveAttribute('src', '/good.jpg');
     fireEvent.error(img);
-    expect(img).toHaveAttribute('src', '/images/default-tire.png');
+    expect(img).toHaveAttribute('src', '/assets/images/generic-tire-image.webp');
   });
 });

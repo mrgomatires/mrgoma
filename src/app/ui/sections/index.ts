@@ -24,3 +24,4 @@ export { default as PromoBanner } from './PromoBanner/PromoBanner';
 export { default as MobileQuickFilters } from './MobileQuickFilters/MobileQuickFilters';
 export { default as FilterRail } from './FilterRail/FilterRail';
 export { default as FilterRailMobile } from './FilterRail/FilterRailMobile';
+export { default as UsedQuickChips } from './UsedQuickChips/UsedQuickChips';

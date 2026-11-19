@@ -1,6 +1,7 @@
 import { LIFE_BUCKETS, PRICE_BUCKETS, bucketOfRange } from '@/app/utils/facetBuckets';
 import { removeValue, setParam, setRange } from '@/app/utils/filterHref';
 import { brandName } from '@/app/utils/tireNaming';
+import { conditionHref, treadLabel } from '@/app/utils/usedFilters';
 import type { TireFilters } from '@/repositories/filtersClause';
 
 export type AppliedChip = {
@@ -23,16 +24,27 @@ export type AppliedChip = {
 export function appliedChips(
   filters: TireFilters,
   search: string,
-  basePath: string
+  basePath: string,
+  {
+    /** `/tires/used`: the condition is the page itself, not a filter to remove (052). */
+    hideCondition = false,
+  }: { hideCondition?: boolean } = {}
 ): AppliedChip[] {
   const chips: AppliedChip[] = [];
   const at = (href: string) => `${basePath}${href}`;
 
-  for (const value of filters.condition ?? []) {
+  const conditions = hideCondition ? [] : (filters.condition ?? []);
+  for (const value of conditions) {
     chips.push({
       group: 'condition',
       label: value === 'new' ? 'New' : 'Used',
-      href: at(removeValue(search, 'condition', value)),
+      // Leaving "used" also drops the used-only filters (052, D3).
+      href: at(
+        conditionHref(
+          search,
+          conditions.filter(c => c !== value)
+        )
+      ),
     });
   }
 
@@ -75,6 +87,14 @@ export function appliedChips(
       group: 'life',
       label: band ? band.label : lifeSpan(filters.minRemainingLife, filters.maxRemainingLife),
       href: at(setRange(search, 'minRemainingLife', 'maxRemainingLife', undefined, undefined)),
+    });
+  }
+
+  if (filters.minTreadDepth !== undefined) {
+    chips.push({
+      group: 'tread',
+      label: `Tread ${treadLabel(filters.minTreadDepth)}`,
+      href: at(setParam(search, 'minTreadDepth', undefined)),
     });
   }
 

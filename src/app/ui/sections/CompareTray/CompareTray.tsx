@@ -26,6 +26,16 @@ const CompareTray: FC = () => {
   const pathname = usePathname();
   const ref = useRef<HTMLElement>(null);
 
+  // A comparison belongs to the page it was opened on: any navigation — a link
+  // in it, Back, the header — closes it, so the next page is never under it.
+  const lastPath = useRef(pathname);
+  const close = compare?.close;
+  useEffect(() => {
+    if (lastPath.current === pathname) return;
+    lastPath.current = pathname;
+    close?.();
+  }, [pathname, close]);
+
   const items = compare?.items ?? [];
   const hidden = !compare || items.length === 0 || pathname?.startsWith('/checkout');
 
@@ -110,7 +120,10 @@ const CompareTray: FC = () => {
 
           <div className="flex shrink-0 flex-col items-end gap-1 sm:flex-row sm:items-center sm:gap-3">
             <p role="status" className="text-xs text-gray-600">
-              {compare.notice ?? `${items.length} of ${MAX_COMPARE} tires`}
+              {compare.notice ??
+                (items.length >= MAX_COMPARE
+                  ? `${items.length} of ${MAX_COMPARE} tires · remove one to add another`
+                  : `${items.length} of ${MAX_COMPARE} tires`)}
             </p>
             <div className="flex items-center gap-2">
               <button

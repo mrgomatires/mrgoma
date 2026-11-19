@@ -2,8 +2,17 @@ import { Float } from 'mssql';
 
 import { getPool } from '@/connection/db';
 import { logQuery } from '@/connection/queryLogger';
+import { STOREFRONT_SELLABLE_WHERE } from '@/repositories/feedQuery';
 import { logger } from '@/utils/logger';
 
+/**
+ * The seller dashboard's width → profile → rim selects.
+ *
+ * They offer the sizes the storefront sells, by the one sellable rule (052, D6).
+ * They used to carry their own copy, `RemainingLife > '70%'` — a text
+ * comparison (`'100%'` sorts below `'70%'`) with a threshold found nowhere
+ * else — which hid 7 of the 294 sellable sizes on 2026-11-18.
+ */
 export type DimensionOption = {
   id: number;
   name: string | number;
@@ -32,11 +41,7 @@ export async function fetchTireHeights(): Promise<DimensionOption[]> {
           Height IS NOT NULL 
           AND Height != '' 
           AND TRY_CAST(Height AS float) IS NOT NULL
-          AND Local = '0' 
-          AND Trash = 'false' 
-          AND Condition != 'sold' 
-          AND RemainingLife > '70%'
-          AND Price != 0
+          AND ${STOREFRONT_SELLABLE_WHERE}
       ) AS UniqueHeights
       WHERE value IS NOT NULL
       ORDER BY TRY_CAST(value AS float)
@@ -63,11 +68,7 @@ export async function fetchTireWidths(height?: number): Promise<DimensionOption[
       Width IS NOT NULL 
       AND Width != '' 
       AND TRY_CAST(Width AS float) IS NOT NULL
-      AND Local = '0' 
-      AND Trash = 'false' 
-      AND Condition != 'sold' 
-      AND RemainingLife > '70%'
-      AND Price != 0
+      AND ${STOREFRONT_SELLABLE_WHERE}
     `;
 
     if (height !== undefined) {
@@ -120,11 +121,7 @@ export async function fetchTireSizes(height?: number, width?: number): Promise<D
       Size IS NOT NULL 
       AND Size != '' 
       AND TRY_CAST(Size AS float) IS NOT NULL
-      AND Local = '0' 
-      AND Trash = 'false' 
-      AND Condition != 'sold' 
-      AND RemainingLife > '70%'
-      AND Price != 0
+      AND ${STOREFRONT_SELLABLE_WHERE}
     `;
 
     if (height !== undefined) {

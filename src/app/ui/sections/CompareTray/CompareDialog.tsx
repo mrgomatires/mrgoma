@@ -281,7 +281,13 @@ const CompareDialog: FC = () => {
                           {!sold && (
                             <button
                               type="button"
-                              onClick={() => addTireToCart(t)}
+                              onClick={() => {
+                                // The cart opens on add, and nothing can show above a
+                                // modal dialog: close the comparison so the cart is
+                                // seen at once. The picks stay in the tray.
+                                compare.close();
+                                addTireToCart(t);
+                              }}
                               disabled={inCart}
                               className={`min-h-11 grow-[3] basis-28 rounded-full px-3 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 ${
                                 inCart
@@ -294,6 +300,9 @@ const CompareDialog: FC = () => {
                           )}
                           <Link
                             href={`/tires/${buildTireSlug(t.id, t.brand ?? '', t.size ?? '')}`}
+                            // The tire page opens behind a modal otherwise: close the
+                            // comparison as the link is followed (the picks stay in the tray).
+                            onClick={compare.close}
                             data-track="compare_view_tire"
                             data-track-category="compare"
                             data-track-tire-id={t.id}

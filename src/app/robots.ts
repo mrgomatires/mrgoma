@@ -40,6 +40,7 @@ export const FACET_PARAMS = [
   'maxPrice',
   'minRemainingLife',
   'maxRemainingLife',
+  'minTreadDepth', // the tread steps (052)
   'patched',
   'kindSale',
   'view',
@@ -48,7 +49,14 @@ export const FACET_PARAMS = [
   'd',
 ] as const;
 
-const facetRules = FACET_PARAMS.flatMap(param => [`/tires?${param}=`, `/tires?*&${param}=`]);
+/**
+ * `/tires/used` filters in place since 052 with the same rail, so its filtered
+ * views are the same unbounded set of URLs. The plain page stays open.
+ */
+const FILTERED_PATHS = ['/tires', '/tires/used'] as const;
+const facetRules = FILTERED_PATHS.flatMap(path =>
+  FACET_PARAMS.flatMap(param => [`${path}?${param}=`, `${path}?*&${param}=`])
+);
 
 export default function robots(): MetadataRoute.Robots {
   const site = getSiteUrl();

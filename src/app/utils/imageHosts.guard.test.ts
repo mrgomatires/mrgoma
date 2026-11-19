@@ -1,4 +1,5 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
@@ -82,8 +83,13 @@ describe('only one place decides whether an image URL is usable', () => {
     expect(source).not.toMatch(/const is(Valid|Optimisable)\w*\s*=\s*\(/);
   });
 
-  it.each(RENDERERS)('%s falls back to an image we host', file => {
+  it.each(RENDERERS)('%s falls back to an image we host, and it exists', file => {
     const source = readFileSync(file, 'utf8');
-    expect(source).toMatch(/'\/images\/[\w-]+\.(png|svg|webp)'/);
+    const fallback = source.match(/'(\/(?:assets\/)?images\/[\w-]+\.(?:png|svg|webp))'/)?.[1];
+    expect(fallback).toBeDefined();
+    // The path alone is not enough: `/images/default-tire.png` matched it for
+    // months and did not exist, so a tire without a photo showed a broken
+    // image (052 site review).
+    expect(existsSync(join(process.cwd(), 'public', fallback!))).toBe(true);
   });
 });

@@ -15,6 +15,7 @@ const CONTROLS: [file: string, expected: string[]][] = [
   ['src/app/ui/sections/FilterRail/SearchableFacet.tsx', ['filter_apply']],
   ['src/app/ui/sections/FilterRail/RangeFacet.tsx', ['filter_apply']],
   ['src/app/ui/sections/FilterRail/AppliedFilters.tsx', ['filter_remove']],
+  ['src/app/ui/sections/UsedQuickChips/UsedQuickChips.tsx', ['filter_apply']],
   // Clear all lives in the rail's header — it was in both, and the page
   // showed the same control twice.
   ['src/app/ui/sections/FilterRail/FilterRail.tsx', ['filter_clear_all']],

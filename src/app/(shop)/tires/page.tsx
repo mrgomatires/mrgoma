@@ -7,11 +7,12 @@ import TiresHero from '@/app/(shop)/tires/container/TiresHero';
 import { fetchTiresServer } from '@/app/(shop)/tires/utils/fetchTiresServer';
 import { sizePageSlug } from '@/app/(shop)/tires/utils/sizeCatalog';
 import { JsonLd, LoadingScreen, ViewToggle } from '@/app/ui/components';
-import { FilterRail, FilterRailMobile } from '@/app/ui/sections';
+import { FilterRail, FilterRailMobile, UsedQuickChips } from '@/app/ui/sections';
 import { appliedChips, looseningSuggestions } from '@/app/ui/sections/FilterRail/appliedChips';
 import { buildTireFilters, parseTireView } from '@/app/utils/filterUtils';
 import { resultsHeading } from '@/app/utils/resultsHeading';
 import { buildBreadcrumbJsonLd, buildPageTypeJsonLd, tiresMetadata } from '@/app/utils/seo';
+import { normalizeUsedFilters } from '@/app/utils/usedFilters';
 import { getCachedTireRanges } from '@/repositories/cachedCatalog';
 import { fetchFacetsForRequest } from '@/repositories/tireFacets';
 
@@ -39,6 +40,7 @@ const EMPTY_FACETS = {
     sidewall: {},
     price: {},
     life: {},
+    tread: {},
     total: 0,
   },
   withoutGroup: {},
@@ -103,7 +105,8 @@ export default async function TiresPage({
 }) {
   const sp = await searchParams;
   const params = toSearchParams(sp);
-  const filters = buildTireFilters(params);
+  // Tread, life and patched mean used tires (052, D3), whatever the URL says.
+  const filters = normalizeUsedFilters(buildTireFilters(params));
   const search = params.toString() ? `?${params.toString()}` : '';
   const view = parseTireView(params.get('view'));
 
@@ -215,7 +218,13 @@ export default async function TiresPage({
                * the page had never met this.
                */}
               <div className="min-w-0">
-                <div className="mb-4 flex justify-end">
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <UsedQuickChips
+                    filters={filters}
+                    search={search}
+                    basePath="/tires"
+                    className="min-w-0"
+                  />
                   <ViewToggle current={view} search={search} basePath="/tires" />
                 </div>
                 <Suspense fallback={<LoadingScreen message="Loading results ..." />}>
