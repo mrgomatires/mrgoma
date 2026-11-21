@@ -8,9 +8,10 @@ import { usePathname } from 'next/navigation';
 
 import { useCart } from '@/app/context/CartContext';
 import HamburgerMenu from '@/app/ui/components/HamburgerMenu/HamburgerMenu';
+import MenuPrefetchLink from '@/app/ui/components/MenuPrefetchLink/MenuPrefetchLink';
 import { ShoppingCart } from '@/app/ui/icons/ShoppingCart';
 import CartModal from '@/app/ui/sections/CartModal/CartModal';
-import { groupChildren, menuItems } from '@/app/ui/sections/Header/MenuItems';
+import { currentChild, groupChildren, menuItems } from '@/app/ui/sections/Header/MenuItems';
 import MenuMobile from '@/app/ui/sections/MenuMobile/MenuMobile';
 
 import { mrGomaLogoLight } from '#public/assets/images/Logo';
@@ -106,6 +107,8 @@ const Header: FC<{ compact?: boolean }> = ({ compact = false }): ReactNode => {
                 if (item.children?.length) {
                   const groups = groupChildren(item.children);
                   const grouped = groups.some(g => g.label);
+                  // The child for the page we are on (059): highlighted like the parent.
+                  const current = currentChild(pathname, item.children, item.href);
                   return (
                     <div
                       key={item.name}
@@ -160,18 +163,25 @@ const Header: FC<{ compact?: boolean }> = ({ compact = false }): ReactNode => {
                                 </p>
                               )}
                               <ul className="space-y-1.5">
-                                {g.items.map(kid => (
-                                  <li key={kid.href}>
-                                    <Link
-                                      href={kid.href}
-                                      className={`block text-sm text-gray-300 hover:text-[#9dfb40] hover:translate-x-0.5 transition-all duration-150 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${
-                                        grouped ? '' : 'px-3 py-2'
-                                      }`}
-                                    >
-                                      {kid.name}
-                                    </Link>
-                                  </li>
-                                ))}
+                                {g.items.map(kid => {
+                                  const KidLink = kid.prefetchOnIntent ? MenuPrefetchLink : Link;
+                                  const here = current?.href === kid.href;
+                                  return (
+                                    <li key={kid.href}>
+                                      <KidLink
+                                        href={kid.href}
+                                        aria-current={
+                                          here ? (current.exact ? 'page' : 'true') : undefined
+                                        }
+                                        className={`block text-sm hover:text-[#9dfb40] hover:translate-x-0.5 transition-all duration-150 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${
+                                          here ? 'font-semibold text-[#9dfb40]' : 'text-gray-300'
+                                        } ${grouped ? '' : 'px-3 py-2'}`}
+                                      >
+                                        {kid.name}
+                                      </KidLink>
+                                    </li>
+                                  );
+                                })}
                               </ul>
                             </div>
                           ))}

@@ -13,13 +13,28 @@ interface TireGridProps {
   viewAllLabel?: string;
   /** The listing, for GA4 list events (feature 046). */
   list?: GaList;
+  /**
+   * The list sits in a results column beside the filter rail (`/tires/used`):
+   * take the column's whole width, as `/tires` does (`TireResults`). Without
+   * it the list keeps its 768 px cap, centred — right for the pages with no
+   * rail, but on `/tires/used` it made the cards 720 px against 944 px on
+   * `/tires` (059).
+   */
+  besideRail?: boolean;
 }
 
-export function TireGrid({ tires, totalCount, viewAllHref, viewAllLabel, list }: TireGridProps) {
+export function TireGrid({
+  tires,
+  totalCount,
+  viewAllHref,
+  viewAllLabel,
+  list,
+  besideRail = false,
+}: TireGridProps) {
   return (
     <div>
       {tires.length > 0 ? (
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+        <div className={besideRail ? 'px-3 sm:px-0' : 'max-w-3xl mx-auto px-4 sm:px-6'}>
           <TireCard products={tires} list={list} />
         </div>
       ) : (

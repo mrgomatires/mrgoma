@@ -234,6 +234,7 @@ export default async function UsedTiresPage({
                   viewAllHref={usedCatalogHref(search)}
                   list={LISTS.usedTires}
                   viewAllLabel={`View all ${totalCount} used tires`}
+                  besideRail
                 />
               </div>
             </div>
