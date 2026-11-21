@@ -6,6 +6,9 @@ import Dashboard from '@/app/(sellers)/dashboard/container/Dashboard';
 import LoadingScreen from '@/app/ui/components/LoadingScreen/LoadingScreen';
 
 export const metadata: Metadata = {
+  // "Dashboard | MrGoma Tires" through the root template — it used to show the
+  // storefront's default title, the same as any shop tab (059).
+  title: 'Dashboard',
   robots: { index: false, follow: false },
 };
 

@@ -5,7 +5,8 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { groupChildren, type MenuChild } from '@/app/ui/sections/Header/MenuItems';
+import MenuPrefetchLink from '@/app/ui/components/MenuPrefetchLink/MenuPrefetchLink';
+import { currentChild, groupChildren, type MenuChild } from '@/app/ui/sections/Header/MenuItems';
 
 interface MenuItemProps {
   name: string;
@@ -49,6 +50,8 @@ export const MenuItem: React.FC<MenuItemProps> = ({
 
   if (submenu?.length) {
     const groups = groupChildren(submenu);
+    // The child for the page we are on (059): highlighted like the parent.
+    const current = currentChild(pathname, submenu, href);
     return (
       <div className={`transition-all duration-300 ${animClass}`}>
         <div
@@ -103,17 +106,25 @@ export const MenuItem: React.FC<MenuItemProps> = ({
                     </p>
                   )}
                   <ul className="space-y-0.5">
-                    {g.items.map(kid => (
-                      <li key={kid.href}>
-                        <Link
-                          href={kid.href}
-                          onClick={onClick}
-                          className="block px-2 py-3 text-sm text-gray-300 hover:text-[#9dfb40] hover:bg-white/5 rounded transition-colors"
-                        >
-                          {kid.name}
-                        </Link>
-                      </li>
-                    ))}
+                    {g.items.map(kid => {
+                      // 059: see MenuChild.prefetchOnIntent.
+                      const KidLink = kid.prefetchOnIntent ? MenuPrefetchLink : Link;
+                      const here = current?.href === kid.href;
+                      return (
+                        <li key={kid.href}>
+                          <KidLink
+                            href={kid.href}
+                            onClick={onClick}
+                            aria-current={here ? (current.exact ? 'page' : 'true') : undefined}
+                            className={`block px-2 py-3 text-sm hover:text-[#9dfb40] hover:bg-white/5 rounded transition-colors ${
+                              here ? 'bg-white/5 font-semibold text-[#9dfb40]' : 'text-gray-300'
+                            }`}
+                          >
+                            {kid.name}
+                          </KidLink>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               ))}

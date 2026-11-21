@@ -133,3 +133,14 @@ describe('the shared filter machinery is left alone', () => {
     }
   });
 });
+
+describe('a list beside the rail takes the column (059)', () => {
+  /**
+   * `/tires/used` gained the filter rail in 052 but kept `TireGrid`'s centred
+   * 768 px list, so its cards were 720 px wide against 944 px on `/tires`.
+   */
+  it('/tires/used passes besideRail to its TireGrid', () => {
+    const USED = readFileSync('src/app/(shop)/tires/used/page.tsx', 'utf8');
+    expect(USED).toMatch(/<TireGrid[^>]*\bbesideRail\b/);
+  });
+});

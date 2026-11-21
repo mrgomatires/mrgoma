@@ -9,6 +9,7 @@ import { TransformedTire } from '@/app/interfaces/tires';
 import BrandImage from '@/app/ui/components/BrandImage/BrandImage';
 import CompareToggle from '@/app/ui/components/CompareToggle/CompareToggle';
 import FreeShippingBadge from '@/app/ui/components/FreeShippingBadge/FreeShippingBadge';
+import IntentPrefetchLink from '@/app/ui/components/IntentPrefetchLink/IntentPrefetchLink';
 import ProductImage from '@/app/ui/components/ProductImage/ProductImage';
 import StockBadge from '@/app/ui/components/StockBadge/StockBadge';
 import { useViewItemList } from '@/app/ui/components/ViewItemList/useViewItemList';
@@ -106,7 +107,7 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
         // "Set of 4 · $640 total", to the tire page with the builder open on
         // exactly that set (054). Rendered in one place per breakpoint.
         const setLink = setOffer ? (
-          <Link
+          <IntentPrefetchLink
             href={setHref(String(product.id), product.brand || '', tireSize, setOffer.ids)}
             data-track="set_offer_select"
             data-track-category="sets"
@@ -123,7 +124,7 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
             </span>{' '}
             <span className="sr-only">— build this set</span>
             <span aria-hidden="true">→</span>
-          </Link>
+          </IntentPrefetchLink>
         ) : null;
 
         const slug = product.id
@@ -200,19 +201,23 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
                   </div>
                 </div>
 
-                {/* Condition + size + stock — all screen sizes */}
+                {/* Condition + size + stock — all screen sizes. The card's secondary
+                    links (these two, the brand logo, the set offer) pre-load only
+                    on hover / touch (059): on sight, every card fetched them and
+                    filters fetched them again. The detail links keep Next's
+                    default, so the card's main tap stays as fast as before. */}
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <Link
+                    <IntentPrefetchLink
                       href={isNew ? '/tires/new' : '/tires/used'}
                       onClick={e => e.stopPropagation()}
                       className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-wide ${condBadgeClass}`}
                     >
                       {condLabel}
-                    </Link>
+                    </IntentPrefetchLink>
                     {tireSize && sizeSlug && (
                       // A 24 px tall target around the 20 px pill (WCAG 2.5.8, 055).
-                      <Link
+                      <IntentPrefetchLink
                         href={`/tires/size/${sizeSlug}`}
                         onClick={e => e.stopPropagation()}
                         className="group/size inline-flex min-h-6 items-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
@@ -220,7 +225,7 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-[#0a0a0a] text-[#9dfb40] text-xs font-black tracking-wider group-hover/size:bg-[#9dfb40] group-hover/size:text-[#0a0a0a] transition-colors duration-150">
                           {tireSize}
                         </span>
-                      </Link>
+                      </IntentPrefetchLink>
                     )}
                   </div>
                   <div className="flex items-center gap-1">
@@ -256,13 +261,13 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
                   </span>
                   <FreeShippingBadge />
                   {product.brandId && brandSlug && (
-                    <Link
+                    <IntentPrefetchLink
                       href={`/tires/brands/${brandSlug}`}
                       onClick={e => e.stopPropagation()}
                       className="flex h-8 overflow-hidden items-center opacity-70 ml-1 hover:opacity-100 transition-opacity"
                     >
                       <BrandImage product={{ brand: product.brand, brandId: product.brandId }} />
-                    </Link>
+                    </IntentPrefetchLink>
                   )}
                 </div>
 
