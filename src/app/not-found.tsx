@@ -2,14 +2,17 @@ import Link from 'next/link';
 
 import { ArrowsToRight } from '@/app/ui/icons/ArrowsToRight';
 import Footer from '@/app/ui/sections/Footer/Footer';
-import Header from '@/app/ui/sections/Header/Header';
-import TopHeader from '@/app/ui/sections/TopHeader/TopHeader';
+import StickyHeader from '@/app/ui/sections/StickyHeader/StickyHeader';
 
 export default function NotFound() {
   return (
     <>
-      <TopHeader />
-      <Header />
+      {/* The site's standard header, as every layout renders it (060). This page
+          used to import `Header` directly: a second entry into the header, and
+          Turbopack then shipped the header in two chunks to every page as soon
+          as the header shared a component with the pages. One entry only —
+          `perf-budget.mjs` fails if the header ships twice. */}
+      <StickyHeader />
 
       <main className="bg-white flex flex-col items-center justify-center min-h-[70vh] px-4 py-20 overflow-hidden relative">
         {/* Background "404" watermark */}

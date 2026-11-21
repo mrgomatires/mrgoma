@@ -339,9 +339,25 @@ pinned by `Dashboard.requests.test.tsx`.
   `009-perf-budget`.) Next 16/Turbopack doesn't emit per-route First-Load JS, so
   the shared floor + total are the reliable proxy. Bump the limits deliberately in
   a PR when a real increase is justified. Since 056 it also budgets
-  **`shopperPageJs` ≤ 320 KB** — every chunk the prerendered `/about-us` and
-  `/contact` HTML links, root layout included — and **fails if zod,
-  react-hook-form or next-auth's client appear in any of them**.
+  **`shopperPageJs` ≤ 225 KB** (lowered from 240 in 060; today ~215) — every
+  chunk the prerendered `/about-us` and `/contact` HTML links, root layout
+  included — and **fails if zod, react-hook-form or next-auth's client appear
+  in any of them**. Since 060 it also fails if the **header or the cart panel
+  ships in more than one chunk** of those pages (or in none: a stale marker),
+  via `LAYOUT_MARKERS` in `scripts/perf-budget.mjs`.
+- **The header has one entry: `StickyHeader` (060).** Layouts and the root 404
+  render `StickyHeader`; nothing else imports `Header` directly
+  (`notFound.guard.test.ts`). In 059 the root 404's direct `Header` was a
+  second entry, and Turbopack shipped the header twice to every page (+12 KB
+  gzip) once it shared a component with the pages.
+- **Links people rarely follow pre-load on intent (059–060).** Use
+  `IntentPrefetchLink` (`ui/components/IntentPrefetchLink`), not `next/link`,
+  for: links to a tire's page (each pre-load of one is a database read — the
+  page is dynamic), every menu link but the logo, the footer, and secondary
+  card links. Keep plain `Link` for links people usually do follow: the logo,
+  the home page's main buttons, "View all…", pagination, the cart's
+  "Checkout", the filter rail. `src/app/ui/intentPrefetch.guard.test.ts`
+  lists the surfaces and the destinations allowed to stay plain.
 - **No barrel files in `src/app/ui` — import by path (057).** There is no
   `index.ts` in `components/`, `icons/` or `sections/`: write
   `import TireCard from '@/app/ui/sections/TireCard/TireCard'`, never

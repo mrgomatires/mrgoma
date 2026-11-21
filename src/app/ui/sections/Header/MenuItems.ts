@@ -6,13 +6,6 @@ export interface MenuChild {
   city?: 'Miami' | 'Orlando';
   /** A heading the child is listed under ("Miami, FL"); none = one plain list. */
   group?: string;
-  /**
-   * Pre-load the page only on hover / touch, not when the link is laid out
-   * (059). The desktop dropdown renders its children invisibly, so Next
-   * prefetched them on every page, and after every filter on `/tires` it
-   * downloaded "New tires" and "Shop by size" again in full.
-   */
-  prefetchOnIntent?: true;
 }
 
 export interface MenuItem {
@@ -70,9 +63,9 @@ export const menuItems: MenuItem[] = [
     // The size index (050) and the condition pages, which had few links in.
     children: [
       { name: 'All tires', href: '/tires' },
-      { name: 'Used tires', href: '/tires/used', prefetchOnIntent: true },
-      { name: 'New tires', href: '/tires/new', prefetchOnIntent: true },
-      { name: 'Shop by size', href: '/tires/size', prefetchOnIntent: true },
+      { name: 'Used tires', href: '/tires/used' },
+      { name: 'New tires', href: '/tires/new' },
+      { name: 'Shop by size', href: '/tires/size' },
     ],
   },
   { name: 'Services', href: '/services' },

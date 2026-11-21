@@ -7,6 +7,7 @@ import { describe, expect, it } from 'vitest';
 import {
   chunksOf,
   evaluateBudget,
+  findDuplicatedLayout,
   findForbidden,
   measureShopperPages,
 } from '../scripts/perf-budget.mjs';
@@ -100,5 +101,54 @@ describe('seller-only code stays out of shopper pages', () => {
   it('fails rather than measuring nothing when a page is not prerendered', () => {
     const dir = fixture({}, {});
     expect(() => measureShopperPages(dir, ['about-us'])).toThrow(/missing/);
+  });
+});
+
+describe('layout components ship once (060)', () => {
+  const markers = [{ name: 'site header', marker: 'data-nav-menu' }];
+
+  it('is quiet when the header is in exactly one chunk', () => {
+    const chunks = [
+      { chunk: 'a.js', source: 'x data-nav-menu y' },
+      { chunk: 'b.js', source: 'react' },
+    ];
+    expect(findDuplicatedLayout(chunks, markers)).toEqual([]);
+  });
+
+  it('reports the header shipped twice (the 059 regression)', () => {
+    const chunks = [
+      { chunk: 'a.js', source: 'data-nav-menu' },
+      { chunk: 'b.js', source: 'data-nav-menu' },
+    ];
+    expect(findDuplicatedLayout(chunks, markers)).toEqual([
+      { name: 'site header', marker: 'data-nav-menu', chunks: ['a.js', 'b.js'] },
+    ]);
+  });
+
+  it('reports a marker found nowhere, so a rename cannot silence the check', () => {
+    expect(findDuplicatedLayout([{ chunk: 'a.js', source: 'react' }], markers)).toEqual([
+      { name: 'site header', marker: 'data-nav-menu', chunks: [] },
+    ]);
+  });
+
+  it('runs on every shopper page', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'perf-budget-'));
+    mkdirSync(join(dir, 'static', 'chunks'), { recursive: true });
+    mkdirSync(join(dir, 'server', 'app'), { recursive: true });
+    writeFileSync(join(dir, 'static', 'chunks', 'h1.js'), 'data-nav-menu cart-modal-title');
+    writeFileSync(join(dir, 'static', 'chunks', 'h2.js'), 'data-nav-menu');
+    writeFileSync(
+      join(dir, 'server', 'app', 'about-us.html'),
+      '<script src="/_next/static/chunks/h1.js"></script><script src="/_next/static/chunks/h2.js"></script>'
+    );
+    const { layout } = measureShopperPages(dir, ['about-us']);
+    expect(layout).toEqual([
+      {
+        page: 'about-us',
+        name: 'site header',
+        marker: 'data-nav-menu',
+        chunks: ['static/chunks/h1.js', 'static/chunks/h2.js'],
+      },
+    ]);
   });
 });

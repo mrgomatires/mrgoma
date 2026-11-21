@@ -10,6 +10,7 @@ import CityTag from '@/app/ui/components/CityTag/CityTag';
 import { Dialog, DialogBackdrop, DialogPanel } from '@/app/ui/components/Dialog/Dialog';
 import GoogleRating from '@/app/ui/components/GoogleRating/GoogleRating';
 import { XMarkIcon } from '@/app/ui/components/Icons/Icons';
+import IntentPrefetchLink from '@/app/ui/components/IntentPrefetchLink/IntentPrefetchLink';
 import { factsParts } from '@/app/utils/cartFacts';
 import { cartLine } from '@/app/utils/cartLine';
 import { citiesLabel, groupCartLines } from '@/app/utils/cartSets';
@@ -49,7 +50,7 @@ const CartLine: FC<{
       {...interest}
     >
       {/* Product Image — a second, mouse-only way into the tire's page */}
-      <Link
+      <IntentPrefetchLink
         href={tireDetailHref(item)}
         onClick={onOpen}
         tabIndex={-1}
@@ -63,18 +64,18 @@ const CartLine: FC<{
           height={56}
           className="w-full h-full object-center object-cover"
         />
-      </Link>
+      </IntentPrefetchLink>
 
       <div className="min-w-0 flex-1">
         <div className="flex justify-between gap-3 font-medium text-gray-900">
           <h3 className="min-w-0">
-            <Link
+            <IntentPrefetchLink
               href={tireDetailHref(item)}
               onClick={onOpen}
               className="underline-offset-2 hover:text-green-700 hover:underline rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
             >
               {line.title}
-            </Link>
+            </IntentPrefetchLink>
           </h3>
           <p className="shrink-0">${item.price.toFixed(2)}</p>
         </div>

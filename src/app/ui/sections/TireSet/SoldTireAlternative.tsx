@@ -1,6 +1,5 @@
-import Link from 'next/link';
-
 import type { SingleTire } from '@/app/interfaces/tires';
+import IntentPrefetchLink from '@/app/ui/components/IntentPrefetchLink/IntentPrefetchLink';
 import { anchorFromTire, closestMatch, type SetUnit } from '@/app/utils/tireSets';
 import { buildTireSlug } from '@/app/utils/tireSlug';
 import {
@@ -45,14 +44,14 @@ export default async function SoldTireAlternative({ tire }: { tire: SingleTire }
   return (
     <p className="mt-3 text-sm text-gray-800">
       {'This tire is sold. '}
-      <Link
+      <IntentPrefetchLink
         href={href}
         data-track="sold_tire_alternative_open"
         data-track-category="detail"
         className="font-semibold text-green-700 underline underline-offset-2 hover:text-green-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 rounded-sm"
       >
         {`We have ${count} like it in stock →`}
-      </Link>
+      </IntentPrefetchLink>
     </p>
   );
 }
