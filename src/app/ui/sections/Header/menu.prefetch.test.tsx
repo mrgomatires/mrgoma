@@ -4,11 +4,10 @@ import { describe, expect, it, vi } from 'vitest';
 import { CartProvider } from '@/app/context/CartContext';
 
 /**
- * 059: the header's "Used tires", "New tires" and "Shop by size" pre-load only
- * on hover / touch. The desktop dropdown lays its children out invisibly, so
- * Next prefetched them on every page — and after every filter on `/tires` it
- * downloaded `/tires/new` and `/tires/size` again in full. Other menu links
- * keep Next's default.
+ * 060: every menu link but the logo pre-loads only on hover / touch — the
+ * visible items, the dropdowns (the desktop dropdowns are laid out invisibly,
+ * so Next pre-loaded all of them on every page) and the phone submenus. In 059
+ * only "Used tires", "New tires" and "Shop by size" did.
  */
 
 vi.mock('next/link', () => ({
@@ -37,32 +36,32 @@ const { menuItems } = await import('./MenuItems');
 const { default: Header } = await import('./Header');
 const { MenuItem } = await import('@/app/ui/sections/MenuMobile/components/MenuItem');
 
-const shop = menuItems.find(i => i.name === 'Shop Tires')!;
-const INTENT = ['/tires/used', '/tires/new', '/tires/size'];
+const links = (root: ParentNode) =>
+  [...root.querySelectorAll('a[href^="/"]')].map(a => ({
+    href: a.getAttribute('href')!,
+    prefetch: a.getAttribute('data-prefetch'),
+  }));
 
-const prefetchOf = (root: ParentNode, href: string) =>
-  [...root.querySelectorAll(`a[href="${href}"]`)].map(a => a.getAttribute('data-prefetch'));
+const MENU_HREFS = menuItems.flatMap(i => [i.href, ...(i.children ?? []).map(c => c.href)]);
 
-describe('header links that pre-load on intent (059)', () => {
-  it('are exactly Used, New and Shop by size', () => {
-    expect(shop.children!.filter(c => c.prefetchOnIntent).map(c => c.href)).toEqual(INTENT);
-    const others = menuItems.flatMap(i => i.children ?? []).filter(c => !INTENT.includes(c.href));
-    expect(others.every(c => !c.prefetchOnIntent)).toBe(true);
-  });
-
-  it('desktop dropdown: those three wait for intent, the rest keep the default', () => {
+describe('menu links pre-load on intent (060)', () => {
+  it('desktop: every menu link waits for intent; only the logo keeps the default', () => {
     const { container } = render(
       <CartProvider>
         <Header />
       </CartProvider>
     );
-    for (const href of INTENT) {
-      expect(prefetchOf(container, href), href).toContain('false');
-    }
-    expect(prefetchOf(container, '/locations/hialeah')).not.toContain('false');
+    const all = links(container);
+    const logo = all.filter(l => l.href === '/');
+    expect(logo).toEqual([{ href: '/', prefetch: 'undefined' }]);
+    const menu = all.filter(l => l.href !== '/');
+    // Every item and child of the menu is there (plus "View all locations").
+    expect(new Set(menu.map(l => l.href))).toEqual(new Set(MENU_HREFS));
+    for (const l of menu) expect(l, l.href).toMatchObject({ prefetch: 'false' });
   });
 
-  it('phone submenu: the same three wait for intent', () => {
+  it('phone: an item with a submenu, and its children, wait for intent', () => {
+    const shop = menuItems.find(i => i.children?.length)!;
     const { container } = render(
       <MenuItem
         name={shop.name}
@@ -73,8 +72,22 @@ describe('header links that pre-load on intent (059)', () => {
         submenu={shop.children}
       />
     );
-    for (const href of INTENT) expect(prefetchOf(container, href), href).toEqual(['false']);
-    // "All tires" (the parent's own page) keeps the default.
-    expect(prefetchOf(container, '/tires')).not.toContain('false');
+    const all = links(container);
+    expect(all.length).toBe(1 + shop.children!.length);
+    for (const l of all) expect(l, l.href).toMatchObject({ prefetch: 'false' });
+  });
+
+  it('phone: a plain item waits for intent', () => {
+    const plain = menuItems.find(i => !i.children?.length)!;
+    const { container } = render(
+      <MenuItem
+        name={plain.name}
+        href={plain.href}
+        index={0}
+        animationStage={9}
+        onClick={() => {}}
+      />
+    );
+    expect(links(container)).toEqual([{ href: plain.href, prefetch: 'false' }]);
   });
 });

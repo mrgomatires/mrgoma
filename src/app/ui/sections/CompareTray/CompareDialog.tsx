@@ -2,11 +2,10 @@
 
 import { FC, useEffect, useId, useMemo, useRef, useState } from 'react';
 
-import Link from 'next/link';
-
 import { useCart } from '@/app/context/CartContext';
 import { useCompare } from '@/app/context/CompareContext';
 import { useAddTireToCart } from '@/app/hooks/useAddTireToCart';
+import IntentPrefetchLink from '@/app/ui/components/IntentPrefetchLink/IntentPrefetchLink';
 import { compareRows, MISSING, sameSize } from '@/app/utils/compare';
 import { brandName, modelName } from '@/app/utils/tireNaming';
 import { buildTireSlug } from '@/app/utils/tireSlug';
@@ -298,7 +297,7 @@ const CompareDialog: FC = () => {
                               {inCart ? '✓ In cart' : 'Add to cart'}
                             </button>
                           )}
-                          <Link
+                          <IntentPrefetchLink
                             href={`/tires/${buildTireSlug(t.id, t.brand ?? '', t.size ?? '')}`}
                             // The tire page opens behind a modal otherwise: close the
                             // comparison as the link is followed (the picks stay in the tray).
@@ -309,7 +308,7 @@ const CompareDialog: FC = () => {
                             className={`inline-flex min-h-11 grow items-center justify-center rounded-full border border-green-700 px-4 text-sm font-semibold text-green-700 hover:bg-green-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600`}
                           >
                             View tire
-                          </Link>
+                          </IntentPrefetchLink>
                         </div>
                       </div>
 

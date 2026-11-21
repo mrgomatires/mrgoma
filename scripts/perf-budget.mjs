@@ -72,6 +72,35 @@ export const FORBIDDEN = [
   { name: 'next-auth client', marker: '__NEXTAUTH' },
 ];
 
+/**
+ * Layout components every shopper page ships exactly once (060). Each marker is
+ * a string only that component contains and that survives minification.
+ *
+ * In 059 the header shipped in **two** chunks on every page (+12 KB gzip) —
+ * Turbopack emitted one copy per entry into it (the layouts' `StickyHeader`
+ * and the root 404's direct `Header`) once the header shared a component with
+ * the pages. The budget let it through (227 of 240 KB). A marker found in two
+ * chunks means a component shipped twice; found in none, the marker went stale
+ * and the check would pass silently — both fail.
+ */
+export const LAYOUT_MARKERS = [
+  { name: 'site header', marker: 'data-nav-menu' },
+  { name: 'cart panel', marker: 'cart-modal-title' },
+];
+
+/**
+ * Layout components a page ships twice or not at all, from its chunks'
+ * sources ({ chunk, source }[]). Pure.
+ */
+export function findDuplicatedLayout(chunks, markers = LAYOUT_MARKERS) {
+  const problems = [];
+  for (const { name, marker } of markers) {
+    const found = chunks.filter(c => c.source.includes(marker)).map(c => c.chunk);
+    if (found.length !== 1) problems.push({ name, marker, chunks: found });
+  }
+  return problems;
+}
+
 /** The `/_next/static/chunks/*.js` files a page's HTML links. Pure. */
 export function chunksOf(html) {
   return [...new Set(html.match(/\/_next\/static\/chunks\/[\w.-]+\.js/g) ?? [])].map(u =>
@@ -92,6 +121,7 @@ export function findForbidden(source) {
 export function measureShopperPages(nextDir = '.next', pages = SHOPPER_PAGES) {
   let shopperPageJs = 0;
   const leaks = [];
+  const layout = [];
   for (const page of pages) {
     const htmlPath = join(nextDir, 'server', 'app', `${page}.html`);
     let html;
@@ -103,16 +133,20 @@ export function measureShopperPages(nextDir = '.next', pages = SHOPPER_PAGES) {
     const chunks = chunksOf(html);
     if (chunks.length === 0) throw new Error(`${htmlPath} links no JS chunks.`);
     let bytes = 0;
+    const sources = [];
     for (const chunk of chunks) {
       const file = join(nextDir, chunk);
       bytes += gzipBytes(file);
-      for (const name of findForbidden(readFileSync(file, 'utf8'))) {
+      const source = readFileSync(file, 'utf8');
+      sources.push({ chunk, source });
+      for (const name of findForbidden(source)) {
         leaks.push({ page, chunk, name });
       }
     }
+    for (const problem of findDuplicatedLayout(sources)) layout.push({ page, ...problem });
     shopperPageJs = Math.max(shopperPageJs, bytes);
   }
-  return { shopperPageJs, leaks };
+  return { shopperPageJs, leaks, layout };
 }
 
 /**
@@ -132,7 +166,7 @@ export function evaluateBudget(measured, budget) {
 
 function main() {
   const budget = JSON.parse(readFileSync('perf-budget.json', 'utf8'));
-  const { shopperPageJs, leaks } = measureShopperPages();
+  const { shopperPageJs, leaks, layout } = measureShopperPages();
   const measured = { ...measure(), shopperPageJs };
   const { results, pass } = evaluateBudget(measured, budget);
 
@@ -149,7 +183,19 @@ function main() {
     console.error('Keep it out of the components barrel and the root layout (see tech-stack.md).');
   }
 
-  if (!pass || leaks.length > 0) {
+  if (layout.length > 0) {
+    console.error('\n✗ A layout component is not shipped exactly once:');
+    for (const l of layout) {
+      console.error(
+        l.chunks.length === 0
+          ? `  ${l.name}: marker "${l.marker}" in no chunk of /${l.page} — update LAYOUT_MARKERS`
+          : `  ${l.name} in ${l.chunks.length} chunks of /${l.page}: ${l.chunks.join(', ')}`
+      );
+    }
+    console.error('Render the header through StickyHeader only (see tech-stack.md, 060).');
+  }
+
+  if (!pass || leaks.length > 0 || layout.length > 0) {
     console.error(
       '\n✗ Performance budget exceeded. Trim JS or bump perf-budget.json deliberately.'
     );

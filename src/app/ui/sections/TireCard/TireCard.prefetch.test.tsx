@@ -5,11 +5,13 @@ import { CartProvider } from '@/app/context/CartContext';
 import type { TransformedTire } from '@/app/interfaces/tires';
 
 /**
- * 059: a card's secondary links (condition badge, size pill, brand logo, set
- * offer) pre-load only on hover / touch; the detail links (photo, title) keep
- * Next's default. On sight, every card used to fetch its size and brand
- * pages, and each filter change fetched them again. If someone swaps one back
- * to a plain `Link`, its `prefetch` stops being `false` and this fails.
+ * Every link on a card pre-loads only on hover / touch. The secondary ones
+ * (condition badge, size pill, brand logo, set offer) since 059: on sight,
+ * every card fetched its size and brand pages, and each filter change fetched
+ * them again. The detail links (photo, title) since 060: each pre-load of a
+ * tire page was a database read — ~20 per scroll of /tires — and brought only
+ * the page's loading screen. If someone swaps one back to a plain `Link`, its
+ * `prefetch` stops being `false` and this fails.
  */
 
 vi.mock('next/link', () => ({
@@ -62,7 +64,7 @@ function links() {
   }));
 }
 
-describe('TireCard pre-loads (059)', () => {
+describe('TireCard pre-loads (059, 060)', () => {
   it('secondary links wait for intent', () => {
     const all = links();
     const secondary = all.filter(
@@ -80,9 +82,9 @@ describe('TireCard pre-loads (059)', () => {
     for (const l of secondary) expect(l, l.href).toMatchObject({ prefetch: 'false' });
   });
 
-  it("detail links keep Next's default (the card's main tap stays fast)", () => {
+  it('detail links (photo, title) wait for intent too — no database read per card on sight', () => {
     const detail = links().filter(l => l.href.startsWith('/tires/42-') && !l.href.includes('set='));
     expect(detail).toHaveLength(2);
-    for (const l of detail) expect(l.prefetch, l.href).toBe('undefined');
+    for (const l of detail) expect(l.prefetch, l.href).toBe('false');
   });
 });

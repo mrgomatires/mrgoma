@@ -10,6 +10,7 @@ import { useCart } from '@/app/context/CartContext';
 import { useVisitorCity } from '@/app/context/VisitorCityContext';
 import CityTag from '@/app/ui/components/CityTag/CityTag';
 import GoogleRating from '@/app/ui/components/GoogleRating/GoogleRating';
+import IntentPrefetchLink from '@/app/ui/components/IntentPrefetchLink/IntentPrefetchLink';
 import LoadingScreen from '@/app/ui/components/LoadingScreen/LoadingScreen';
 import ProductMeta from '@/app/ui/components/ProductMeta/ProductMeta';
 import ShippingStateGate from '@/app/ui/components/ShippingStateGate/ShippingStateGate';
@@ -872,12 +873,12 @@ export default function Checkout() {
                                       />
                                     </div>
                                     <div>
-                                      <Link
+                                      <IntentPrefetchLink
                                         href={detailHref}
                                         className="font-medium text-gray-900 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
                                       >
                                         {cartLine(item).title}
-                                      </Link>
+                                      </IntentPrefetchLink>
                                       {cartLine(item).size && (
                                         <p className="text-sm text-gray-500">
                                           {cartLine(item).size}

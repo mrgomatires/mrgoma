@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation';
 
 import { useCart } from '@/app/context/CartContext';
 import HamburgerMenu from '@/app/ui/components/HamburgerMenu/HamburgerMenu';
-import MenuPrefetchLink from '@/app/ui/components/MenuPrefetchLink/MenuPrefetchLink';
+import IntentPrefetchLink from '@/app/ui/components/IntentPrefetchLink/IntentPrefetchLink';
 import { ShoppingCart } from '@/app/ui/icons/ShoppingCart';
 import CartModal from '@/app/ui/sections/CartModal/CartModal';
 import { currentChild, groupChildren, menuItems } from '@/app/ui/sections/Header/MenuItems';
@@ -118,7 +118,7 @@ const Header: FC<{ compact?: boolean }> = ({ compact = false }): ReactNode => {
                       onMouseLeave={() => setMenusShut(false)}
                       onFocus={() => setMenusShut(false)}
                     >
-                      <Link
+                      <IntentPrefetchLink
                         href={item.href}
                         className={`inline-flex items-center gap-1 text-sm font-semibold leading-6 transition-colors rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${
                           isActive ? 'text-[#65D01E]' : 'text-white hover:text-[#65D01E]'
@@ -138,7 +138,7 @@ const Header: FC<{ compact?: boolean }> = ({ compact = false }): ReactNode => {
                         >
                           <polyline points="6 9 12 15 18 9" />
                         </svg>
-                      </Link>
+                      </IntentPrefetchLink>
                       {/* Opens on hover **and** when focus is inside, so Tab reaches
                           the children (050; it used to be hover-only). */}
                       <div
@@ -164,11 +164,10 @@ const Header: FC<{ compact?: boolean }> = ({ compact = false }): ReactNode => {
                               )}
                               <ul className="space-y-1.5">
                                 {g.items.map(kid => {
-                                  const KidLink = kid.prefetchOnIntent ? MenuPrefetchLink : Link;
                                   const here = current?.href === kid.href;
                                   return (
                                     <li key={kid.href}>
-                                      <KidLink
+                                      <IntentPrefetchLink
                                         href={kid.href}
                                         aria-current={
                                           here ? (current.exact ? 'page' : 'true') : undefined
@@ -178,7 +177,7 @@ const Header: FC<{ compact?: boolean }> = ({ compact = false }): ReactNode => {
                                         } ${grouped ? '' : 'px-3 py-2'}`}
                                       >
                                         {kid.name}
-                                      </KidLink>
+                                      </IntentPrefetchLink>
                                     </li>
                                   );
                                 })}
@@ -186,12 +185,12 @@ const Header: FC<{ compact?: boolean }> = ({ compact = false }): ReactNode => {
                             </div>
                           ))}
                           {item.allLabel && (
-                            <Link
+                            <IntentPrefetchLink
                               href={item.href}
                               className="col-span-2 mt-2 pt-3 border-t border-white/10 text-xs font-bold text-[#9dfb40] hover:underline"
                             >
                               {item.allLabel}
-                            </Link>
+                            </IntentPrefetchLink>
                           )}
                         </div>
                       </div>
@@ -200,7 +199,7 @@ const Header: FC<{ compact?: boolean }> = ({ compact = false }): ReactNode => {
                 }
 
                 return (
-                  <Link
+                  <IntentPrefetchLink
                     key={item.name}
                     href={item.href}
                     className={`text-sm font-semibold leading-6 transition-colors rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${
@@ -208,7 +207,7 @@ const Header: FC<{ compact?: boolean }> = ({ compact = false }): ReactNode => {
                     }`}
                   >
                     {item.name}
-                  </Link>
+                  </IntentPrefetchLink>
                 );
               })}
             </div>

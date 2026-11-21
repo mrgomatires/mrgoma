@@ -2,10 +2,9 @@
 
 import { FC } from 'react';
 
-import Link from 'next/link';
-
 import { TransformedTire } from '@/app/interfaces/tires';
 import CompareToggle from '@/app/ui/components/CompareToggle/CompareToggle';
+import IntentPrefetchLink from '@/app/ui/components/IntentPrefetchLink/IntentPrefetchLink';
 import StockBadge from '@/app/ui/components/StockBadge/StockBadge';
 import type { GaList } from '@/app/utils/ecommerce';
 import { brandName, modelName, parseTireName } from '@/app/utils/tireNaming';
@@ -106,12 +105,12 @@ const TireTable: FC<TireTableProps> = ({ products, list }) => {
                 className="border-b border-gray-100 last:border-b-0 hover:bg-gray-50"
               >
                 <td className="px-4 py-3">
-                  <Link
+                  <IntentPrefetchLink
                     href={slug ? `/tires/${slug}` : '/tires'}
                     className="font-semibold text-gray-900 underline-offset-2 hover:text-green-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
                   >
                     {title || product.name}
-                  </Link>
+                  </IntentPrefetchLink>
                 </td>
                 <td className="whitespace-nowrap px-3 py-3 tabular-nums text-gray-700">{size}</td>
                 <td className="px-3 py-3">

@@ -1,6 +1,5 @@
-import Link from 'next/link';
-
 import type { SingleTire } from '@/app/interfaces/tires';
+import IntentPrefetchLink from '@/app/ui/components/IntentPrefetchLink/IntentPrefetchLink';
 import { otherSizesFor, priceLabel } from '@/app/utils/otherSizes';
 import { brandName, modelName } from '@/app/utils/tireNaming';
 import { buildTireSlug } from '@/app/utils/tireSlug';
@@ -95,7 +94,7 @@ export default async function OtherSizes({ tire }: { tire: SingleTire }) {
                   </li>
                 ) : (
                   <li key={s.size}>
-                    <Link
+                    <IntentPrefetchLink
                       href={`/tires/${buildTireSlug(s.tireId, tire.brand ?? '', s.size)}`}
                       data-track="other_size_select"
                       data-track-category="detail"
@@ -119,7 +118,7 @@ export default async function OtherSizes({ tire }: { tire: SingleTire }) {
                         <span className="font-semibold text-gray-900">{priceLabel(s)}</span>{' '}
                         <span className="text-gray-500">{`· ${s.units} available`}</span>
                       </span>
-                    </Link>
+                    </IntentPrefetchLink>
                   </li>
                 )
               )}

@@ -1,5 +1,4 @@
-import Link from 'next/link';
-
+import IntentPrefetchLink from '@/app/ui/components/IntentPrefetchLink/IntentPrefetchLink';
 import type { FooterSection as FooterSectionType } from '@/app/ui/sections/Footer/footer-section';
 
 interface FooterSectionProps {
@@ -31,12 +30,12 @@ export const FooterSection = ({ section }: FooterSectionProps) => {
                 {link.label}
               </a>
             ) : (
-              <Link
+              <IntentPrefetchLink
                 href={link.href}
                 className="text-gray-300 hover:text-[#9dfb40] transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#9dfb40] rounded"
               >
                 {link.label}
-              </Link>
+              </IntentPrefetchLink>
             )}
           </li>
         ))}

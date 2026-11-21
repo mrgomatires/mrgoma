@@ -1,9 +1,9 @@
 import React from 'react';
 
 import Image from 'next/image';
-import Link from 'next/link';
 
 import CookieSettingsLink from '@/app/ui/components/CookieConsent/CookieSettingsLink';
+import IntentPrefetchLink from '@/app/ui/components/IntentPrefetchLink/IntentPrefetchLink';
 import type {
   FooterProps,
   FooterSection as FooterSectionType,
@@ -144,18 +144,18 @@ export const Footer = ({
               trademark of Jomah Trading Inc. All rights reserved {copyrightYear}
             </p>
             <div className="flex gap-6">
-              <Link
+              <IntentPrefetchLink
                 href="/legal-policies"
                 className="text-gray-300 hover:text-[#9dfb40] transition-colors duration-200 text-sm"
               >
                 Terms and Conditions
-              </Link>
-              <Link
+              </IntentPrefetchLink>
+              <IntentPrefetchLink
                 href="/legal-policies#privacy"
                 className="text-gray-300 hover:text-[#9dfb40] transition-colors duration-200 text-sm"
               >
                 Privacy Policy
-              </Link>
+              </IntentPrefetchLink>
               {/* Beside the policy that explains the choice, so the way to change
                   it sits next to the description of what it does. */}
               <CookieSettingsLink />

@@ -2,10 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import MenuPrefetchLink from '@/app/ui/components/MenuPrefetchLink/MenuPrefetchLink';
+import IntentPrefetchLink from '@/app/ui/components/IntentPrefetchLink/IntentPrefetchLink';
 import { currentChild, groupChildren, type MenuChild } from '@/app/ui/sections/Header/MenuItems';
 
 interface MenuItemProps {
@@ -59,7 +58,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
             isActive ? 'bg-[#222] border-[#65D01E]/50' : 'border-[#333]'
           }`}
         >
-          <Link
+          <IntentPrefetchLink
             href={href}
             onClick={onClick}
             className={`flex-1 px-4 py-3 text-base font-semibold transition-colors ${
@@ -67,7 +66,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
             }`}
           >
             {name}
-          </Link>
+          </IntentPrefetchLink>
           <button
             type="button"
             onClick={() => setExpanded(v => !v)}
@@ -107,12 +106,10 @@ export const MenuItem: React.FC<MenuItemProps> = ({
                   )}
                   <ul className="space-y-0.5">
                     {g.items.map(kid => {
-                      // 059: see MenuChild.prefetchOnIntent.
-                      const KidLink = kid.prefetchOnIntent ? MenuPrefetchLink : Link;
                       const here = current?.href === kid.href;
                       return (
                         <li key={kid.href}>
-                          <KidLink
+                          <IntentPrefetchLink
                             href={kid.href}
                             onClick={onClick}
                             aria-current={here ? (current.exact ? 'page' : 'true') : undefined}
@@ -121,7 +118,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
                             }`}
                           >
                             {kid.name}
-                          </KidLink>
+                          </IntentPrefetchLink>
                         </li>
                       );
                     })}
@@ -136,7 +133,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
   }
 
   return (
-    <Link
+    <IntentPrefetchLink
       href={href}
       onClick={onClick}
       className={`block rounded-lg px-4 py-3 text-base font-semibold transition-all duration-300 border ${
@@ -146,6 +143,6 @@ export const MenuItem: React.FC<MenuItemProps> = ({
       } ${animClass}`}
     >
       {name}
-    </Link>
+    </IntentPrefetchLink>
   );
 };

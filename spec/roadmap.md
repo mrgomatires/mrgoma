@@ -45,7 +45,7 @@ performance budget is in place (P1.8).
   other non-critical chunks load deferred; trim the rest.
 - ⬜ **P1.6 — INP / interactivity.** Reduce main-thread work; confirm the 3D
   canvases only run when active.
-- 🟡 **P1.7 — Data / routes (`058-dashboard-requests-local-auth` ✅ PR #219, 2026-11-19: dashboard 13 → 5 requests on load; `059-tires-prefetch-repeats`: card and menu links pre-load on intent; after a filter 10 → 0 background requests).** Review caching/ISR where applicable and hot SQL
+- 🟡 **P1.7 — Data / routes (`058-dashboard-requests-local-auth` ✅ PR #219, 2026-11-19: dashboard 13 → 5 requests on load; `059-tires-prefetch-repeats` ✅ PR #220, 2026-11-20: card and menu links pre-load on intent; after a filter 10 → 0 background requests; `060-intent-prefetch-site`: tire-page links, the menu and the footer pre-load on intent site-wide — 99 → 0 database reads from pre-loads across 8 pages, menu/footer 0 pre-loads; header-duplication guard).** Review caching/ISR where applicable and hot SQL
   queries that affect TTFB.
 - ⬜ **P1.8 — Re-measure and budget.** Confirm CWV in the green and set a
   performance budget to prevent regressions.

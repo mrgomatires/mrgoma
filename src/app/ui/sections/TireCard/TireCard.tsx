@@ -1,7 +1,5 @@
 import { FC, SyntheticEvent } from 'react';
 
-import Link from 'next/link';
-
 import { useCart } from '@/app/context/CartContext';
 import { useAddTireToCart } from '@/app/hooks/useAddTireToCart';
 import { useSetOffers } from '@/app/hooks/useSetOffers';
@@ -166,7 +164,7 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
             {/* ── Mobile: flex-col  /  Desktop: flex-row ── */}
             <div className="flex flex-col sm:flex-row">
               {/* ── Image ── */}
-              <Link
+              <IntentPrefetchLink
                 href={detailUrl}
                 onClick={() => handleSelect(product, indexOffset + index + 1)}
                 className="block bg-gray-50 sm:w-52 md:w-64 shrink-0 overflow-hidden"
@@ -175,7 +173,7 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
                 <div className="relative h-48 sm:h-full sm:min-h-[180px] group-hover:scale-105 transition-transform duration-300 origin-center">
                   <ProductImage product={product} priority={index === 0} coverFromSm />
                 </div>
-              </Link>
+              </IntentPrefetchLink>
 
               {/* ── Content ── */}
               <div className="flex-1 min-w-0 flex flex-col px-4 pt-3 pb-4 sm:px-6 sm:py-5 gap-2.5 sm:gap-2">
@@ -201,11 +199,12 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
                   </div>
                 </div>
 
-                {/* Condition + size + stock — all screen sizes. The card's secondary
-                    links (these two, the brand logo, the set offer) pre-load only
-                    on hover / touch (059): on sight, every card fetched them and
-                    filters fetched them again. The detail links keep Next's
-                    default, so the card's main tap stays as fast as before. */}
+                {/* Condition + size + stock — all screen sizes. Every link on the
+                    card pre-loads only on hover / touch: the secondary ones since
+                    059 (on sight, every card fetched them and filters fetched them
+                    again), the photo and title since 060 — each tire page pre-load
+                    was a database read, ~20 per scroll of /tires, and only brought
+                    the page's loading screen anyway. */}
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 flex-wrap">
                     <IntentPrefetchLink
@@ -236,7 +235,7 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
                 </div>
 
                 {/* Title */}
-                <Link
+                <IntentPrefetchLink
                   href={detailUrl}
                   onClick={() => handleSelect(product, indexOffset + index + 1)}
                   className="group/title"
@@ -251,7 +250,7 @@ const TireCard: FC<TireCardProps> = ({ products, list, indexOffset = 0 }) => {
                   <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 leading-snug line-clamp-2 group-hover/title:text-green-700 transition-colors">
                     {titleText}
                   </h3>
-                </Link>
+                </IntentPrefetchLink>
 
                 {/* Price + brand logo */}
                 <div className="flex items-center gap-3 flex-wrap">
