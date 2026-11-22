@@ -3,6 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
 import { afterEach } from 'vitest';
 
+import { clearSetOffersCache } from '@/app/hooks/useSetOffers';
 import { clearSharedJson } from '@/app/utils/sharedFetch';
 
 // jsdom doesn't implement scrollIntoView; stub it so components that call it
@@ -36,4 +37,6 @@ afterEach(() => {
   // 058: filter options are shared per URL for the page's lifetime; a test
   // must not inherit another test's (mocked) answers.
   clearSharedJson();
+  // 061: set offers are remembered per card set for the tab's lifetime.
+  clearSetOffersCache();
 });

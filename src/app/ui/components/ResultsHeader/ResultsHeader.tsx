@@ -2,10 +2,11 @@
 
 import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 import { ShowFilterContext } from '@/app/context/ShowFilterContext';
 import { AdjustmentsHorizontalIcon } from '@/app/ui/components/Icons/Icons';
+import { useResultsNavigation } from '@/app/ui/components/ResultsNavigation/ResultsNavigation';
 
 interface ResultsHeaderProps {
   /**
@@ -39,7 +40,9 @@ const ResultsHeader: FC<ResultsHeaderProps> = ({
   showFilterButton = true,
 }) => {
   const { setShowFilter } = useContext(ShowFilterContext);
-  const router = useRouter();
+  // On /tires the change is tracked as pending (061); elsewhere a plain push.
+  const { navigate } = useResultsNavigation();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const [sortOption, setSortOption] = useState('');
 
@@ -67,10 +70,9 @@ const ResultsHeader: FC<ResultsHeaderProps> = ({
       // Reset to first page when sort changes
       params.set('page', '1');
 
-      // Update URL without refreshing page
-      router.push(`?${params.toString()}`, { scroll: false });
+      navigate(`${pathname}?${params.toString()}`);
     },
-    [router, searchParams]
+    [navigate, pathname, searchParams]
   );
 
   // Get the tire size to display

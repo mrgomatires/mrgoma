@@ -69,6 +69,9 @@ const SITES: { file: string; plainAllowed: string[]; intent?: false }[] = [
   // The footer.
   { file: 'src/app/ui/sections/Footer/Footer.tsx', plainAllowed: [] },
   { file: 'src/app/ui/sections/Footer/FooterSection.tsx', plainAllowed: [] },
+  // "Shop by size": ~300 size links; on sight they made 563 pre-loads per
+  // scroll (061). Only the breadcrumb and the fallback keep the default.
+  { file: 'src/app/(shop)/tires/size/page.tsx', plainAllowed: ['"/"', '"/tires"'] },
 ];
 
 describe('rarely-followed links pre-load on intent (060)', () => {

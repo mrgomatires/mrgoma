@@ -350,6 +350,16 @@ pinned by `Dashboard.requests.test.tsx`.
   (`notFound.guard.test.ts`). In 059 the root 404's direct `Header` was a
   second entry, and Turbopack shipped the header twice to every page (+12 KB
   gzip) once it shared a component with the pages.
+- **A server-rendered list renders its props; it does not fetch them again
+  (061).** `/tires`' results come from the page's server render; the list
+  shows them and never calls `/api/tires` (`tiresPage.guard.test.ts`). Every
+  change to the results — filters, chips, sort, ranges, page, page size — is a
+  navigation through `ResultsNavigation` (`ui/components/ResultsNavigation`):
+  one transition, so the list can stay on screen dimmed and `inert` while the
+  new page renders. Links stay links (it takes over plain clicks in React's
+  capture phase); programmatic changes call `useResultsNavigation().navigate`.
+  The list/table switch changes the URL with `history.pushState` (no server
+  render) and keeps the page.
 - **Links people rarely follow pre-load on intent (059–060).** Use
   `IntentPrefetchLink` (`ui/components/IntentPrefetchLink`), not `next/link`,
   for: links to a tire's page (each pre-load of one is a database read — the

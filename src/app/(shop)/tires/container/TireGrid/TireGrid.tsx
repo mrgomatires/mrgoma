@@ -6,6 +6,13 @@ import { TransformedTire } from '@/app/interfaces/tires';
 import TireCard from '@/app/ui/sections/TireCard/TireCard';
 import type { GaList } from '@/app/utils/ecommerce';
 
+/**
+ * 62rem − 2 × 1.5rem = 59rem = 944 px of cards, the width of `/tires`'s
+ * results column on a desktop; `px-7` (28 px) on phones is `/tires`'s 16 px
+ * page margin plus its 12 px list margin.
+ */
+export const CENTRED_LIKE_TIRES = 'mx-auto max-w-[62rem] px-7 sm:px-6';
+
 interface TireGridProps {
   tires: TransformedTire[];
   totalCount: number;
@@ -15,10 +22,13 @@ interface TireGridProps {
   list?: GaList;
   /**
    * The list sits in a results column beside the filter rail (`/tires/used`):
-   * take the column's whole width, as `/tires` does (`TireResults`). Without
-   * it the list keeps its 768 px cap, centred — right for the pages with no
-   * rail, but on `/tires/used` it made the cards 720 px against 944 px on
-   * `/tires` (059).
+   * take the column's whole width, as `/tires` does (`TireResults`) (059).
+   *
+   * Without a rail (`/tires/new`, brand and size pages) the list is centred
+   * and sized to match `/tires` (061): cards 944 px wide on a desktop (the
+   * results column of `max-w-7xl` beside the 15rem rail), and on phones the
+   * same 28 px / 24 px side margins. It was a 768 px cap: 720 px cards, a
+   * quarter narrower than the same card on `/tires`.
    */
   besideRail?: boolean;
 }
@@ -34,7 +44,7 @@ export function TireGrid({
   return (
     <div>
       {tires.length > 0 ? (
-        <div className={besideRail ? 'px-3 sm:px-0' : 'max-w-3xl mx-auto px-4 sm:px-6'}>
+        <div className={besideRail ? 'px-3 sm:px-0' : CENTRED_LIKE_TIRES}>
           <TireCard products={tires} list={list} />
         </div>
       ) : (

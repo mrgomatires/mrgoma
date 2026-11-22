@@ -7,6 +7,19 @@ import Link from 'next/link';
 type Props = Omit<ComponentProps<typeof Link>, 'prefetch'>;
 
 /**
+ * A tire's own page with no query: `/tires/<id>` or `/tires/<id>-brand-size`.
+ *
+ * Not with a query (the card's "Set of 2" link, `?set=`): Next 16 does not
+ * reuse a full pre-load of a URL with search params — measured, every hover
+ * and the click asked for the whole page again — so there it would cost more
+ * than the default, not less.
+ */
+const TIRE_PAGE = /^\/tires\/\d+(?:-[^/?#]*)?$/;
+
+export const isTirePageHref = (href: Props['href']): boolean =>
+  typeof href === 'string' && TIRE_PAGE.test(href);
+
+/**
  * A `next/link` that pre-loads its page only once the shopper shows intent:
  * the pointer enters it or a finger touches it (059).
  *
@@ -33,13 +46,23 @@ type Props = Omit<ComponentProps<typeof Link>, 'prefetch'>;
  * page loads on Enter, as for any link). Measured in
  * spec/features/059-tires-prefetch-repeats/results.md and
  * spec/features/060-intent-prefetch-site/results.md.
+ *
+ * A tire's page pre-loads **in full** (061). It renders on every request, so
+ * Next's default pre-load stops at its `loading.tsx`: the hover fetched the
+ * skeleton and the `<title>` (which reads the tire from the database) and the
+ * click read it again for the page. `prefetch={true}` fetches the whole page
+ * on the hover; the click then asks for nothing — one read instead of two.
+ * Only tire pages without a query (see `TIRE_PAGE`): `/tires/used` is dynamic
+ * too, and a full pre-load there would run the whole listing on a menu hover. A full pre-load is reused for
+ * up to 5 minutes (`staleTimes.static`); checkout validates the tire again.
  */
 export default function IntentPrefetchLink({ onMouseEnter, onTouchStart, ...props }: Props) {
   const [intent, setIntent] = useState(false);
+  const onIntent = isTirePageHref(props.href) ? true : null;
   return (
     <Link
       {...props}
-      prefetch={intent ? null : false}
+      prefetch={intent ? onIntent : false}
       onMouseEnter={e => {
         setIntent(true);
         onMouseEnter?.(e);

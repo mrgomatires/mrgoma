@@ -133,6 +133,19 @@ export function setParam(search: string, param: string, value: string | undefine
   return serialise(next);
 }
 
+/**
+ * Switch the list/table view, **keeping the page** (061). Unlike a filter, the
+ * view does not change what the results are, so the buyer stays where they
+ * were; `setParam` would have reset them to page 1. `undefined` = the default
+ * (list), left out of the URL.
+ */
+export function setView(search: string, view: string | undefined): string {
+  const next = params(search);
+  if (view === undefined || view === '') next.delete('view');
+  else next.set('view', view);
+  return serialise(next);
+}
+
 export function toggleParam(search: string, param: string, value: string): string {
   return params(search).get(param) === value
     ? setParam(search, param, undefined)
