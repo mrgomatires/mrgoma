@@ -163,7 +163,8 @@ export default async function NewTiresPage() {
 
         {/* Tire grid */}
         <section className="py-10">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 mb-6">
+          {/* Aligned with the cards below (TireGrid's CENTRED_LIKE_TIRES, 061). */}
+          <div className="mx-auto max-w-[62rem] px-7 sm:px-6 mb-6">
             <h2 className="text-2xl font-black text-gray-900 tracking-tight">
               New tires available now
             </h2>

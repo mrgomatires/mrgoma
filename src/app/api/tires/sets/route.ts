@@ -29,12 +29,23 @@ const Ids = z
 const isSold = (tire: SingleTire) =>
   typeof tire.status === 'string' && tire.status.trim().toLowerCase() === 'sold';
 
-/** Runs `work` over `items`, at most `limit` at a time. */
-async function mapLimited<T, R>(items: T[], limit: number, work: (item: T) => Promise<R>) {
-  const out: R[] = new Array(items.length);
+/**
+ * Runs `work` over `items`, at most `limit` at a time. Stops starting new work
+ * once `signal` is aborted (061): the browser drops this request when the
+ * buyer changes the results before it answers, and each item here can be a
+ * database query on a cold cache — no point finishing them for nobody.
+ */
+async function mapLimited<T, R>(
+  items: T[],
+  limit: number,
+  work: (item: T) => Promise<R>,
+  signal?: AbortSignal
+) {
+  const out: (R | undefined)[] = new Array(items.length);
   let next = 0;
   const lanes = Array.from({ length: Math.min(limit, items.length) }, async () => {
     while (next < items.length) {
+      if (signal?.aborted) return;
       const i = next++;
       out[i] = await work(items[i]);
     }
@@ -63,6 +74,8 @@ export const GET = withLogging('tires.sets.GET', async (req: NextRequest) => {
   }
   try {
     const records = await fetchTiresByIds(parsed.data);
+    // The buyer moved on while the ids were read: answer nobody, query no more.
+    if (req.signal?.aborted) return new NextResponse(null, { status: 499 });
     const tires = records.map(mapTireRecordToSingleTire).filter(t => !isSold(t));
 
     // One candidate fetch per distinct set group, shared by the cards in it.
@@ -76,9 +89,13 @@ export const GET = withLogging('tires.sets.GET', async (req: NextRequest) => {
       keyOf.set(String(tire.id), key);
     }
     const keys = [...groups.keys()];
-    const pools = await mapLimited(keys, CONCURRENCY, key =>
-      getCachedSetCandidates(groups.get(key)!).catch(() => [])
+    const pools = await mapLimited(
+      keys,
+      CONCURRENCY,
+      key => getCachedSetCandidates(groups.get(key)!).catch(() => []),
+      req.signal
     );
+    if (req.signal?.aborted) return new NextResponse(null, { status: 499 });
     const poolOf = new Map(keys.map((k, i) => [k, pools[i]]));
 
     const offers: Record<string, CardSetOffer> = {};

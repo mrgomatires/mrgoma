@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import type { Metadata } from 'next';
 
+import IntentPrefetchLink from '@/app/ui/components/IntentPrefetchLink/IntentPrefetchLink';
 import JsonLd from '@/app/ui/components/JsonLd/JsonLd';
 import SizeSearch from '@/app/ui/components/SizeSearch/SizeSearch';
 import { SHIPPING, WARRANTY } from '@/app/utils/brandClaims';
@@ -21,6 +22,12 @@ import { getCachedSizeCounts } from '@/repositories/cachedCatalog';
  *
  * The lists are plain headed lists, not an accordion: everything visible and
  * scannable, and every size an ordinary link in the HTML.
+ *
+ * The ~300 size links pre-load only on hover or touch (061). As plain
+ * `next/link`s each one pre-loaded its page as it scrolled into view:
+ * scrolling this page once made 563 requests for 286 pages, 1.3 MB
+ * transferred (19 MB uncompressed), with no click. The breadcrumb keeps the
+ * default.
  */
 export const revalidate = 300;
 
@@ -103,7 +110,7 @@ export default async function SizeIndexPage() {
               <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
                 {popular.map(c => (
                   <li key={c.size}>
-                    <Link
+                    <IntentPrefetchLink
                       href={sizeHref(c.size)}
                       data-track="size_index_select"
                       data-track-category="size_index"
@@ -113,7 +120,7 @@ export default async function SizeIndexPage() {
                     >
                       <span className="font-bold tabular-nums text-gray-900">{c.size}</span>{' '}
                       <span className="text-sm text-gray-600">{tireCountLabel(c.units)}</span>
-                    </Link>
+                    </IntentPrefetchLink>
                   </li>
                 ))}
               </ul>
@@ -149,7 +156,7 @@ export default async function SizeIndexPage() {
                     <ul className="grid grid-cols-2 gap-x-4 sm:grid-cols-3 md:grid-cols-4">
                       {group.sizes.map(c => (
                         <li key={c.size}>
-                          <Link
+                          <IntentPrefetchLink
                             href={sizeHref(c.size)}
                             data-track="size_index_select"
                             data-track-category="size_index"
@@ -161,7 +168,7 @@ export default async function SizeIndexPage() {
                               {c.size}
                             </span>{' '}
                             <span className="text-sm text-gray-500">{`· ${tireCountLabel(c.units)}`}</span>
-                          </Link>
+                          </IntentPrefetchLink>
                         </li>
                       ))}
                     </ul>

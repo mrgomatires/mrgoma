@@ -144,3 +144,21 @@ describe('a list beside the rail takes the column (059)', () => {
     expect(USED).toMatch(/<TireGrid[^>]*\bbesideRail\b/);
   });
 });
+
+describe('the results load once per change (061)', () => {
+  /**
+   * The list kept its own copy of the results and fetched them again from
+   * `/api/tires` after every filter, page or sort change — while the server
+   * had just rendered that very page: two catalogue searches per click. The
+   * list renders the server's page; changes go through `ResultsNavigation`.
+   */
+  it('SearchResults never fetches the catalogue itself', () => {
+    expect(RESULTS).not.toContain('/api/tires');
+    expect(RESULTS).not.toMatch(/\bfetch\(/);
+  });
+
+  it('/tires wraps the rail and the results in ResultsNavigation', () => {
+    expect(PAGE).toContain('<ResultsNavigation>');
+    expect(PAGE).toMatch(/<SearchResults[\s\S]*?data=\{initialData\}/);
+  });
+});

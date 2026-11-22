@@ -8,6 +8,7 @@ import { fetchTiresServer } from '@/app/(shop)/tires/utils/fetchTiresServer';
 import { sizePageSlug } from '@/app/(shop)/tires/utils/sizeCatalog';
 import JsonLd from '@/app/ui/components/JsonLd/JsonLd';
 import LoadingScreen from '@/app/ui/components/LoadingScreen/LoadingScreen';
+import ResultsNavigation from '@/app/ui/components/ResultsNavigation/ResultsNavigation';
 import ViewToggle from '@/app/ui/components/ViewToggle/ViewToggle';
 import { appliedChips, looseningSuggestions } from '@/app/ui/sections/FilterRail/appliedChips';
 import FilterRail from '@/app/ui/sections/FilterRail/FilterRail';
@@ -184,64 +185,67 @@ export default async function TiresPage({
               : 'Used & New Tires in Miami & Orlando'}
           </h2>
 
-          <section aria-labelledby="products-heading">
-            <div className="pt-6 lg:hidden">
-              <FilterRailMobile {...railProps} />
-            </div>
-
-            {/*
-             * Two columns, and the left one travels with the results.
-             *
-             * `lg:self-start` is load-bearing: a grid item stretches to the row
-             * height by default, so `sticky` would have nothing to move within
-             * and would silently do nothing at all. `lg:top-20` clears the site
-             * header, which is itself sticky at `top-14`.
-             *
-             * The rail costs the results nothing. The list was capped at
-             * `max-w-3xl` and centred inside this container, leaving 224 px blank
-             * on each side; giving 240 px of that to the rail leaves the list
-             * **wider** than it was.
-             */}
-            <div className="mt-6 grid gap-8 lg:grid-cols-[15rem_1fr]">
-              <aside
-                aria-label="Filters"
-                className="hidden lg:sticky lg:top-20 lg:block lg:max-h-[calc(100dvh-6rem)] lg:self-start lg:overflow-y-auto"
-              >
-                <FilterRail {...railProps} />
-              </aside>
+          {/* One pending state for every change to the results — filters, chips,
+              sort, range, page — while the server renders them (061). */}
+          <ResultsNavigation>
+            <section aria-labelledby="products-heading">
+              <div className="pt-6 lg:hidden">
+                <FilterRailMobile {...railProps} />
+              </div>
 
               {/*
-               * `min-w-0` is load-bearing.
+               * Two columns, and the left one travels with the results.
                *
-               * A grid item defaults to `min-width: auto`, which refuses to
-               * shrink below its content's intrinsic width. On a phone the
-               * results column therefore pushed the whole document wider than
-               * the viewport: the header and the hero rendered at screen width
-               * while the cards ran off the side, and the browser zoomed out to
-               * fit. The results were never a grid item before this feature, so
-               * the page had never met this.
+               * `lg:self-start` is load-bearing: a grid item stretches to the row
+               * height by default, so `sticky` would have nothing to move within
+               * and would silently do nothing at all. `lg:top-20` clears the site
+               * header, which is itself sticky at `top-14`.
+               *
+               * The rail costs the results nothing. The list was capped at
+               * `max-w-3xl` and centred inside this container, leaving 224 px blank
+               * on each side; giving 240 px of that to the rail leaves the list
+               * **wider** than it was.
                */}
-              <div className="min-w-0">
-                <div className="mb-4 flex items-center justify-between gap-3">
-                  <UsedQuickChips
-                    filters={filters}
-                    search={search}
-                    basePath="/tires"
-                    className="min-w-0"
-                  />
-                  <ViewToggle current={view} search={search} basePath="/tires" />
+              <div className="mt-6 grid gap-8 lg:grid-cols-[15rem_1fr]">
+                <aside
+                  aria-label="Filters"
+                  className="hidden lg:sticky lg:top-20 lg:block lg:max-h-[calc(100dvh-6rem)] lg:self-start lg:overflow-y-auto"
+                >
+                  <FilterRail {...railProps} />
+                </aside>
+
+                {/*
+                 * `min-w-0` is load-bearing.
+                 *
+                 * A grid item defaults to `min-width: auto`, which refuses to
+                 * shrink below its content's intrinsic width. On a phone the
+                 * results column therefore pushed the whole document wider than
+                 * the viewport: the header and the hero rendered at screen width
+                 * while the cards ran off the side, and the browser zoomed out to
+                 * fit. The results were never a grid item before this feature, so
+                 * the page had never met this.
+                 */}
+                <div className="min-w-0">
+                  <div className="mb-4 flex items-center justify-between gap-3">
+                    <UsedQuickChips
+                      filters={filters}
+                      search={search}
+                      basePath="/tires"
+                      className="min-w-0"
+                    />
+                    <ViewToggle current={view} search={search} basePath="/tires" />
+                  </div>
+                  <Suspense fallback={<LoadingScreen message="Loading results ..." />}>
+                    <SearchResults
+                      data={initialData}
+                      suggestions={suggestions}
+                      heading={resultsHeading(filters)}
+                    />
+                  </Suspense>
                 </div>
-                <Suspense fallback={<LoadingScreen message="Loading results ..." />}>
-                  <SearchResults
-                    initialData={initialData}
-                    view={view}
-                    suggestions={suggestions}
-                    heading={resultsHeading(filters)}
-                  />
-                </Suspense>
               </div>
-            </div>
-          </section>
+            </section>
+          </ResultsNavigation>
         </div>
       </main>
     </>

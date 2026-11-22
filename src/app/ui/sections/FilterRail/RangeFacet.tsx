@@ -3,9 +3,9 @@
 import { FC, useEffect, useRef, useState } from 'react';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 import RangeSlider from '@/app/ui/components/RangeSlider/RangeSlider';
+import { useResultsNavigation } from '@/app/ui/components/ResultsNavigation/ResultsNavigation';
 import { setRange } from '@/app/utils/filterHref';
 
 export type RangeOption = {
@@ -85,7 +85,8 @@ const RangeFacet: FC<RangeFacetProps> = ({
    */
   const handSet =
     (value[0] !== undefined || value[1] !== undefined) && !options.some(o => o.applied);
-  const router = useRouter();
+  // On /tires tracked as pending (061); on /tires/used a plain push, as before.
+  const { navigate } = useResultsNavigation();
   const [low, high] = bounds;
   const current: [number, number] = [value[0] ?? low, value[1] ?? high];
   const [draft, setDraft] = useState<[number, number]>(current);
@@ -109,7 +110,7 @@ const RangeFacet: FC<RangeFacetProps> = ({
     // pinning the catalogue's current extremes into a shareable URL.
     const min = next[0] <= low ? undefined : next[0];
     const max = next[1] >= high ? undefined : next[1];
-    router.push(`${basePath}${setRange(search, minParam, maxParam, min, max)}`, { scroll: false });
+    navigate(`${basePath}${setRange(search, minParam, maxParam, min, max)}`);
   };
 
   const handleChange = (next: [number, number]) => {

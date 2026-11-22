@@ -49,3 +49,41 @@ describe('useSetOffers (054)', () => {
     expect(fetchFn).not.toHaveBeenCalled();
   });
 });
+
+describe('useSetOffers asks once per set of cards (061)', () => {
+  it('a re-render with the same cards (new array, same ids) asks nothing again', async () => {
+    const fetchFn = stubFetch(() => ok({ offers: {} }));
+    const { rerender } = renderHook(({ ids }) => useSetOffers(ids), {
+      initialProps: { ids: ['3', '1'] },
+    });
+    rerender({ ids: ['1', '3'] });
+    rerender({ ids: ['1', '3', '3'] });
+    await waitFor(() => expect(fetchFn).toHaveBeenCalledTimes(1));
+  });
+
+  it('new cards cancel only the previous request, and ask once', async () => {
+    const signals: AbortSignal[] = [];
+    const fetchFn = vi.fn((_: string, init?: { signal?: AbortSignal }) => {
+      signals.push(init!.signal!);
+      return new Promise(() => {}); // never answers: still in flight
+    });
+    vi.stubGlobal('fetch', fetchFn);
+    const { rerender } = renderHook(({ ids }) => useSetOffers(ids), {
+      initialProps: { ids: ['1'] },
+    });
+    rerender({ ids: ['2'] });
+    expect(fetchFn).toHaveBeenCalledTimes(2);
+    expect(signals[0].aborted).toBe(true); // the replaced cards' request
+    expect(signals[1].aborted).toBe(false); // the cards on screen
+  });
+
+  it('cards shown again (list → table → list) reuse the answer: no request', async () => {
+    const fetchFn = stubFetch(() => ok({ offers: { '1': offer('1') } }));
+    const first = renderHook(() => useSetOffers(['1']));
+    await waitFor(() => expect(first.result.current['1']).toBeDefined());
+    first.unmount();
+    const again = renderHook(() => useSetOffers(['1']));
+    expect(again.result.current['1']).toBeDefined(); // at once, from memory
+    expect(fetchFn).toHaveBeenCalledTimes(1);
+  });
+});

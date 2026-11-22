@@ -1,116 +1,73 @@
 'use client';
 
-import React, { FC, Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, Suspense, useCallback } from 'react';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 import { useGenerateFixedPagination } from '@/app/hooks/useGeneratePagination';
-import { TiresData } from '@/app/interfaces/tires';
 import CollapsibleSearchBar from '@/app/ui/components/CollapsibleSearchBar/CollapsibleSearchBar';
 import ErrorDisplay from '@/app/ui/components/ErrorDisplay/ErrorDisplay';
 import LoadingScreen from '@/app/ui/components/LoadingScreen/LoadingScreen';
 import NoResultsFound from '@/app/ui/components/NotResultsFound/NoResultsFound';
 import type { LooseningSuggestion } from '@/app/ui/components/NotResultsFound/NoResultsFound';
 import ResultsHeader from '@/app/ui/components/ResultsHeader/ResultsHeader';
+import { useResultsNavigation } from '@/app/ui/components/ResultsNavigation/ResultsNavigation';
 import { useSearchEvent } from '@/app/ui/components/SearchEvent/useSearchEvent';
-import ResultsSkeleton from '@/app/ui/components/TireCardSkeleton/TireCardSkeleton';
 import TireResults from '@/app/ui/components/TireResults/TireResults';
 import TireTable from '@/app/ui/components/TireTable/TireTable';
 import { promoBannerConfig } from '@/app/ui/sections/PromoBanner/config/promoBanner';
 import PromoBanner from '@/app/ui/sections/PromoBanner/PromoBanner';
 import { LISTS } from '@/app/utils/ecommerce';
-import type { TireView } from '@/app/utils/filterUtils';
-import {
-  DEFAULT_PAGE,
-  DEFAULT_PAGE_SIZE,
-  getAvailablePageSizes,
-  validatePageSize,
-} from '@/app/utils/paginationUtils';
-import { createPaginatedResponse } from '@/app/utils/transformTireData';
+import { parseTireView, type TireView } from '@/app/utils/filterUtils';
+import { DEFAULT_PAGE, getAvailablePageSizes } from '@/app/utils/paginationUtils';
 
 import { PaginatedTiresResponse } from '../utils/fetchTiresServer';
 
 interface SearchResultsProps {
-  initialData?: PaginatedTiresResponse;
-  /** How the buyer is reading the results — decided on the server, from the URL. */
-  view?: TireView;
+  /** The page of results the server rendered for the current URL. */
+  data: PaginatedTiresResponse;
   /** Ways out of an empty result, computed on the server with their counts. */
   suggestions?: LooseningSuggestion[];
   /** What the results are, in words — built from the applied filters. */
   heading?: string;
-  searchParams?: {
-    page?: string;
-    pageSize?: string;
-    w?: string;
-    s?: string;
-    d?: string;
-  };
 }
 
 /**
- * SearchResults component displays the search results page for tires,
- * including the header section, lateral filters, and the list of tire products.
- * It handles pagination, sorting, and filtering functionality.
+ * The results on `/tires`: their header, the list (or table) and pagination.
  *
- * @returns The SearchResults component.
+ * **It renders the server's answer and fetches nothing (061).** It used to keep
+ * its own copy of the results, seeded once from the server, and fetch them
+ * again from the catalogue API after every filter, page or sort change — although
+ * the server had just rendered that very page. Two catalogue searches per
+ * click, and the list swapped to a skeleton meanwhile, which unmounted the
+ * cards and restarted their set-offer requests. Now every change is a
+ * navigation (`ResultsNavigation`): the server renders the new page, this
+ * component receives it as `data`, and the cards update in place. While the
+ * change is on its way the current list is dimmed and inert.
  */
-const SearchResults: FC<SearchResultsProps> = ({
-  initialData,
-  view = 'list',
-  suggestions = [],
-  heading,
-}) => {
-  const router = useRouter();
+const SearchResults: FC<SearchResultsProps> = ({ data, suggestions = [], heading }) => {
   const searchParams = useSearchParams();
+  const pathname = usePathname() || '/tires';
+  const { navigate, isPending } = useResultsNavigation();
   // GA4 `search` where every size search lands (feature 046, D5).
   useSearchEvent(searchParams);
-  const [tiresData, setTiresData] = useState<PaginatedTiresResponse>(
-    initialData ?? {
-      tires: [],
-      totalCount: 0,
-      page: DEFAULT_PAGE,
-      pageSize: DEFAULT_PAGE_SIZE,
-      totalPages: 1,
-      error: '',
-    }
-  );
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [count, setCount] = useState(0);
-  // Skip the first client-side fetch when SSR data was already provided
-  const skipNextFetch = useRef(Boolean(initialData));
 
-  /**
-   * Pagination state starts from the URL, not from page 1.
-   *
-   * It used to start at `DEFAULT_PAGE` and let an effect catch up. On a reload
-   * of `?page=7`, that effect's `setPage(7)` only lands on the next render, but
-   * the effect below that writes state back into the URL runs in the same first
-   * commit — still holding page 1 — and `router.replace`d the URL to `?page=1`.
-   * The first effect then read page 1 and the buyer was sent back to the start,
-   * at the cost of a second full server render of `/tires`.
-   */
-  const [page, setPage] = useState<number>(
-    () => parseInt(searchParams.get('page') || String(DEFAULT_PAGE), 10) || DEFAULT_PAGE
-  );
-  const [pageSize, setPageSize] = useState<number>(() =>
-    validatePageSize(
-      parseInt(searchParams.get('pageSize') || String(DEFAULT_PAGE_SIZE), 10) || DEFAULT_PAGE_SIZE
-    )
-  );
-  const totalPages = Math.ceil(tiresData.totalCount / pageSize);
+  // From the URL, not a server prop: the list/table switch updates the URL in
+  // the browser only (061 — no server render, no catalogue search).
+  const view: TireView = parseTireView(searchParams.get('view'));
+
+  const page = Math.max(DEFAULT_PAGE, data.page || DEFAULT_PAGE);
+  const pageSize = data.pageSize;
+  const totalPages = Math.max(1, data.totalPages || Math.ceil(data.totalCount / pageSize));
   const maxVisiblePages = 10;
-
-  // Refs to track current values for comparison in effects
-  const pageRef = useRef(page);
-  const pageSizeRef = useRef(pageSize);
+  const tiresData = data;
+  const error = data.error || null;
 
   // Tire size parameters
   const width = searchParams.get('w') || '';
   const sidewall = searchParams.get('s') || '';
   const diameter = searchParams.get('d') || '';
 
-  // Function to get the tire size to display
   const getTireSize = () => {
     if (width && sidewall && diameter) {
       return `${width}/${sidewall}/${diameter}`;
@@ -118,77 +75,14 @@ const SearchResults: FC<SearchResultsProps> = ({
     return '';
   };
 
-  // Function to update pagination parameters in the URL
-  const updatePaginationParams = useCallback(
-    (pageNum: number, pageSizeNum: number) => {
-      try {
-        // Validate page size
-        const validatedPageSize = validatePageSize(pageSizeNum);
-
-        // Notify if adjusted
-        if (pageSizeNum !== validatedPageSize) {
-          console.warn(`Invalid pageSize: ${pageSizeNum} adjusted to ${validatedPageSize}`);
-        }
-
-        // Use current location to avoid dependency on searchParams identity
-        const params = new URLSearchParams(
-          typeof window !== 'undefined' ? window.location.search : ''
-        );
-
-        const currentPage = parseInt(params.get('page') || String(DEFAULT_PAGE), 10);
-        const currentPageSize = parseInt(params.get('pageSize') || String(DEFAULT_PAGE_SIZE), 10);
-
-        // If it already matches, don't navigate to avoid loops
-        if (currentPage === pageNum && currentPageSize === validatedPageSize) {
-          return;
-        }
-
-        // Update and replace (no push) to avoid polluting history
-        params.set('page', pageNum.toString());
-        params.set('pageSize', validatedPageSize.toString());
-        router.replace(`?${params.toString()}`, { scroll: false });
-      } catch (e) {
-        const errorMessage = e instanceof Error ? e.message : String(e);
-        console.error('Error updating pagination:', errorMessage);
-      }
+  /** This page's URL with `page` / `pageSize` set — every filter and the view kept. */
+  const hrefWith = useCallback(
+    (changes: Record<string, number>) => {
+      const params = new URLSearchParams(window.location.search);
+      for (const [key, value] of Object.entries(changes)) params.set(key, String(value));
+      return `${pathname}?${params.toString()}`;
     },
-    [router]
-  );
-
-  const getDataTires = useCallback(
-    async (page: number) => {
-      if (count === 1) {
-        setLoading(true);
-        try {
-          const baseUrl = window.location.origin;
-          const params = new URLSearchParams(searchParams.toString());
-
-          params.set('page', page.toString());
-          params.set('pageSize', pageSize.toString());
-
-          const response = await fetch(`${baseUrl}/api/tires?${params.toString()}`);
-          const result: { records: TiresData[]; totalCount: number } = await response.json();
-
-          const tiresData = result.records;
-          const totalCount = result.totalCount;
-
-          const dataTransformed = createPaginatedResponse(
-            tiresData,
-            page,
-            pageSize,
-            totalCount
-          ) as PaginatedTiresResponse;
-          setTiresData(dataTransformed);
-
-          setCount(0);
-        } catch (error: unknown) {
-          setError(error instanceof Error ? error.message : String(error));
-        } finally {
-          setLoading(false);
-        }
-      }
-    },
-    [searchParams, pageSize, count]
+    [pathname]
   );
 
   const handleUpScroll = useCallback(() => {
@@ -201,94 +95,36 @@ const SearchResults: FC<SearchResultsProps> = ({
     }
   }, []);
 
-  const handleNextPage = useCallback(() => {
-    if (page < totalPages) {
-      setPage(prevPage => prevPage + 1);
-      handleUpScroll();
-    }
-  }, [page, totalPages, handleUpScroll]);
-
-  const handlePreviousPage = useCallback(() => {
-    if (page > 1) {
-      setPage(prevPage => prevPage - 1);
-      handleUpScroll();
-    }
-  }, [page, handleUpScroll]);
-
-  const handlePageClick = useCallback(
-    (pageNumber: number) => {
-      setPage(pageNumber);
+  /** Go to a page: one navigation (history replaced, as before 061). */
+  const goToPage = useCallback(
+    (target: number) => {
+      const next = Math.min(Math.max(1, target), totalPages);
+      if (next === page) return;
+      navigate(hrefWith({ page: next, pageSize }), { replace: true });
       handleUpScroll();
     },
-    [handleUpScroll]
+    [navigate, hrefWith, page, pageSize, totalPages, handleUpScroll]
   );
 
-  const handleFirstPage = useCallback(() => {
-    setPage(1);
-    handleUpScroll();
-  }, [handleUpScroll]);
-
-  const handleLastPage = useCallback(() => {
-    setPage(totalPages);
-    handleUpScroll();
-  }, [totalPages, handleUpScroll]);
+  const handleNextPage = useCallback(() => goToPage(page + 1), [goToPage, page]);
+  const handlePreviousPage = useCallback(() => goToPage(page - 1), [goToPage, page]);
+  const handlePageClick = useCallback((pageNumber: number) => goToPage(pageNumber), [goToPage]);
+  const handleFirstPage = useCallback(() => goToPage(1), [goToPage]);
+  const handleLastPage = useCallback(() => goToPage(totalPages), [goToPage, totalPages]);
 
   const handlePageSizeChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       const newPageSize = parseInt(event.target.value, 10);
-
+      // Keep the first tire on screen in view: the page that contains it.
       const currentRecordIndex = (page - 1) * pageSize;
       const newPage = Math.floor(currentRecordIndex / newPageSize) + 1;
-
-      setPageSize(newPageSize);
-      setPage(newPage);
+      navigate(hrefWith({ page: newPage, pageSize: newPageSize }), { replace: true });
     },
-    [page, pageSize]
+    [navigate, hrefWith, page, pageSize]
   );
 
   const pagination = useGenerateFixedPagination(page, totalPages, maxVisiblePages);
   const availablePageSizes = getAvailablePageSizes(tiresData.totalCount);
-
-  // Update refs when state changes
-  useEffect(() => {
-    pageRef.current = page;
-  }, [page]);
-
-  useEffect(() => {
-    pageSizeRef.current = pageSize;
-  }, [pageSize]);
-
-  useEffect(() => {
-    const urlPage = parseInt(searchParams.get('page') || String(DEFAULT_PAGE), 10);
-    const urlPageSizeRaw = parseInt(searchParams.get('pageSize') || String(DEFAULT_PAGE_SIZE), 10);
-
-    // Validar el tamaño de página
-    const urlPageSize = validatePageSize(urlPageSizeRaw);
-
-    // Si se detectó un valor inválido, actualizarlo en la URL
-    if (urlPageSizeRaw !== urlPageSize && searchParams.has('pageSize')) {
-      updatePaginationParams(urlPage, urlPageSize);
-    }
-
-    if (pageRef.current !== urlPage) setPage(urlPage);
-    if (pageSizeRef.current !== urlPageSize) setPageSize(urlPageSize);
-  }, [searchParams, updatePaginationParams]);
-
-  useEffect(() => {
-    void getDataTires(page);
-  }, [getDataTires, page]);
-
-  useEffect(() => {
-    updatePaginationParams(page, pageSize);
-  }, [updatePaginationParams, page, pageSize]);
-
-  useEffect(() => {
-    if (skipNextFetch.current) {
-      skipNextFetch.current = false;
-      return;
-    }
-    setCount(1);
-  }, [searchParams]);
 
   return (
     <Suspense fallback={<LoadingScreen message="Preparing your tire selection..." />}>
@@ -321,32 +157,41 @@ const SearchResults: FC<SearchResultsProps> = ({
           />
         ) : (
           <div className="relative">
-            {loading ? (
-              <ResultsSkeleton count={pageSize} />
-            ) : tiresData.tires.length === 0 ? (
-              <NoResultsFound
-                title="No Tires Found"
-                message={
-                  suggestions.length > 0
-                    ? 'Nothing matches all of your filters at once.'
-                    : "We couldn't find any tires matching your search criteria. Please try different specifications."
-                }
-                suggestions={suggestions}
-              />
-            ) : view === 'table' ? (
-              <TireTable products={tiresData.tires} list={LISTS.catalog} />
-            ) : (
-              <TireResults
-                products={tiresData.tires}
-                list={LISTS.catalog}
-                indexOffset={
-                  // From the data's own page, not the page state: the state
-                  // moves before the new tires arrive, and would re-report the
-                  // old ones at the new positions (found in the browser, 046).
-                  (Math.max(1, tiresData.page || 1) - 1) * (tiresData.pageSize || pageSize)
-                }
-              />
-            )}
+            {/* While a change is on its way the current results stay, dimmed and
+                inert (061): no skeleton, so the cards are not unmounted and
+                remounted, and nothing here can be clicked until the new page
+                replaces it. The header and pagination stay out of `inert`, so
+                focus moved to the heading on a page change is not lost. */}
+            <div
+              inert={isPending}
+              aria-busy={isPending}
+              className={`transition-opacity duration-200 ${isPending ? 'opacity-50' : ''}`}
+            >
+              {tiresData.tires.length === 0 ? (
+                <NoResultsFound
+                  title="No Tires Found"
+                  message={
+                    suggestions.length > 0
+                      ? 'Nothing matches all of your filters at once.'
+                      : "We couldn't find any tires matching your search criteria. Please try different specifications."
+                  }
+                  suggestions={suggestions}
+                />
+              ) : view === 'table' ? (
+                <TireTable products={tiresData.tires} list={LISTS.catalog} />
+              ) : (
+                <TireResults
+                  products={tiresData.tires}
+                  list={LISTS.catalog}
+                  indexOffset={
+                    // From the data's own page, not the page state: the state
+                    // moves before the new tires arrive, and would re-report the
+                    // old ones at the new positions (found in the browser, 046).
+                    (Math.max(1, tiresData.page || 1) - 1) * (tiresData.pageSize || pageSize)
+                  }
+                />
+              )}
+            </div>
             {tiresData.tires.length > 0 && (
               <div className="mt-16">
                 <div className="mt-16 w-full">
@@ -360,7 +205,7 @@ const SearchResults: FC<SearchResultsProps> = ({
                           <button
                             type="button"
                             onClick={handleFirstPage}
-                            disabled={page === 1}
+                            disabled={page === 1 || isPending}
                             aria-label="First page"
                             title="First page"
                             aria-disabled={page === 1}
@@ -371,7 +216,7 @@ const SearchResults: FC<SearchResultsProps> = ({
                           <button
                             type="button"
                             onClick={handlePreviousPage}
-                            disabled={page === 1}
+                            disabled={page === 1 || isPending}
                             aria-label="Previous page"
                             title="Previous page"
                             aria-disabled={page === 1}
@@ -386,6 +231,7 @@ const SearchResults: FC<SearchResultsProps> = ({
                               type="button"
                               key={index}
                               onClick={() => handlePageClick(pageNumber)}
+                              disabled={isPending}
                               aria-current={pageNumber === page ? 'page' : undefined}
                               className={`px-3 py-2 cursor-pointer h-min min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-md border text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${
                                 pageNumber === page
@@ -405,7 +251,7 @@ const SearchResults: FC<SearchResultsProps> = ({
                           <button
                             type="button"
                             onClick={handleNextPage}
-                            disabled={page === totalPages}
+                            disabled={page === totalPages || isPending}
                             aria-label="Next page"
                             title="Next page"
                             aria-disabled={page === totalPages}
@@ -416,7 +262,7 @@ const SearchResults: FC<SearchResultsProps> = ({
                           <button
                             type="button"
                             onClick={handleLastPage}
-                            disabled={page === totalPages}
+                            disabled={page === totalPages || isPending}
                             aria-label="Last page"
                             title="Last page"
                             aria-disabled={page === totalPages}
@@ -440,6 +286,7 @@ const SearchResults: FC<SearchResultsProps> = ({
                           id="pageSize"
                           value={pageSize}
                           onChange={handlePageSizeChange}
+                          disabled={isPending}
                           className="bg-white border border-gray-300 rounded-md py-1.5 px-3 text-sm text-gray-700 shadow-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 cursor-pointer transition-colors"
                         >
                           {availablePageSizes.map(size => (

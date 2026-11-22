@@ -108,3 +108,38 @@ describe('GET /api/tires/sets (054)', () => {
     expect(body.offers).toEqual({});
   });
 });
+
+describe('a cancelled request stops querying (061)', () => {
+  const aborted = (q: string, abortAfterGroups?: number) => {
+    const controller = new AbortController();
+    if (abortAfterGroups === 0) controller.abort();
+    return {
+      controller,
+      request: {
+        url: `http://x/api/tires/sets${q}`,
+        signal: controller.signal,
+      } as unknown as NextRequest,
+    };
+  };
+
+  beforeEach(() => {
+    h.groupCalls = [];
+    h.pools = {};
+  });
+
+  it('reads no set groups once the buyer has moved on', async () => {
+    h.records = [record('1', 'P ZERO'), record('2', 'CINTURATO'), record('3', 'SCORPION')];
+    const { request } = aborted('?ids=1,2,3', 0);
+    const res = await GET(request);
+    expect(res.status).toBe(499);
+    expect(h.groupCalls).toEqual([]);
+  });
+
+  it('answers normally when not cancelled', async () => {
+    h.records = [record('1', 'P ZERO'), record('2', 'CINTURATO')];
+    const { request } = aborted('?ids=1,2');
+    const res = await GET(request);
+    expect(res.status).toBe(200);
+    expect(h.groupCalls).toHaveLength(2);
+  });
+});
