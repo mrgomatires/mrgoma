@@ -300,6 +300,33 @@ options, size lists — goes through `sharedJson` (`src/app/utils/sharedFetch.ts
 one request per URL, kept 60 s. The dashboard's request counts on load are
 pinned by `Dashboard.requests.test.tsx`.
 
+### Post-deploy check
+
+A green build is not proof that production got the code. On 22 Nov 2026 a
+deploy reused an old build cache and shipped the old `globals.css` with the new
+JavaScript; every check passed (062). Since 062 Turbopack's build cache is off
+(`next.config.mjs`, held by `src/turbopackBuildCache.guard.test.ts`), so every
+build compiles the commit from scratch. After each **production** deploy:
+
+1. **The deployment is the one you mean.** In Vercel it is READY and its commit
+   is the merge you deployed. A "Restored build cache from previous deployment"
+   line in the build log is expected — Vercel's other caches still apply.
+2. **The published stylesheet has this release's rules.** Open the site in the
+   browser (curl gets a 429 from the firewall), find the stylesheet in
+   DevTools → Network (filter `css`) and search it for one rule per UI feature
+   in the release. Today's list: `.compare-dialog`, `.compare-table`
+   (comparison window), `.quick-chips` (quick size chips),
+   `.size-picker-panel` (size picker). Add the new feature's rule to this list
+   when it ships hand-written CSS.
+3. **Each new screen is opened for real**, not just its button seen: open the
+   comparison window, the size picker, whatever the release added, and compare
+   it with local.
+4. **Production is browse-only.** No cart, forms or checkout; if the compare
+   tray is used to test, empty it afterwards.
+
+Record the outcome in the feature's `results.md`. If a rule is missing:
+redeploy without build cache first, then find out why.
+
 ### Accessibility
 
 - Target **WCAG 2.1 AA** on key flows: semantic HTML, labelled controls, keyboard
@@ -336,7 +363,8 @@ pinned by `Dashboard.requests.test.tsx`.
   non-zero on a breach. Run it as part of the **Definition of Done** and before a
   deploy. (It's a local/pre-deploy gate, not a CI step: `next build` needs the DB
   for build-time data fetches, which CI doesn't have — see feature
-  `009-perf-budget`.) Next 16/Turbopack doesn't emit per-route First-Load JS, so
+  `009-perf-budget`. Since 062 every `next build` starts without Turbopack's
+  cache — ~22 s locally — so local builds measure what Vercel ships.) Next 16/Turbopack doesn't emit per-route First-Load JS, so
   the shared floor + total are the reliable proxy. Bump the limits deliberately in
   a PR when a real increase is justified. Since 056 it also budgets
   **`shopperPageJs` ≤ 225 KB** (lowered from 240 in 060; today ~215) — every
