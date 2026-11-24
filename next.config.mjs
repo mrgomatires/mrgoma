@@ -72,6 +72,22 @@ const nextConfig = {
   // ~450 ms render-blocking stylesheet, but every page's HTML grew by ~64 KB gz
   // (the CSS goes in twice — in the <style> and in the RSC payload) and mobile
   // LCP did not improve. Numbers in spec/features/056-bundle-lcp-mobile/results.md.
+  experimental: {
+    /**
+     * Off on purpose (062). Next 16.3 turns Turbopack's build cache on by
+     * default and keeps it in `.next/cache`, the folder Vercel restores before
+     * every build. On 22 Nov 2026 the deploy of 69a02f5 reused the cache of the
+     * previous release (048) and shipped the new JavaScript with the old
+     * `globals.css`: the comparison window went out unstyled, every check was
+     * green, and only a redeploy without build cache fixed it.
+     *
+     * Every build now compiles everything from the commit; Vercel's other
+     * caches still apply. Re-check when upgrading Next — the guard
+     * `src/turbopackBuildCache.guard.test.ts` fails if the option is renamed.
+     * Evidence: spec/features/062-turbopack-build-cache-off/results.md.
+     */
+    turbopackFileSystemCacheForBuild: false,
+  },
   async redirects() {
     return [
       /**

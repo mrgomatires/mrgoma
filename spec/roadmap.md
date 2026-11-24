@@ -45,7 +45,7 @@ performance budget is in place (P1.8).
   other non-critical chunks load deferred; trim the rest.
 - ⬜ **P1.6 — INP / interactivity.** Reduce main-thread work; confirm the 3D
   canvases only run when active.
-- 🟡 **P1.7 — Data / routes (`058-dashboard-requests-local-auth` ✅ PR #219, 2026-11-19: dashboard 13 → 5 requests on load; `059-tires-prefetch-repeats` ✅ PR #220, 2026-11-20: card and menu links pre-load on intent; after a filter 10 → 0 background requests; `060-intent-prefetch-site` ✅ PR #221, 2026-11-21: tire-page links, the menu and the footer pre-load on intent site-wide — 99 → 0 database reads from pre-loads across 8 pages, menu/footer 0 pre-loads; header-duplication guard; `061-tires-results-load-once`: every change on /tires loads its results once — no duplicate `/api/tires`, list dimmed while loading, view switch without a server render and keeping the page, set offers asked once).** Review caching/ISR where applicable and hot SQL
+- 🟡 **P1.7 — Data / routes (`058-dashboard-requests-local-auth` ✅ PR #219, 2026-11-19: dashboard 13 → 5 requests on load; `059-tires-prefetch-repeats` ✅ PR #220, 2026-11-20: card and menu links pre-load on intent; after a filter 10 → 0 background requests; `060-intent-prefetch-site` ✅ PR #221, 2026-11-21: tire-page links, the menu and the footer pre-load on intent site-wide — 99 → 0 database reads from pre-loads across 8 pages, menu/footer 0 pre-loads; header-duplication guard; `061-tires-results-load-once` ✅ PR #222, 2026-11-22: every change on /tires loads its results once — no duplicate `/api/tires`, list dimmed while loading, view switch without a server render and keeping the page, set offers asked once).** Review caching/ISR where applicable and hot SQL
   queries that affect TTFB.
 - ⬜ **P1.8 — Re-measure and budget.** Confirm CWV in the green and set a
   performance budget to prevent regressions.
@@ -383,6 +383,13 @@ To be resumed after the two tracks above; no fixed order yet.
   The firewall rule was published on 2026-08-17 and verified: preview crawlers
   now get `200` while ordinary non-browser clients still get `429`.
   _Implemented; awaiting the Rich Results check after deploy._
+- 🟡 **Every deploy is built from scratch (`062-turbopack-build-cache-off`).**
+  On 2026-11-22 the production deploy of 049–061 reused the previous release's
+  build cache and shipped the new JavaScript with the old `globals.css`: the
+  comparison window went out unstyled and every check was green. Turbopack's
+  build cache (on by default since Next 16.3) is now off, held by a guard test,
+  and `tech-stack.md` has a post-deploy check. Shipped JS/CSS unchanged.
+  _Implemented; awaiting the first deploy and its post-deploy check._
 - ⬜ **Document Stakeholders/Requirements** if formal sources appear.
 
 ## Recently delivered (context)
